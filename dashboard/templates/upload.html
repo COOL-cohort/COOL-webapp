@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block    head %}
+<link href="{% static '/css/upload.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block    body %}
+
+<style>
+    .label {
+        color: white;
+        padding: 8px;
+        background-color: #2196F3;
+        cursor: pointer;
+        font-size: 8pt;
+        height: 30px;
+        vertical-align: middle;
+        font-weight:bold;
+    }
+    .submit {
+        color: white;
+        padding: 8px;
+        background-color: rgb(16, 89, 150);
+        cursor: pointer;
+        display: inline-block;
+        font-size: 8pt;
+        height: 30px;
+        font-weight:bold;
+    }
+</style>
+<div class="col-md-12">
+	<div>
+		<h2><b>{% trans "Upload" %}</b></h2><br />
+        <h2>Upload your file</h2>
+        <form method="POST" enctype="multipart/form-data" action="upload/">{% csrf_token %}
+            <input type="file" name='csv_file' id="csv_file" accept='.csv' class="hidden"/>
+            <label class = "label" for="csv_file"><i class = "fa fa-cloud-upload"></i> Choose a file...</label><br />
+            <br/><label id="uploadedfile"></label>
+            <h2>Name it as</h2>
+            <input type="text" name="name" placeholder="File name">
+            <button class="submit" type="submit">submit</button>
+        </form>
+	</div>
+</div>
+{% endblock body %}
+
+
+{% block    scripts %}
+<script>
+    document.querySelector("#csv_file").onchange = function(){
+        document.querySelector("#uploadedfile").textContent = this.files[0].name;
+    }
+</script>
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+{% endblock scripts %}

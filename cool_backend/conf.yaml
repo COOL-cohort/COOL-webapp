@@ -1,0 +1,17 @@
+# Aeolus Cluster configuration
+
+---
+
+queenServerConf:
+  port: 10123 # 0 for any free port
+  netInterface: "default"
+  metaStoreLocal: "/tmp"
+  threadPoolSize: 10
+  
+queryServerConf:
+  brokerPort: 9000
+  brokerPoolSize: 7
+  workerPort: 9001
+  workerPoolSize: 10
+  netInterface: "default"
+  localStore: "cohana/"

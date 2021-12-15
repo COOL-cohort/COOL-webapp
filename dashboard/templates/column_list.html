@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block    body %}
+
+{#<form id='uploadForm' action='./upload/' method='post' enctype='multipart/form-data'>#}
+{#    {% csrf_token %}#}
+{#    <input type="file" name='file' id="fileElem" accept='.csv' class="hidden">#}
+{#    <div ng-app='app'>#}
+{#        <ui-view></ui-view>#}
+{#    </div>#}
+{#</form>#}
+<style>
+    .submit {
+        color: white;
+        padding: 8px;
+        background-color: rgb(16, 89, 150);
+        cursor: pointer;
+        display: inline-block;
+        font-size: 8pt;
+        height: 30px;
+        font-weight:bold;
+    }
+</style>
+<div class="col-md-12">
+    <h2><b>{% trans "Label" %}</b></h2><br />
+        <h2>Label columns in dataset</h2>
+        <form method="POST" enctype="multipart/form-data" action="./">{% csrf_token %}
+{#            <input type="text" name=" name">#}
+            {% for key,data in column_type.items %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Column: <span> {{ key }}</span></h3>
+                    </div>
+                    <div class="panel-body">
+                        represents
+                        <select class="form-control select" name="{{key}}">
+                            {% for op,value in options.items %}
+                                {% if data == op %}
+                                    <option value="{{ op }}" selected="selected"> {{ op }} </option>
+                                {% else %}
+                                    <option value="{{ op }}"> {{ op }} </option>
+                                {% endif %}
+
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            {% endfor %}
+            <div style ="display: flex; justify-content: flex-end">
+            <div>
+                <button class="submit" type="submit">submit</button>
+            </div>
+            </div>
+        </form>
+    </div>
+{% endblock body %}
+
+
+{% block    scripts %}
+
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+{% endblock scripts %}

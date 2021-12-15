@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+
+{% block    body %}
+    <div class="col-md-12">
+        <h2><b>{% trans "Figures" %}</b></h2><br />
+        <h2>Visualisation rendered based on analysis</h2>
+    </div>
+    <div class="page-content-wrap">
+        <div class="row"></div>
+        <div class="col-md-12">
+
+            {% for key,value in figures.items %}
+{#                <div id="{{ key }}" style="width: 800px;height:600px; float: left;"></div>                #}
+                <div id="{{ key }}" style="width: 900px;height:600px; "></div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+    </div>
+
+{% endblock body %}
+
+
+{% block    scripts %}
+    <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+    <script type="text/javascript">
+        function renderItem(params, api) {
+            var xValue = api.value(0);
+            var highPoint = api.coord([xValue, api.value(1)]);
+            var lowPoint = api.coord([xValue, api.value(2)]);
+            var halfWidth = 10;
+            var style = api.style({
+                stroke: api.visual('color'),
+                fill: null
+            });
+
+            return {
+                type: 'group',
+                children: [
+                    {
+                        type: 'line',
+                        shape: {
+                            x1: highPoint[0] - halfWidth, y1: highPoint[1],
+                            x2: highPoint[0] + halfWidth, y2: highPoint[1]
+                        },
+                        style: style
+                    },
+                    {
+                        type: 'line',
+                        shape: {
+                            x1: highPoint[0], y1: highPoint[1],
+                            x2: lowPoint[0], y2: lowPoint[1]
+                        },
+                        style: style
+                    },
+                ]
+            };
+        }
+
+
+        {% for key,value in figures.items %}
+            var tem_{{ key }} = echarts.init(document.getElementById("{{ key }}"));
+            {% if value.type == "heatmap" %}
+                var option_{{ key }} = {
+                    title: {
+                        text: '{{ value.title }}'
+                    },
+                    tooltip: {
+                        position: 'top'
+                    },
+                    animation: false,
+                    grid: {
+                        height: '50%',
+                        top: '10%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: {{ value.x_label|safe }},
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: {{ value.y_label|safe }},
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    visualMap: {
+                        min: {{ value.min }},
+                        max: {{ value.max }},
+                        calculable: true,
+                        orient: 'horizontal',
+                        left: 'center',
+                        bottom: '25%'
+                    },
+                    series: [{
+                        name: 'value',
+                        type: 'heatmap',
+                        data: {{ value.data|safe }},
+                        label: {
+                            show: true
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }]
+                };
+            {% elif value.type == "line" %}
+                var option_{{ key }} = {
+                    title: {
+                        text: '{{ value.title }}'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'        // 'line' | 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {
+                                readOnly: false
+                            },
+                            magicType: {
+                                type: ['line', 'bar']
+                            },
+                            restore: {},
+                            saveAsImage: {
+                                show: true
+                            }
+                        }
+                    },
+                    legend: {
+                        data: {{ value.y_label|safe }},
+                        top: "6%"
+                    },
+                    xAxis: {
+                        data: {{ value.x_label|safe }}
+                    },
+                    yAxis: {},
+                    series: [
+                        {% for key2, value2 in value.data.items %}
+                            {
+                                name: '{{key2}}',
+                                type: 'line',
+                                data: {{ value2|safe }},
+                                label: {
+                                    show: true
+                                },
+                            },
+                        {% endfor %}
+                    ]
+                };
+            {% elif value.type == "pie" %}
+                var option_{{ key }} = {
+                    title: {
+                        text: '{{ value.title }}',
+                        subtext: '',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b} : {c} ({d}%)'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        data: {{ value.y_label|safe }},
+                    },
+                    series: [
+                        {
+                            name: '{{ value.feature }}',
+                            type: 'pie',
+                            radius: '60%',
+                            center: ['50%', '60%'],
+                            data: [
+                                {% for key2, value2 in value.data.items %}
+                                    {value: {{ value2 }}, name: '{{ key2 }}'},
+                                {% endfor %}
+                            ],
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 20,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                };
+            {% elif value.type == "range" %}
+                var option_{{ key }} = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'        // 'line' | 'shadow'
+                        }
+                    },
+                    title: {
+                        text: '{{value.title}}'
+                    },
+                    legend: {
+                        data: {{ value.cols|safe }},
+                        orient: 'horizontal',
+                         y: '5%',
+                    },
+                    grid:{
+                        top:'30%',
+                    },
+                    xAxis: {},
+                    yAxis: {},
+                    series: [
+                        {% for sub_value in value.series %}
+                            {% if sub_value.type == "line" %}
+                                {
+                                    type: 'line',
+                                    name: '{{ sub_value.name }}',
+                                    data: {{ sub_value.data|safe }},
+                                    label: {
+                                        show: true
+                                    },
+                                },
+                            {% elif sub_value.type == "custom" %}
+                                {
+                                    type: 'custom',
+                                    name: '{{ sub_value.name }}',
+                                    renderItem: renderItem,
+                                    data: {{sub_value.data|safe}},
+                                    z:3,
+                                },
+                            {% endif %}
+                        {% endfor %}
+                    ]
+                };
+
+            {% endif %}
+            tem_{{ key }}.setOption(option_{{ key }});
+        {% endfor %}
+    </script>
+
+{% endblock scripts %}

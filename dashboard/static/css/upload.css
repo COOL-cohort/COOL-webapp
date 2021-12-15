@@ -1,0 +1,19 @@
+.header {
+    font-weight: bold;
+    font-size:   1.5em;
+    margin:  4em 0 1em 0;
+}
+.input-select {
+    width: 20em;
+    display: inline-block;
+    margin: 0.5em;
+}
+.field-name {
+    font-weight: bold;
+    color: blue;
+}
+.input-label {
+    width: 20em;
+    display: inline-block;
+    text-align: right;
+}

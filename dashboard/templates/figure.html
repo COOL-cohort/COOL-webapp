@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+
+
+
+{% block    body %}
+<div class="col-md-12">
+    <h2><b>{% trans "Figures" %}</b></h2><br />
+        <h2>Visualisation rendered based on analysis</h2>
+</div>
+
+<div class="row"></div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">List of analysises</h3>
+    </div>
+    <div class="panel-body">
+        <table class="table datatable_simple">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Analysis Name</th>
+                    <th>Analysis Type</th>
+                    <th>Design Date</th>
+                    <th>Relate Database</th>
+                    <th colspan="2" style="text-align: center;">Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for key,Analysis in Analysises.items %}
+
+                <tr>
+
+                    <td>{{ Analysis.index }}</td>
+                    <td>{{ Analysis.name }}</td>
+                    <td>{{ Analysis.type }}</td>
+                    <td>{{ Analysis.date }}</td>
+                    <td>{{ Analysis.database }}</td>
+                    <td style="text-align: center;">
+                        <form method="POST" enctype="multipart/form-data" action="./figure/">{% csrf_token %}
+                            <input name="analysis_save" value="{{ Analysis.file_save }}" type="hidden">
+                            <input name="file_operation" value="select" type="hidden">
+                            <input value="Select" type="submit" class="select">
+                        </form>
+                    </td>
+                    <td style="text-align: center;">
+                        <form method="POST" enctype="multipart/form-data" action="./figure/">{% csrf_token %}
+                            <input name="analysis_save" value="{{ Analysis.file_save }}" type="hidden">
+                            <input name="file_operation" value="delete" type="hidden">
+                            <input value="Delete" type="submit" class="delete">
+                        </form>
+                    </td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}
+
+
+{% block    scripts %}
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+{% endblock scripts %}
