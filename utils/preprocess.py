@@ -16,14 +16,12 @@ file_name = args.file_name
 
 root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-input_file_path = root_path + "/cohana/%s/data.csv" % file_name
-print(input_file_path)
-print(os.listdir(root_path+"/cohana/%s"%file_name))
-output_path = root_path + "/cohana/%s" % file_name
+input_file_path = root_path + "/cool_storage/%s/data.csv" % file_name
+# print(os.listdir(root_path+"/cool_storage/%s"%file_name))
+output_path = root_path + "/cool_storage/%s" % file_name
 
 raw_output = output_path + "/raw.csv"
 yaml_input = output_path + "/table.yaml"
-yaml_input2 = output_path + "/cube.yaml"
 dim_output = output_path + "/dim.csv"
 
 
@@ -104,9 +102,9 @@ simpleRead()
 create_dim()
 print("Preprocessing Finished in "+str(time()-t0))
 
-t0 = time()
-print("Start Loading Engine")
-os.system("mkdir cohana/"+file_name+"/000000")
-os.system("java -jar utils/LocalLoader.jar '"+yaml_input+"' '"+dim_output+"'  '"+raw_output+"'  'cohana/"+file_name+"/000000' 65536")
-print("java -jar utils/LocalLoader.jar '"+yaml_input+"' '"+dim_output+"'  '"+raw_output+"'  'cohana/"+file_name+"/000000' 65536")
-print("Loading Finished in "+str(time()-t0))
+# t0 = time()
+# print("Start Loading Engine")
+# os.system("mkdir cool_storage/"+file_name+"/000000")
+# os.system("java -jar utils/LocalLoader.jar '"+yaml_input+"' '"+dim_output+"'  '"+raw_output+"'  'cool_storage/"+file_name+"/000000' 65536")
+# print("java -jar utils/LocalLoader.jar '"+yaml_input+"' '"+dim_output+"'  '"+raw_output+"'  'cool_storage/"+file_name+"/000000' 65536")
+# print("Loading Finished in "+str(time()-t0))

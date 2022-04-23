@@ -12,6 +12,7 @@ import numpy as np
 import string
 import random
 from dashboard.models import *
+from preprocess import preprocessor
 import shutil
 import sqlite3
 
@@ -20,7 +21,7 @@ logger = logging.getLogger('django')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 upload_path = "upload/"
-data_path = "cohana/"
+data_path = "cool_storage/"
 
 if not os.path.exists(upload_path):
     os.mkdir(upload_path)
@@ -49,6 +50,10 @@ fieldTypes = {
         'type': "Metric",
         "datatype": "Int32"
     },
+    'String':{
+        'type': "Segment",
+        "datatype": "String"
+    }
 }
 
 class Upload( View ):
@@ -62,35 +67,30 @@ class Upload( View ):
             "advice": "Please upload your data!",
         }
 
+        # without a CSV file
         if "csv_file" not in request.FILES:
             errors['details'] = ["No dataset is uploaded!"]
+            return render(request, "error.html", errors)
+
+        # without a file name
+        if request.POST.get("name") == "":
+            errors['details'] = ["Please input a name"]
             return render(request, "error.html", errors)
 
         csv_file_content = request.FILES["csv_file"]
         file_name = request.POST.get("name")
 
-        if file_name == "":
-            errors['details'] = ["Please input a name"]
-            return render(request, "error.html", errors)
-
+        # get the new file name
         rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
+
+        # load new file
         f = open(upload_path + file_save + ".csv", 'wb')
         for chunk in csv_file_content.chunks():
             f.write(chunk)
         f.close()
 
-        rawdata = pd.read_csv(upload_path + file_save + ".csv")
-        columns = rawdata.columns
-        columns = [i.lower().strip() for i in columns if i != '' and i != '\r']
-        rawdata.columns = columns
-
-        if "event" in list(columns):
-            request.session['relateds'] = list(rawdata["event"].unique())
-        else:
-            request.session['relateds'] = []
-
-        request.session['columns'] = columns
+        # store necessary information
         request.session['csv_name'] = file_name
         request.session['csv_save'] = file_save
 
@@ -128,33 +128,44 @@ def getFoldSize(foldPath, size=0):
 
 class Column_list( View ):
     def get(self, request):
-        if request.session['csv_save'] == "error":
-            return redirect("/upload/")
+        # if request.session['csv_save'] == "error":
+        #     return redirect("/upload/")
+
+        file_save = request.session['csv_save']
+
+        rawdata = pd.read_csv(upload_path + file_save + ".csv")
+        columns = rawdata.columns
+        column_types = rawdata.dtypes.to_dict()
+
+        # f = open(upload_path + file_save + ".csv", "r")
+        # columns = f.readline()
+        # columns = columns[:-1].split(",")
+        # f.close()
 
         result = {}
-        columns = request.session['columns']
-        relateds = request.session['relateds']
+        request.session['columns'] = columns
 
         result['columns'] = request.session['columns']
         result['options'] = fieldTypes
 
         result['column_type'] = {}
 
-        if "id" in columns:
-            result['column_type']["id"] = "User ID"
-            columns.remove("id")
-        if "time" in columns:
-            result['column_type']["time"] = "Time"
-            columns.remove("time")
-        if "event" in columns:
-            result['column_type']["event"] = "Event"
-            columns.remove("event")
-            for related_col in relateds:
-                if related_col.lower() in columns:
-                    result['column_type'][related_col] = "Event Related"
-                    columns.remove(related_col)
         for col in columns:
-            result['column_type'][col] = "Value"
+            low_col = col.lower().strip()
+            if low_col[-2:] == 'id':
+                result['column_type'][col] = "User ID"
+            elif low_col[-4:] == 'time':
+                result['column_type'][col] = "Time"
+            elif "event" in low_col and str(column_types[low_col])=='object':
+                result['column_type'][col] = "Event"
+                event_related = list(rawdata[low_col].unique())
+            elif str(column_types[low_col])=='object':
+                result['column_type'][col] = "Segment"
+            else:
+                result['column_type'][col] = "Value"
+
+        for col in event_related:
+            result['column_type'][col] = "Event Related"
 
         return render(request, "column_list.html", result)
 
@@ -166,11 +177,10 @@ class Column_list( View ):
 
         file_save = request.session['csv_save']
 
-
-        if request.session['csv_save'] == "error":
-            return redirect("/upload/")
-        else:
-            data = pd.read_csv(upload_path + file_save + ".csv")
+        # if request.session['csv_save'] == "error":
+        #     return redirect("/upload/")
+        # else:
+        data = pd.read_csv(upload_path + file_save + ".csv")
 
         # check the format of the dataset
         check_list = ['User ID', 'Time', 'Event']
@@ -187,16 +197,15 @@ class Column_list( View ):
                     errors['details'] = ["No column denotes the %s!" %(check)]
                 return render(request, "error.html", errors)
 
+        # if "value" not in request.session['columns']:
+        #     errors["details"]= ["No column names value!"]
+        #     return render(request, "error.html", errors)
 
-        if "value" not in request.session['columns']:
-            errors["details"]= ["No column names value!"]
-            return render(request, "error.html", errors)
-
-        events = list(data['event'].unique())
-        for field in request.session['columns']:
-            if field not in events and fieldTypes[request.POST.get(field)]['type'] == "Segment":
-                errors["details"] = ["%s is not an event, please check again!" %(field)]
-                return render(request, "error.html", errors)
+        # events = list(data['event'].unique())
+        # for field in request.session['columns']:
+        #     if field not in events and fieldTypes[request.POST.get(field)]['type'] == "Segment":
+        #         errors["details"] = ["%s is not an event, please check again!" %(field)]
+        #         return render(request, "error.html", errors)
 
         # preprocess the dataset
         sub_path = data_path + "/%s" % request.session['csv_save']
@@ -209,7 +218,7 @@ class Column_list( View ):
                 fields.append({
                     "name": field.replace('\r', ''),
                     "fieldType": fieldTypes[request.POST.get(field)]['type'],
-                    "dataType": fieldTypes[request.POST.get(field)]['datatype'],
+                    # "dataType": fieldTypes[request.POST.get(field)]['datatype'],
                 })
                 if fieldTypes[request.POST.get(field)]['type'] == "ActionTime":
                     data['time'] = pd.to_datetime(data['time'])
@@ -219,26 +228,30 @@ class Column_list( View ):
 
         data.to_csv(data_path + "%s/data.csv" % file_save, index=False)
 
-        return_info = subprocess.Popen('utils/preprocess.sh '+ str(request.session['csv_save']), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        preprocessor(file_save)
 
-        sh_results = []
-        for next_line in return_info.stdout:
-            sh_results.append(next_line.decode("utf-8", "ignore"))
-        if sh_results[-1][:19]!= "Loading Finished in":
-            for next_line in sh_results:
-                logger.info(next_line)
+        # return_info = subprocess.Popen('utils/preprocess.sh '+ str(request.session['csv_save']), shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        #
+        # sh_results = []
+        # for next_line in return_info.stdout:
+        #     sh_results.append(next_line.decode("utf-8", "ignore"))
+        # if sh_results[-1][:19]!= "Loading Finished in":
+        #     for next_line in sh_results:
+        #         logger.info(next_line)
+        #
+        #     shutil.rmtree(data_path + file_save)
+        #     os.remove(upload_path + file_save + ".csv")
+        #
+        #     request.session['csv_save'] = "error"
+        #
+        #     errors = {
+        #         "type": "Loading data",
+        #         "advice": "Please check your data format!",
+        #         "details": sh_results,
+        #     }
+        #     return render(request, "error.html", errors)
 
-            shutil.rmtree(data_path + file_save)
-            os.remove(upload_path + file_save + ".csv")
 
-            request.session['csv_save'] = "error"
-
-            errors = {
-                "type": "Loading data",
-                "advice": "Please check your data format!",
-                "details": sh_results,
-            }
-            return render(request, "error.html", errors)
 
         logger.info("[*] Loading data successfully.")
         os.remove(upload_path + file_save + ".csv")
