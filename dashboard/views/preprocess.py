@@ -9,7 +9,7 @@ import sqlite3
 class preprocessor():
     def __init__(self, file_name):
         self.file_name = file_name
-        self.output_path = "/cool_storage/%s" % file_name
+        self.output_path = "./cool_storage/%s" % file_name
         self.input_file_path = self.output_path + "/data.csv"
 
         self.yaml_input = self.output_path + "/table.yaml"

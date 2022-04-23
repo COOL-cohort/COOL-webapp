@@ -5,6 +5,7 @@ from datetime               import datetime
 
 import logging
 import os
+import json
 import subprocess
 import yaml
 import pandas as pd
@@ -12,12 +13,14 @@ import numpy as np
 import string
 import random
 from dashboard.models import *
-from preprocess import preprocessor
+from dashboard.views.preprocess import preprocessor
 import shutil
+import requests
 import sqlite3
 
 logger = logging.getLogger('django')
 
+SERVER = 'http://cool-backend:9998'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 upload_path = "upload/"
@@ -134,7 +137,7 @@ class Column_list( View ):
         file_save = request.session['csv_save']
 
         rawdata = pd.read_csv(upload_path + file_save + ".csv")
-        columns = rawdata.columns
+        columns = list(rawdata.columns)
         column_types = rawdata.dtypes.to_dict()
 
         # f = open(upload_path + file_save + ".csv", "r")
@@ -145,10 +148,11 @@ class Column_list( View ):
         result = {}
         request.session['columns'] = columns
 
-        result['columns'] = request.session['columns']
+        result['columns'] = columns
         result['options'] = fieldTypes
 
         result['column_type'] = {}
+        event_related = []
 
         for col in columns:
             low_col = col.lower().strip()
@@ -218,7 +222,7 @@ class Column_list( View ):
                 fields.append({
                     "name": field.replace('\r', ''),
                     "fieldType": fieldTypes[request.POST.get(field)]['type'],
-                    # "dataType": fieldTypes[request.POST.get(field)]['datatype'],
+                    "dataType": fieldTypes[request.POST.get(field)]['datatype'],
                 })
                 if fieldTypes[request.POST.get(field)]['type'] == "ActionTime":
                     data['time'] = pd.to_datetime(data['time'])
@@ -251,7 +255,19 @@ class Column_list( View ):
         #     }
         #     return render(request, "error.html", errors)
 
+        query = {
+            "dataFileType": "CSV",
+            "cubeName": file_save,
+            "schemaPath": data_path + "%s/table.yaml" % file_save,
+            "dataPath": data_path + "%s/data.csv" % file_save,
+            "outputPath": data_path[:-1],
+        }
 
+        out = requests.post(SERVER + "/v1/load", data=json.dumps(query))
+
+        if out.status_code != 200:
+            errors['details'] = ["ErrorCode[%d] %s" % (out.status_code, out.text)]
+            return render(request, "error.html", errors)
 
         logger.info("[*] Loading data successfully.")
         os.remove(upload_path + file_save + ".csv")
