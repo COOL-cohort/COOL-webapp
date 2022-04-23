@@ -7,6 +7,6 @@ RUN pip install requests==2.14.2 Django==1.11.2 numpy==1.16.1 pandas==0.20.1 boo
 
 EXPOSE 8188
 EXPOSE 9999
-WORKDIR cohana
+WORKDIR cool_storage
 ENTRYPOINT [ "/bin/bash" ]
 CMD [ "./cool_front/start_django.sh" ]
