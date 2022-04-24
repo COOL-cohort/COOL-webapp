@@ -275,8 +275,28 @@ function initCubeYamlSelect2(jqObj) {
     jqObj.select2({
         minimumResultsForSearch: 5,
         placeholder: gettext('Select an option'),
-        data: djangoData['cube.yaml']['measures'].map(function(d,i) {
-            return { id: String(d.name), text: d.name};
+        data:[{id: String(djangoData['measure']), text: String(djangoData['measure'])}]
+        // data: djangoData['cube.yaml']['measures'].map(function(d,i) {
+        //     return { id: String(d.name), text: d.name};
+        // })
+    });
+    // console.log(djangoData['cube.yaml']['measures'].map(function(d,i) {
+    //         return { id: String(d.name), text: d.name};
+    //     }));
+    // console.log([{ id: String(djangoData['measure']), text: String(djangoData['measure'])}]);
+}
+
+function initTableYamlSelect2(jqObj) {
+    jqObj.append('<option></option>'); // for select2 placeholder
+    jqObj.parents(".select-multi-stage").find(".second-stage").select2({
+        placeholder: gettext('Select an option'),
+        disabled: true
+    });
+    jqObj.select2({
+        minimumResultsForSearch: 5,
+        placeholder: gettext('Select an option'),
+        data: djangoData['table.yaml']['fields'].map(function(d,i) {
+            return { id: String(i), text: d.name };
         })
     });
 }
@@ -594,8 +614,9 @@ function buildLoyal(){
 function buildQuery(){
     var query = JSON.parse(queryTemplate);
     query['dataSource'] = djangoData['datasource'];
-    var measure = $('#measure').val();
-    query['measure'] = measure;
+    // /var measure = $('#measure').val();
+    // query['measure'] = measure;
+    query['measure'] = djangoData['measure'];
 
     var eventSelectSize = $(".event-container .eventSelection").size();
     var eventSelects = [];

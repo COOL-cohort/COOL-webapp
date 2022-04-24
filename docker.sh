@@ -20,15 +20,15 @@ function check_images(){
 if [ $1x == "start"x ]; then
     echo "[*] start COOL "
     check_images
-    docker run -d -v $(pwd)/cohana:/cohana -p 8200:9998 cool-backend
-    docker run -d -v $(pwd):/cohana -p 8201:9999 --link $(docker ps -q --filter ancestor=cool-backend ):cool-backend cool-front
+    docker run -d -v $(pwd)/cool_storage:/cool_storage -p 8200:9998 cool-backend
+    docker run -d -v $(pwd):/cool_storage -p 8201:9999 --link $(docker ps -q --filter ancestor=cool-backend ):cool-backend cool-front
 
 elif [ $1x == "restart"x ]; then
     echo "[*] restart COOL "
 
     if [ -z $(docker ps -a -q --filter ancestor=$backend) ]; then
         check_images
-        docker run -d -v $(pwd):/cohana -p 8201:9999 --link $(docker ps -q --filter ancestor=cool-backend ):cool-backend cool-front
+        docker run -d -v $(pwd):/cool_storage -p 8201:9999 --link $(docker ps -q --filter ancestor=cool-backend ):cool-backend cool-front
     else
         echo " [*] restart docker: $backend"
         docker restart $(docker ps -a -q --filter ancestor=$backend)
@@ -36,7 +36,7 @@ elif [ $1x == "restart"x ]; then
     
     if [ -z $(docker ps -a -q --filter ancestor=$front) ]; then
         check_images
-        docker run -d -v $(pwd)/cohana:/cohana -p 8200:9998 cool-backend
+        docker run -d -v $(pwd)/cool_storage:/cool_storage -p 8200:9998 cool-backend
     else
         echo " [*] restart docker: $front"
         docker restart $(docker ps -a -q --filter ancestor=$front)
@@ -99,6 +99,6 @@ elif [ $1x == "clean"x ]; then
 #         # docker stop $(docker ps -q --filter ancestor=$backend)
 #     fi
 else
-    echo "[!] can not recognize the commond $1"
-	echo "[!] support commond: start, restart, stop, clean"
+    echo "[!] can not recognize the command $1"
+	echo "[!] support command: start, restart, stop, clean"
 fi 
