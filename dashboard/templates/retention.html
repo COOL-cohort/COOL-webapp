@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+{% block    head %}
+<link href="{% static 'css/retention.css' %}" rel="stylesheet">
+<!--<script src="http://livejs.com/live.js"></script>-->
+<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet">-->
+{#<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>#}
+{#<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>#}
+{#<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>#}
+{#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />#}
+<script src="../../static/local/select2.full.min.js"></script>
+<script type="text/javascript" src="../../static/local/moment.min.js"></script>
+<script type="text/javascript" src="../../static/local/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="../../static/local/bootstrap-datetimepicker.min.css" />
+<script>
+const CSRF_TOKEN = "{{ csrf_token }}";
+function redirectToSimple() {
+    console.log("d");
+    window.location.href = "/{{ LANGUAGE_CODE }}/retention";
+}
+</script>
+{% endblock head %}
+
+{% block    body %}
+<div class="col-md-12">
+    <h2><b>{% trans "Cohort Analysis" %}</b></h2><br />
+        <h2>Customise features for analysis </h2>
+        <h2>Name: {{ analysis_name }}</h2>
+</div>
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+        <div class='cover-div' id='loading'><img class='loading-img' src="{% static 'img/loading.svg' %}"></div>
+            <div class="x_title">
+                <ul class="nav navbar-right panel_toolbox">
+                    <div class="btn-group" data-toggle="modal" data-target="#myModal">
+                        <label class="glyphicon glyphicon-question-sign"></label>
+                    </div>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="options" id="option1"> {% trans "Advanced" %}
+                        </label>
+                    </div>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <br>
+                <form id="query-form" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+
+                    <!-- GLOBAL OPTIONS-->
+                    <div class="form-group form-section-label"> <label class="control-label section-title col-md-3 col-sm-3 col-xs-12">{% trans "Cohort Metric" %}</label> </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans "Measure" %}</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            <select class="form-control select2-single data-cube-yaml" id='measure'>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans "Over" %}</label>
+                        <i class="fa fa-plus-circle globalFilter-add globalFilter-empty-btn" style="margin-left: 11px; display: none; margin-bottom: 10px;" aria-hidden="true"></i>
+                        <div id="global-filters-container" class=" col-md-9 col-sm-9 col-xs-12">
+                            <div class="global-filter select-multi-stage row pad-bottom">
+                                <div class="col-md-3 col-sm-3 col-xs-4">
+                                    <select class="form-control select2-single data-table-yaml"> </select>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <select class="form-control select2-single second-stage">
+                                    </select>
+                                </div>
+                                <div class='col-sm-6 col-sm-6 col-xs-6 datetimepicker' style="display: none;">
+                                    <div class='input-group date date1'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <div class='input-group date date2'>
+                                        <input type='text' class="form-control" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class='col-sm-6 col-sm-6 col-xs-6 intRange' style="display: none;">
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <input type="text" class="form-control min ">
+                                    </div>
+                                    <div style="float:left; line-height:33px;">-</div>
+                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                        <input type="text" class="form-control max ">
+                                    </div>
+                                </div>
+                                <i class="fa fa-plus-circle globalFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                <i class="fa fa-minus-circle globalFilter-remove" style="padding-right:7px;" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% trans "Time Range" %}</label>
+                        <div class="col-md-1 col-sm-1 col-xs-3">
+                            <input type="text" id="min-age" required="required" class="form-control col-md-1 col-xs-1" placeholder="0">
+                        </div>
+                        <div style="float:left; line-height:33px;">-</div>
+                        <div class="col-md-1 col-sm-1 col-xs-3">
+                            <input type="text" id="max-age" required="required" class="form-control col-md-1 col-xs-1" placeholder="30">
+                        </div>
+                        <label class="control-label " style="width: auto; float:left;">&nbsp;{% trans "by" %}&nbsp;</label>
+                        <div style="width: 80px; float:left; line-height:33px;">
+                            <select class="form-control select2-single range-select" id='age-type'>
+                                <option value="days">{% trans "days" %}</option>
+                                <option value="weeks">{% trans "weeks" %}</option>
+                                <option value="months">{% trans "months" %}</option>
+                                <option value="years">{% trans "years" %}</option>
+{#                                <option value="events">{% trans "events" %}</option>#}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group range-others select-multi-stage" style="">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12 " for="occur">{% trans "Aged by" %}</label>
+                        <div class="col-md-1 col-sm-1 col-xs-6">
+                            <input type="text" id="occur" name="occur" required="required" class="form-control" placeholder='1'>
+                        </div>
+                        <label class="control-label col-md-2 col-sm-2 col-xs-6" style="float:left;width: auto;">{% trans "occurences on" %} </label>
+                        <div class="col-md-3 col-sm-3 col-xs-4" style="width: auto;line-height:33px;">
+                            <select class="form-control select2-single2 data-table-yaml" id ="occurCol" >
+                            </select>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-xs-8" style="">
+                            <select class="form-control second-stage" id="occurVal"></select>
+                        </div>
+                    </div>
+                    <!--USER SELECTION-->
+                    <div class="form-group form-section-label"> <label class="control-label section-title col-md-3 col-sm-3 col-xs-12 filter-users">{% trans "User Selection" %}<input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked> </label></div>
+                    <div id="users-events-container" class="events-container">
+                        <div class="event-container">
+                            <div class="form-group">
+                                <label class="col-sm-offset-2 control-label birthEvent-label">{% trans "Event" %} </label>
+                                <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans "Event:" %}</label>
+                                    <div class="col-md-9 multi-eventFilters userSelection" >
+                                        <div class="form-group row">
+                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% trans "Their" %}</label>
+                                            <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
+                                                <div class="col-md-5 col-sm-5 col-xs-11 width">
+                                                    <select class="form-control select2-single data-table-yaml">
+                                                    </select>
+                                                </div>
+                                                <label class="control-label float-left">{% trans "is" %}</label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 width">
+                                                    <select class="form-control second-stage"> </select>
+                                                </div>
+                                                <div class='col-sm-6 col-sm-6 col-xs-12 datetimepicker' style="display: none;">
+                                                    <div class='input-group date date1'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class='input-group date date2'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class='col-sm-6 col-sm-6 col-xs-12 intRange' style="display: none;">
+                                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                                        <input type="text" class="form-control event-min " placeholder="1">
+                                                    </div>
+                                                    <div style="float:left; line-height:33px;">-</div>
+                                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                                        <input type="text" class="form-control event-min " placeholder="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                            <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% trans "Frequency" %}:</label>
+                                    <div class="col-md-1 col-sm-1 col-xs-5">
+                                        <input type="text" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                    </div>
+                                    <div style="float:left; line-height:33px;">-</div>
+                                    <div class="col-md-1 col-sm-1 col-xs-5">
+                                        <input type="text" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                    </div>
+                                    <div style="float:left; line-height:33px;">{% trans "time(s)" %}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% trans "In the" %}  </label>
+                                    <div style="width: 80px; float:left; line-height:33px;">
+                                        <select class="form-control select2-single range-select first">
+                                            <option>{% trans "first" %}</option>
+                                            <option>{% trans "any" %}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1 col-sm-1 col-xs-5">
+                                        <input type="text" required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">
+                                    </div>
+                                    <div style="float:left; line-height:33px; font-weight: 800;">{% trans "day(s)" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group users-add-event-btn">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
+                            <button onclick="handleNewUserEvent()" type=button class="btn btn-primary">
+                                <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
+                                {% trans "Add Event" %}
+                            </button>
+                        </div>
+                    </div>
+                    <!--COHORT SELECTION-->
+                    <div class="form-group form-section-label"><label class="control-label section-title col-md-3 col-sm-3 col-xs-12">{% trans "Start Condition" %}</label></div>
+                    <div id="events-container" class="events-container">
+                        <!--BEGIN COHORT EVENT-->
+                        <div class="event-container">
+                            <div class="form-group">
+                                <label class="col-sm-offset-2 control-label birthEvent-label">{% trans "Event" %} </label>
+                                <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans "Event:" %}</label>
+                                    <div class="col-md-9 multi-eventFilters eventSelection" >
+                                        <div class="form-group row">
+                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% trans "Their" %}</label>
+                                            <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
+                                                <div class="col-md-5 col-sm-5 col-xs-11 width">
+                                                    <select class="form-control select2-single data-table-yaml">
+                                                    </select>
+                                                </div>
+                                                <label class="control-label float-left">{% trans "is" %}</label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12 width">
+                                                    <select class="form-control second-stage"> </select>
+                                                </div>
+                                                <div class='col-sm-6 col-sm-6 col-xs-12 datetimepicker' style="display: none;">
+                                                    <div class='input-group date date1'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class='input-group date date2'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class='col-sm-6 col-sm-6 col-xs-12 intRange' style="display: none;">
+                                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                                        <input type="text" class="form-control event-min " placeholder="1">
+                                                    </div>
+                                                    <div style="float:left; line-height:33px;">-</div>
+                                                    <div class="col-md-5 col-sm-5 col-xs-5">
+                                                        <input type="text" class="form-control event-max " placeholder="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                            <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min">{% trans "Frequency" %}:</label>
+                                    <div class="col-md-1 col-sm-1 col-xs-5">
+                                        <input type="text" name="min" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                    </div>
+                                    <div style="float:left; line-height:33px;">-</div>
+                                    <div class="col-md-1 col-sm-1 col-xs-5">
+                                        <input type="text" name="max" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                    </div>
+                                    <div style="float:left; line-height:33px;">{% trans "time(s)" %}</div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans "Group by" %}:</label>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <select class="form-control select2-single data-table-yaml groupby">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                        <label class="control-label float-left">{% trans "Advanced" %}:</label>
+                                        <div class="float-left">
+                                            <input style="margin-top:12px; margin-left: 8px;" class="advanced-checkbox adv" type="checkbox" name="" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group advanced-container">
+                                    <div class="row">
+                                        <label class="control-label col-md-offset-1 col-md-3 col-sm-3 col-xs-12 ">{% trans "Min" %}:</label>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                            <input type="text" placeholder="0" class="form-control adv1" placeholder="">
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12 ">{% trans "Max" %}:</label>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                            <input type="text" placeholder="10" class="form-control adv2" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:6px">
+                                        <label class="control-label col-md-offset-1 col-md-3 col-sm-3 col-xs-12 ">{% trans "Interval" %}:</label>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                            <input type="text" placeholder="20" class="form-control adv3" placeholder="">
+                                        </div>
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12 ">{% trans "Log Scale" %}:</label>
+                                        <div class="col-md-1 col-sm-1 col-xs-12">
+                                            <input style="margin-top:12px;" class='adv4' type="checkbox" name="" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--END COHORT EVENT-->
+                    </div>
+
+                    <div class="form-group add-event-btn">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
+                            <button onclick="handleNewEvent()" type=button class="btn btn-primary">
+                                <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
+                                {% trans "Add Event" %}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
+                            <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+                            <button class="btn btn-danger" type="reset" onClick="window.location.reload();return false;" >{% trans "Reset" %}</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div id="line" style="height:0px"></div>
+    <div id="heat" style="height:0px"></div>
+    <div id="range" style="height:0px"></div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{% trans "Advanced Model Tutorial" %}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{% trans "Advanced model allows you to customize your very own cohort analysis" %}</p>
+                 <img src="../../static/img/advanced_tutorial.png" style="width:580px;height:720px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+
+
+{% block scripts %}
+<script>
+'use strict';
+var djangoData = {{ djangoData | default:"{}" | safe }};
+</script>
+<script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
+<script src='{% static "js/retention.js" %}'></script>
+
+{% endblock scripts %}

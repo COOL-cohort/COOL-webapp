@@ -82,12 +82,20 @@ ENV/
 # mypy
 .mypy_cache/
 
+<<<<<<< HEAD
 cache/*
 cool_storage/*
 */cool_storage/*
+=======
+upload/*
+cool_storage/*
+>>>>>>> 19f75b6 (Finish the update of the website app)
 
 
 dim.db
 # db.sqlite3
 test.ipynb
+<<<<<<< HEAD
 backup
+=======
+>>>>>>> 19f75b6 (Finish the update of the website app)
