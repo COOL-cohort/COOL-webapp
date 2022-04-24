@@ -82,8 +82,10 @@ ENV/
 # mypy
 .mypy_cache/
 
-# upload/*
-# cohana/*
+upload/*
+cool_storage/*
 
-# dim.db
+
+dim.db
 # db.sqlite3
+test.ipynb

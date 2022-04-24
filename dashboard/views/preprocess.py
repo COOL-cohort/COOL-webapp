@@ -5,11 +5,12 @@ from time import time
 import io
 import sqlite3
 
+from dashboard.config import *
 
 class preprocessor():
     def __init__(self, file_name):
         self.file_name = file_name
-        self.output_path = "./cool_storage/%s" % file_name
+        self.output_path = "%s/%s" % (data_path, file_name)
         self.input_file_path = self.output_path + "/data.csv"
 
         self.yaml_input = self.output_path + "/table.yaml"

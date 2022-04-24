@@ -5,8 +5,7 @@ import json
 import yaml
 
 from .                      import lang
-
-data_path = "cool_storage/"
+from dashboard.config import *
 
 def strTotime(name):
     return name[:4] + "/" + name[4:6] + "/" + name[6:8]

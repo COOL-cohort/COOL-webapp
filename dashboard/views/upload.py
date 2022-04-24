@@ -1,4 +1,3 @@
-from django.http            import HttpResponseRedirect
 from django.shortcuts       import render, redirect
 from django.views           import View
 from datetime               import datetime
@@ -6,31 +5,18 @@ from datetime               import datetime
 import logging
 import os
 import json
-import subprocess
 import yaml
 import pandas as pd
 import numpy as np
 import string
 import random
 from dashboard.models import *
+from dashboard.config import *
 from dashboard.views.preprocess import preprocessor
-import shutil
 import requests
 import sqlite3
 
 logger = logging.getLogger('django')
-
-SERVER = 'http://cool-backend:9998'
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-upload_path = "upload/"
-data_path = "cool_storage/"
-
-if not os.path.exists(upload_path):
-    os.mkdir(upload_path)
-
-if not os.path.exists(data_path):
-    os.mkdir(data_path)
 
 fieldTypes = {
     'User ID':{
