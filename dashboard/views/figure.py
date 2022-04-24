@@ -2,10 +2,8 @@ from django.shortcuts       import render, redirect
 from django.views           import View
 
 from dashboard.models import *
+from dashboard.config import *
 import os, json
-
-upload_path = "upload/"
-data_path = "cohana/"
 
 def strTotime(name):
     return name[:4] + "/" + name[4:6] + "/" + name[6:8] + " " + name[8:10] + ":" + name[10:12] + ":" + name[12:14]

@@ -2,64 +2,48 @@ import logging
 import requests
 import re
 import json
+from dashboard.config import *
 
-SERVER = 'http://cool-backend:9998'
-
-logger = logging.getLogger('django')
+headers = {
+    'Connection': 'keep-alive',
+    'Cookie': '',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36',
+    'Content-Type': 'application/json',
+    'Accept': '*/*'
+}
 
 def pass_reload(datasource, server=SERVER):
-    headers = { \
-            'Connection':'keep-alive', \
-            'Cookie':'', \
-            'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36', \
-            'Content-Type':'application/json', \
-            'Accept' :'*/*'
-            }
     url = server+'/v1/reload?cube='+datasource
     logger.info("pass reload: " + url)
-    r = requests.get(server+'/v1/reload?cube='+datasource, headers = headers)
-    return json.loads(r.text)
+    r = requests.get(url, headers = headers)
+    return r.text
 
 def pass_request(query, server=SERVER):
-    headers = { \
-            'Connection':'keep-alive', \
-            'Cookie':'', \
-            'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36', \
-            'Content-Type':'application/json', \
-            'Accept' :'*/*'
-            }
     url = server+'/v1/cohort/analysis'
     logger.info("pass request: " + url)
     logger.info("pass request: " + json.dumps(query))
-    r = requests.post(server+'/v1/cohort/analysis',data = json.dumps(query), headers = headers)
+    r = requests.post(url, data=json.dumps(query))
     # logger.info(r.text)
-    return json.loads(r.text)
+    return r.text
 
 def pass_create_request(query, server=SERVER):
-    headers = { \
-            'Connection':'keep-alive', \
-            'Cookie':'', \
-            'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36', \
-            'Content-Type':'application/json', \
-            'Accept' :'*/*'
-            }
-    url = server+'/v1/cohort/manage/create'
+    url = server+'/v1/cohort/selection/'
     logger.info("pass create request: " + url)
     logger.info("pass create request data:" + json.dumps(query))
-    r = requests.post(server+'/v1/cohort/manage/create', data = json.dumps(query), headers = headers)
-    # logger.info("pass create response:" + r.text)
-    return json.loads(r.text)
+    r = requests.post(url, data = json.dumps(query))
+    logger.info("pass create response:" + r.text)
+    return r.text
 
 def removeCohort(cohort, server=SERVER):
-    url = server+'/v1/cohort/manage/remove/' + cohort
+    url = server+'/v1/cohort/remove/' + cohort
     logger.info("Remove cohort: "+url)
     r = requests.get(url)
     return r.status_code
 
 
 import numpy as np
-def get_plotdata_chart(result):
-    rawResult = result[u'result']
+def get_plotdata_chart(rawResult):
+    rawResult = json.loads(rawResult)
     col = []
     data = {}
     series = []
