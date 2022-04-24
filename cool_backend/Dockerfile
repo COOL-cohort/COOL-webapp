@@ -29,9 +29,7 @@ RUN set -x \
   && [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
 EXPOSE 9998
-ADD Queryserver_encrypt.jar Queryserver_encrypt.jar
-ADD aeolus-queryserver-0.0.1-SNAPSHOT.jar aeolus-queryserver-0.0.1-SNAPSHOT.jar
-ADD conf.yaml conf.yaml
+ADD cool-queryserver-0.1-SNAPSHOT.jar cool-queryserver-0.1-SNAPSHOT.jar
 ADD liblinux.so /tmp/liblinux.so
 #ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -agentlib:linux -jar Queryserver_encrypt.jar conf.yaml
-ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -jar aeolus-queryserver-0.0.1-SNAPSHOT.jar conf.yaml
+ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -jar cool-queryserver-0.1-SNAPSHOT.jar cool_storage 9998

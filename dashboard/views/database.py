@@ -3,10 +3,7 @@ from django.views           import View
 
 from dashboard.models import *
 import shutil, os, yaml
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-upload_path = "upload/"
-data_path = "cohana/"
+from dashboard.config import *
 
 def strTotime(name):
     return name[:4] + "/" + name[4:6] + "/" + name[6:8] + " " + name[8:10] + ":" + name[10:12] + ":" + name[12:14]

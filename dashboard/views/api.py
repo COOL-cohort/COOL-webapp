@@ -8,9 +8,7 @@ from . import request_bypass
 from dashboard.models import *
 import string,random
 from datetime import datetime
-
-upload_path = "upload/"
-data_path = "cohana/"
+from dashboard.config import *
 
 class Api( View ):
     def get(self, request):
@@ -21,13 +19,13 @@ class Api( View ):
 
     def post(self, request):
         mode = request.POST.get("mode", "funnel")
-        print(mode)
+        logger.info("mode: %s"%mode)
 
         analysis_name = request.session['analysis_name']
-        agg = request.session['agg']
+        measure = request.session['measure']
         file_save = request.session['file_save']
 
-        print(analysis_name)
+        logger.info("analysis name: %s"%analysis_name)
 
         rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         analysis_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
@@ -52,6 +50,7 @@ class Api( View ):
                 with open(data_path+'/%s/%s.dat'%(file_save,analysis_save), 'w') as jsonFile:
                     json.dump(response, jsonFile)
                 # return HttpResponse(json.dumps(response))
+
             elif mode == "loyal-cohort":
                 response['code'] = 200
                 query2 = request.POST.get("data2", "")
@@ -60,7 +59,7 @@ class Api( View ):
                     return HttpResponse(json.dumps(response))
 
                 loyal2 = json.loads(query2)
-                request_bypass.removeCohort("loyal")
+                # request_bypass.removeCohort("loyal")
                 result = request_bypass.pass_create_request(loyal2)
 
                 query1 = request.POST.get("data1", "")
@@ -73,6 +72,7 @@ class Api( View ):
                     raw_response = request_bypass.pass_request(loyal1)
                 except Exception as e:
                     raise Exception("Invalid Query")
+                logger.info(raw_response)
                 response['data'] = request_bypass.get_plotdata_chart(raw_response)
 
                 with open(data_path+'/%s/%s.dat'%(file_save,analysis_save), 'w') as jsonFile:
@@ -88,7 +88,7 @@ class Api( View ):
             file = csv_file.objects.get(file_save=file_save)
             new_analysis = analysis(
                 file_id=file,
-                analysis_type=agg,
+                analysis_type=measure,
                 analysis_name=analysis_name,
                 analysis_save=analysis_save
             )

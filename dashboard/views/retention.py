@@ -6,22 +6,24 @@ import threading
 from .                      import request_bypass
 from . import lang
 
+from dashboard.config import *
 
 class Retention( View ):
     def get(self, request):
         file = request.session['file_save']
-        events = []
+        analysis_name = request.session['analysis_name']
 
         djangoData = {
-            "table.yaml": yaml.load( open( './cohana/'+file+"/table.yaml" ) ),
-            "cube.yaml":  yaml.load( open( './cohana/'+file+"/cube.yaml" ) ),
-            "events": events,
-            "datasource": file
+            "table.yaml": yaml.load(open("%s/%s/table.yaml"%(data_path, file) )),
+            # "cube.yaml": yaml.load(open("%s/%s/cube.yaml" % (data_path, file))),
+            "datasource": file,
+            'measure': request.session['measure'],
+            'analysis_name': request.session['analysis_name']
         }
-        djangoData = json.dumps( djangoData, indent=4 )
+        djangoData = json.dumps(djangoData, indent=4)
 
         def reload():
-            request_bypass.pass_reload(file)
+            logger.info(request_bypass.pass_reload(file))
         t1 = threading.Thread(target=reload)
         t1.start()
 
