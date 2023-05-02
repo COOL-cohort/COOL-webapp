@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row" style="padding: 30px;">
+                    {% if root_flag %}
+                        <div class="col-md-3 col-sm-6 col-xs-12 text-center mt-1">
+                            <h2><b>Total Uploaded Datasets</b></h2>
+                            <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-3 col-xs-6 center">
+                                <button class="btn btn-info btn-block"><b>{{ all_datasets }}</b></button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 text-center mt-1">
+                            <h2><b>Total Used Storage</b></h2>
+                            <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-3 col-xs-6">
+                                <button class="btn btn-info btn-block"><b>{{ all_storage }} MB</b></button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 text-center mt-1">
+                            <h2><b>Total Analysis Figures</b></h2>
+                            <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-3 col-xs-6">
+                                <button class="btn btn-info btn-block"><b>{{ all_figures }}</b></button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12 text-center mt-1">
+                            <h2><b>Total Users</b></h2>
+                            <div class="col-md-offset-3 col-md-6 col-sm-offset-3 col-sm-6 col-xs-offset-3 col-xs-6">
+                                <button class="btn btn-info btn-block"><b>{{ all_users }}</b></button>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="col-xl-4 col-md-4">
+                        <!-- card -->
+                        <div class="card card-h-100">
+                            <!-- card body -->
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Number of Dataset</span>
+                                        <h4 class="mb-3">
+                                            <span class="counter-value" data-target={{ user_datasets }}>0</span>
+                                        </h4>
+                                    </div>
+                                    <div class="col-6">
+                                        <span class="badge badge-soft-success text-success">Latest Uploaded</span>
+                                        <div>
+                                            <span class="ms-1 text-muted font-size-18">{{ last_dataset }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-4 col-md-4">
+                        <!-- card -->
+                        <div class="card card-h-100">
+                            <!-- card body -->
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Storage</span>
+                                        <h4 class="mb-3">
+                                            <span class="counter-value" data-target={{ user_storage }}>0</span> MB
+                                        </h4>
+                                    </div>
+                                    <div class="col-6">
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-4 col-md-4">
+                        <!-- card -->
+                        <div class="card card-h-100">
+                            <!-- card body -->
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">Queries</span>
+                                        <h4 class="mb-3">
+                                            <span class="counter-value" data-target={{ user_figures }}>0</span>
+                                        </h4>
+                                    </div>
+                                    <div class="col-6">
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                </div>
+
+
+                <div class="row">
+                {% for key,value in databases.items %}
+                    <div class="col-xs-12">
+                        <div class="panel panel-default panel-container" >
+                            <div class="panel-heading">
+                                <h4>{{ value.name }} ({{ value.date }})</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div  style="height:300px" class="chartpanel" >
+
+                                    <div class="col-xs-2">
+                                        <div>
+                                            <h2>Num of IDs: </h2>
+                                            <h1>{{ value.num_ids }}</h1>
+                                        </div>
+                                        <div>
+                                            <h2>Num of Records: </h2>
+                                            <h1>{{ value.num_records }}</h1>
+                                        </div>
+                                        <div>
+                                            <h2>Involved Dates: </h2>
+                                            <h1>{{ value.involved_dates }}</h1>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        {% for fig in value.figures %}
+                                            <div id="{{ fig }}" style="width: 320px;height:280px; float: left;"></div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+    <!-- dashboard init -->
+    <script src="{% static 'static/js/dashboard.init.js' %}"></script>
+{% endblock scripts %}
