@@ -68,7 +68,7 @@ Password: 123456
 
 7. Remove all the events with no `value`
 
-* Example dataset: [here](example-data/example.csv).  
+* Example dataset: [here](example/example.csv).  
 * Example video: [here](https://www.comp.nus.edu.sg/~dbsystem/cool/#/demo).
 
 
@@ -86,7 +86,7 @@ The ```dashboard``` directory contains the Main Django Application.
 
 This section describes the schema of the dataset used in data compacting and query processing.
 
-* Example file: [here](/example-data/example-table.yaml).
+* Example file: [here](/example/example-table.yaml).
 
 
 ### For data compacting
@@ -138,7 +138,7 @@ For each entry in the measures part, it contains three attributes: "aggregator",
 
 * "tableFieldName" is the same as the baseField attribute of the schema file. The entries of the measures part provides the metrics that can be specified in cohort queries.  
 
-* Example file: [here](/example-data/example-cube.yaml).
+* Example file: [here](/example/example-cube.yaml).
 
 # Literature References
 

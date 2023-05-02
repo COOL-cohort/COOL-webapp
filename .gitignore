@@ -89,3 +89,4 @@ cool_storage/*
 dim.db
 # db.sqlite3
 test.ipynb
+backup

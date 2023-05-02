@@ -31,5 +31,4 @@ RUN set -x \
 EXPOSE 9998
 ADD cool-queryserver-0.1-SNAPSHOT.jar cool-queryserver-0.1-SNAPSHOT.jar
 ADD liblinux.so /tmp/liblinux.so
-#ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -agentlib:linux -jar Queryserver_encrypt.jar conf.yaml
 ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -jar cool-queryserver-0.1-SNAPSHOT.jar cool_storage 9998
