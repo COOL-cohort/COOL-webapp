@@ -5,10 +5,8 @@ upload_path = "./upload/"
 repo_name = "cool_storage"
 data_path = "./%s/" % repo_name
 
-SERVER = 'http://cool-backend:9998'
-# SERVER = 'http://127.0.0.1:8200'
-
-logger = logging.getLogger('django')
+# SERVER = 'http://cool-backend:9998'
+SERVER = 'http://127.0.0.1:8080'
 
 if not os.path.exists(upload_path):
     os.mkdir(upload_path)

@@ -17,13 +17,16 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-from cool_dashboard.views import login, register, dashboard
 from .views import *
 
 urlpatterns = [
     # default page
     path('', login_required(dashboard.Dashboard.as_view()), name="Dashboard"),
     path('dashboard/', login_required(dashboard.Dashboard.as_view()), name="Dashboard"),
+    path('upload/', login_required(Upload.as_view()), name='Upload'),
+    path('return_columns/', analyze_columns, name='return the columns'),
+    path('error-500/', test_error_500, name='Test internal system error'),
+    path('request/', test_request, name='test request'),
 
     # API for the pratical system
     path('login/', login.webLogin, name="Login"),
