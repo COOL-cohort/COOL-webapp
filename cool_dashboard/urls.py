@@ -25,6 +25,7 @@ urlpatterns = [
     path('dashboard/', login_required(dashboard.Dashboard.as_view()), name="Dashboard"),
     path('upload/', login_required(Upload.as_view()), name='Upload'),
     path('return_columns/', analyze_columns, name='return the columns'),
+    path('dataset-show/',login_required(DatasetShow.as_view()), name='Show datasets'),
     path('error-500/', test_error_500, name='Test internal system error'),
     path('request/', test_request, name='test request'),
     path('test/', test, name='test function'),
