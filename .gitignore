@@ -82,8 +82,9 @@ ENV/
 # mypy
 .mypy_cache/
 
-upload/*
+cache/*
 cool_storage/*
+*/cool_storage/*
 
 
 dim.db

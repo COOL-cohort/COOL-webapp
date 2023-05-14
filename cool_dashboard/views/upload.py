@@ -1,16 +1,15 @@
-import logging
-import os
-import random
-from datetime import datetime
-import string
 import yaml
+import datetime
 import pandas as pd
+import shutil
 
+from django.contrib.auth.models import User
 from django.views import View
 from django.shortcuts import render, redirect
-from ..models import User, upload_history
+from .pass_request import *
 
 from ..config import *
+from ..models import upload_history, cube_details
 
 logger = logging.getLogger('django')
 
@@ -24,51 +23,127 @@ class Upload(View):
         filename = request.POST.get("filename")
         setname = request.POST.get("setname")
         details = request.POST.get("details")
+        columns = request.session['columns']
+        # columns = request.POST.get("columns")
+        size = request.POST.get("size")
         if filename == None:
             return render(request, "error-500.html", {'error': "Please upload a csv file."})
 
         if not os.path.exists(os.path.join(upload_path, "%s.csv" % filename)):
             return render(request, "error-500.html", {'error': "The csv file is missing. Please reload again. %s"%filename})
 
-        user = User.objects.get(id=request.user.id)
-        upload_history.objects.create(user_id=user, file_save=filename)
-
-        data = pd.read_csv(upload_path + filename + ".csv", header=0)
-        columns = list(data.columns)
+        # data = pd.read_csv(upload_path + filename + ".csv", header=0)
+        # columns = list(data.columns)
 
         new_path = os.path.join(data_path, filename)
         if not os.path.exists(new_path):
             os.mkdir(new_path)
 
+        # logger.info(columns)
         # for col in columns:
         #     logger.info(request.POST.get(col))
 
+        # is_null = pd.isna(data)
+        # if is_null.any():
+        #     return render(request, "error-500.html",
+        #                   {'error': "There are null values in the csv file."})
+
+        # save the table.yaml file
         with open(os.path.join(new_path, 'table.yaml'), 'w') as f:
             fields = []
             for field in columns:
                 fields.append({
                     "name": field.replace('\r', ''),
                     "fieldType": fieldTypes[request.POST.get(field)]['type'],
-                    "dataType": fieldTypes[request.POST.get(field)]['datatype'],
+                    # "dataType": fieldTypes[request.POST.get(field)]['datatype'],
+                    "invariantField": fieldTypes[request.POST.get(field)]['invariantField'],
                 })
-                if fieldTypes[request.POST.get(field)]['type'] == "ActionTime":
-                    data[field] = pd.to_datetime(data[field])
-                    data[field] = data[field].dt.strftime("%Y-%m-%d")
-                    data.to_csv(os.path.join(upload_path,"%s.csv"%filename), index=False)
+                # if fieldTypes[request.POST.get(field)]['type'] == "ActionTime":
+                #     data[field] = pd.to_datetime(data[field])
+                #     data[field] = data[field].dt.strftime("%Y-%m-%d")
+                #     data.to_csv(os.path.join(upload_path, "%s.csv" % filename), index=False)
 
             f.write(yaml.dump({'fields': fields, 'charset': 'utf-8'}, default_flow_style=False))
 
-        # his_all = []
-        # for his in upload_history.objects.all():
-        #     his_all.append(his.file_save)
-        #
-        # files = os.listdir(upload_path)
-        # for file in files:
-        #     if file[:-4] not in his_all:
-        #         os.remove(upload_path + file)
+        query = {
+            "dataFileType": "CSV",
+            # filename e.g.,20230504153543eTQCiLZ3
+            "cubeName": "%s" % filename,
+            # path to the table yaml
+            "schemaPath": os.path.join(back_data_path, filename, 'table.yaml'),
+            "dataPath": os.path.join("../", upload_path, "%s.csv" % filename),
+            "outputPath": "./%s/" % repo_name
+        }
+        logger.info(query)
+        out = pass_load(query)
+        if out.status_code != 200:
+            return render(request, "error-500.html", {'error': out.text})
+        else:
+            version = out.text
 
-        # return redirect("/column_list/")
-        return render(request, "dataset-upload.html")
+        # save the original csv file
+        shutil.copyfile(os.path.join(upload_path, "%s.csv" % filename),
+                        os.path.join(new_path, "%s.csv" % filename))
+        shutil.copyfile(os.path.join(new_path, 'table.yaml'),
+                        os.path.join(new_path, version, 'table.yaml'))
+
+        # remove all previous csv files
+        his_all = []
+        for his in upload_history.objects.all():
+            his_all.append(his.file_save)
+
+        files = os.listdir(upload_path)
+        for file in files:
+            if file[:-4] not in his_all:
+                os.remove(upload_path + file)
+
+        results = self.get_demo_info(filename, fields)
+        with open(os.path.join(new_path, 'demographic.yaml'), 'w') as f:
+            f.write(yaml.dump(results, default_flow_style=False))
+
+        user = User.objects.get(id=request.user.id)
+        new_file = cube_details(
+            user_id=user,
+            set_name=setname,
+            set_details=details,
+            cube_name=filename,
+            cube_size=getFoldSize(os.path.join(new_path, version)),
+            num_ids=results[results['UserKey']]['size'],
+            num_records=size,
+            start_time=results[results['Time']]['start'],
+            end_time=results[results['Time']]['end'],
+        )
+        new_file.save()
+
+        # return render(request, "dataset-upload.html")
+        return redirect("/dashboard/")
+
+    def get_demo_info(self, cubename, fields):
+        base_time = datetime.datetime.strptime(base_day, "%Y-%m-%d %H:%M:%S")
+        results = {}
+        for field in fields:
+            query = {
+                "cube": cubename,
+                "col": field['name']
+            }
+            out = pass_read_col(query)
+            # logger.info(out.text)
+            out = eval(out.text)
+            if out['type'] == 'UserKey':
+                out['size'] = len(out['values'])
+                results['UserKey'] = field['name']
+            elif out['type'] == 'Segment':
+                out['size'] = len(out['values'])
+            elif out['type'] == 'ActionTime':
+                results['Time'] = field['name']
+                # min_day = base_time + datetime.timedelta(days=int(out['min']))
+                # max_day = base_time + datetime.timedelta(days=int(out['max']))
+                # out['start'] = min_day.strftime("%Y-%m-%d %H:%M:%S")
+                # out['end'] = max_day.strftime("%Y-%m-%d %H:%M:%S")
+                out['start'] = base_time + datetime.timedelta(days=int(out['min']))
+                out['end'] = base_time + datetime.timedelta(days=int(out['max']))
+            results[field['name']] = out
+        return results
 
 
 def get_FileSize(filePath):
@@ -80,5 +155,6 @@ def get_FileSize(filePath):
 def getFoldSize(foldPath, size=0):
     for root, dirs, files in os.walk(foldPath):
         for f in files:
-            size += os.path.getsize(os.path.join(root, f))
+            size += get_FileSize(os.path.join(root, f))
     return size
+

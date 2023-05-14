@@ -16,4 +16,10 @@ def pass_load(query):
     url = SERVER + '/load'
     logger.info("pass load: " + url)
     r = requests.post(url, headers=headers, data=json.dumps(query))
-    return r.text
+    return r
+
+def pass_read_col(query):
+    url=SERVER + '/cohort/list_col_info?cube=%s&col=%s'%(query['cube'], query['col'])
+    logger.info("pass read col: " + url)
+    r = requests.get(url, headers=headers)
+    return r

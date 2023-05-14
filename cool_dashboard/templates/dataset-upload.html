@@ -263,6 +263,9 @@
                 $("#columns").append('<input type="hidden" name="setname" value="'+res["setname"]+'" />')
                 $("#columns").append('<input type="hidden" name="filename" value="'+res["filename"]+'" />')
                 $("#columns").append('<input type="hidden" name="details" value="'+res["details"]+'" />')
+                $("#columns").append('<input type="hidden" name="columns" value="'+columns+'" />')
+                $("#columns").append('<input type="hidden" name="size" value="'+res['size']+'" />')
+                $("#columns").append('<div> Record size: '+res['size']+'</div>')
                 $.each(columns, function (index, item) {
                     var name = columns[index];
                     let pattern = '<div class="col-lg-12"> \

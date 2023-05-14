@@ -27,6 +27,7 @@ urlpatterns = [
     path('return_columns/', analyze_columns, name='return the columns'),
     path('error-500/', test_error_500, name='Test internal system error'),
     path('request/', test_request, name='test request'),
+    path('test/', test, name='test function'),
 
     # API for the pratical system
     path('login/', login.webLogin, name="Login"),

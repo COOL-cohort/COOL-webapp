@@ -1,0 +1,35 @@
+charset: utf-8
+fields:
+- dataType: String
+  fieldType: UserKey
+  name: id
+- dataType: Int32
+  fieldType: Metric
+  name: age
+- dataType: Int32
+  fieldType: Metric
+  name: gender
+- dataType: Int32
+  fieldType: Metric
+  name: race
+- dataType: String
+  fieldType: Action
+  name: event
+- dataType: String
+  fieldType: Segment
+  name: position
+- dataType: String
+  fieldType: Segment
+  name: disease
+- dataType: String
+  fieldType: Segment
+  name: labtest
+- dataType: String
+  fieldType: Segment
+  name: medicine
+- dataType: Int32
+  fieldType: Metric
+  name: value
+- dataType: Int32
+  fieldType: ActionTime
+  name: time
