@@ -63,12 +63,12 @@
                                                     <td>{{ set.num_records }}</td>
                                                     <td>{{ set.set_detail }}</td>
                                                     <td>
-                                                        <form method="POST" enctype="multipart/form-data" action="/dataset/{{ set.set_id }}">{% csrf_token %}
-                                                            <input name="set_id" value="{{ set.set_id }}" type="hidden">
-                                                            <input name="operation" value="show" type="hidden">
-                                                            <button type="submit" class="btn btn-light btn-sm">View</button>
-                                                        </form>
-
+{#                                                        <form method="POST" enctype="multipart/form-data" action="/dataset/{{ set.set_id }}">{% csrf_token %}#}
+{#                                                            <input name="set_id" value="{{ set.set_id }}" type="hidden">#}
+{#                                                            <input name="operation" value="show" type="hidden">#}
+{#                                                            <button type="submit" class="btn btn-light btn-sm">View</button>#}
+{#                                                        </form>#}
+                                                        <a type="button" class="btn btn-light btn-sm" href="/dataset/{{ set.set_id }}">View</a></td>
                                                     </td>
                                                     <td>
                                                         <button type="button" class="btn btn-light btn-sm">Delete</button>
