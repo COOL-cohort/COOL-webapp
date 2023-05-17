@@ -96,7 +96,7 @@
                                             <!--Cohort Metrix-->
                                             <div class="row">
                                                 <!-- GLOBAL OPTIONS-->
-                                                <div class="form-group form-section-label">
+                                                <div class="form-section-label">
                                                     <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Cohort Metric" %}</label>
                                                 </div>
                                                 <div class="row mb-4">
@@ -111,7 +111,7 @@
                                                     <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Over" %}</label>
                                                     <i class="fa fa-plus-circle globalFilter-add globalFilter-empty-btn" style="margin-left: 11px; display: none; margin-bottom: 10px;" aria-hidden="true"></i>
                                                     <div id="global-filters-container" class=" col-md-9 col-sm-9 col-xs-12">
-                                                        <div class="row">
+                                                        <div class="row global-filter">
                                                             <div class="col-md-3 col-sm-3 col-xs-4">
                                                                 <select class="form-select select2-single data-table-yaml"> </select>
                                                             </div>
@@ -119,21 +119,21 @@
                                                                 <select class="form-select select2-single second-stage">
                                                                 </select>
                                                             </div>
-                                                            <div class='col-sm-6 col-sm-6 col-xs-6 datetimepicker' style="display: none;">
-                                                                <div class='input-group date date1'>
-                                                                    <input type='text' class="form-control" />
+                                                            <div class="col-sm-6 col-sm-6 col-xs-6 datetimepicker" style="display: none;">
+                                                                <div class="input-group date date1">
+                                                                    <input type="text" class="form-control" />
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
                                                                 </div>
-                                                                <div class='input-group date date2'>
-                                                                    <input type='text' class="form-control" />
+                                                                <div class="input-group date date2">
+                                                                    <input type="text" class="form-control" />
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-sm-6 col-sm-6 col-xs-6 intRange' style="display: none;">
+                                                            <div class="col-sm-6 col-sm-6 col-xs-6 intRange" style="display: none;">
                                                                 <div class="col-md-5 col-sm-5 col-xs-5">
                                                                     <input type="text" class="form-control min ">
                                                                 </div>
@@ -142,7 +142,7 @@
                                                                     <input type="text" class="form-control max ">
                                                                 </div>
                                                             </div>
-                                                            <div class='col-sm-1 col-sm-1 col-xs-1'>
+                                                            <div class="col-sm-1 col-sm-1 col-xs-1">
                                                                 <i class="fa fa-plus-circle globalFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
                                                                 <i class="fa fa-minus-circle globalFilter-remove" style="padding-right:7px;" aria-hidden="true"></i>
                                                             </div>
@@ -171,7 +171,7 @@
                                             </div>
                                             <!--USER SELECTION-->
                                             <div class="row">
-                                                <div class="form-group form-section-label">
+                                                <div class=" form-section-label">
                                                     <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">{% translate "User Selection" %}
                                                         <input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked> </label>
                                                 </div>
@@ -187,7 +187,7 @@
                                                                 <div class="row">
                                                                     <label class="text-center col-md-1 col-sm-1 col-xs-12">{% translate "Their" %}</label>
                                                                     <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
-                                                                        <div class="col-md-3 col-sm-3 col-xs-5 float-left">
+                                                                        <div class="col-md-5 col-sm-5 col-xs-5 float-left">
                                                                             <select class="form-select select2-single data-table-yaml">
                                                                             </select>
                                                                         </div>
@@ -263,7 +263,7 @@
                                             </div>
                                             <!--COHORT SELECTION-->
                                             <div class="row">
-                                                <div class="form-group form-section-label">
+                                                <div class="form-section-label">
                                                     <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Start Condition" %}</label>
                                                 </div>
                                                 <div id="events-container" class="events-container">
@@ -276,7 +276,7 @@
                                                         <div class="row mb-4">
                                                             <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Event:" %}</label>
                                                             <div class="col-md-9 multi-eventFilters eventSelection" >
-                                                                <div class="form-group row">
+                                                                <div class="row">
                                                                     <label class="text-center col-md-1 col-sm-1 col-xs-12">{% translate "Their" %}</label>
                                                                     <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
                                                                         <div class="col-md-5 col-sm-5 col-xs-11 float-left">
@@ -329,46 +329,11 @@
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
                                                         </div>
-                                                        <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12">{% translate "Group by" %}:</label>
-                                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                                <select class="form-select select2-single data-table-yaml groupby">
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                                <label class="control-label float-left">{% translate "Advanced" %}:</label>
-                                                                <div class="float-left">
-                                                                    <input style="margin-top:12px; margin-left: 8px;" class="advanced-checkbox adv" type="checkbox" name="" >
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group advanced-container">
-                                                            <div class="row">
-                                                                <label class="control-label col-md-offset-1 col-md-3 col-sm-3 col-xs-12 ">{% translate "Min" %}:</label>
-                                                                <div class="col-md-1 col-sm-1 col-xs-12">
-                                                                    <input type="text" placeholder="0" class="form-control adv1" placeholder="">
-                                                                </div>
-                                                                <label class="control-label col-md-1 col-sm-1 col-xs-12 ">{% translate "Max" %}:</label>
-                                                                <div class="col-md-1 col-sm-1 col-xs-12">
-                                                                    <input type="text" placeholder="10" class="form-control adv2" placeholder="">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row" style="margin-top:6px">
-                                                                <label class="control-label col-md-offset-1 col-md-3 col-sm-3 col-xs-12 ">{% translate "Interval" %}:</label>
-                                                                <div class="col-md-1 col-sm-1 col-xs-12">
-                                                                    <input type="text" placeholder="20" class="form-control adv3" placeholder="">
-                                                                </div>
-                                                                <label class="control-label col-md-1 col-sm-1 col-xs-12 ">{% translate "Log Scale" %}:</label>
-                                                                <div class="col-md-1 col-sm-1 col-xs-12">
-                                                                    <input style="margin-top:12px;" class="adv4" type="checkbox" name="" >
-                                                                </div>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     <!--END COHORT EVENT-->
                                                 </div>
 
-                                                <div class="form-group add-event-btn">
+                                                <div class="add-event-btn">
                                                     <div class="col-md-11 col-sm-11 col-xs-12 col-md-offset-2">
                                                         <button onclick="handleNewEvent()" type=button class="btn btn-primary float-end">
                                                             <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
@@ -377,11 +342,46 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="ln_solid"></div>
-                                            <div class="form-group">
-                                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-2">
-                                                    <button type="submit" class="btn btn-primary">{% translate "Submit" %}</button>
-                                                    <button class="btn btn-danger" type="reset" onClick="window.location.reload();return false;" >{% translate "Reset" %}</button>
+                                            <!--GROUP BY-->
+                                            <div class="row">
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Cohort Partition" %}</label>
+                                                </div>
+                                                <div class="row mb-4 advanced-check">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{% translate "Group by" %}:</label>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <select class="form-select select2-single data-table-yaml groupby">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 mb-4">
+                                                        <label class="control-label float-left">{% translate "Advanced" %}:</label>
+                                                        <div class="float-left">
+                                                            <input style="margin-top:12px; margin-left: 8px;" class="advanced-checkbox adv" type="checkbox" name="" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="advanced-container">
+                                                    <div class="row mb-3 offset-md-3 offset-sm-3">
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Min" %}:</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="0" class="form-control adv1" >
+                                                        </div>
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Max" %}:</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="10" class="form-control adv2" >
+                                                        </div>
+                                                        <label class="control-label  col-md-2 col-sm-2 col-xs-3 ">{% translate "Interval" %}:</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="20" class="form-control adv3" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="row float-end">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
+                                                    <button type="submit" class="btn btn-primary w-md">{% translate "Submit" %}</button>
+                                                    <div class="vr"></div>
+                                                    <button class="btn btn-danger w-md" type="reset" onClick="window.location.reload();return false;" >{% translate "Reset" %}</button>
                                                 </div>
                                             </div>
                                         </form>
