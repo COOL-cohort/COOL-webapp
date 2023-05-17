@@ -29,7 +29,7 @@ def strTotime(name):
 class Dashboard(View):
     # @login_required
     def get(self, request):
-        logging.info(request.user)
+        # logging.info(request.user)
         if request.user.is_superuser:
             all_users = User.objects.count()
             all_figures = analysis.objects.count()

@@ -142,14 +142,14 @@
                                         </div>
                                         <div>
                                             <h2>Involved Dates: </h2>
-                                            <h1>{{ value.involved_dates }}</h1>
+                                            <h1>{{ value.start }} - {{ value.end }}</h1>
                                         </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        {% for fig in value.figures %}
-                                            <div id="{{ fig }}" style="width: 320px;height:280px; float: left;"></div>
-                                        {% endfor %}
-                                    </div>
+{#                                    <div class="col-xs-10">#}
+{#                                        {% for fig in value.figures %}#}
+{#                                            <div id="{{ fig }}" style="width: 320px;height:280px; float: left;"></div>#}
+{#                                        {% endfor %}#}
+{#                                    </div>#}
                                 </div>
                             </div>
                         </div>
