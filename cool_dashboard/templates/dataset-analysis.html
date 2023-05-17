@@ -150,7 +150,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="row mb-4">
-                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% translate "Time Range" %}</label>
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min-age">{% translate "Time Range" %}</label>
                                                     <div class="col-md-1 col-sm-1 col-xs-3">
                                                         <input type="text" id="min-age" required="required" class="form-control col-md-1 col-xs-1" placeholder="0">
                                                     </div>
@@ -195,21 +195,21 @@
                                                                         <div class="col-md-6 col-sm-6 col-xs-12 float-left">
                                                                             <select class="form-select second-stage"> </select>
                                                                         </div>
-                                                                        <div class='col-sm-6 col-sm-6 col-xs-12 datetimepicker' style="display: none;">
-                                                                            <div class='input-group date date1'>
-                                                                                <input type='text' class="form-control" />
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
+                                                                            <div class="input-group date date1">
+                                                                                <input type="text" class="form-control" />
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
-                                                                            <div class='input-group date date2'>
-                                                                                <input type='text' class="form-control" />
+                                                                            <div class="input-group date date2">
+                                                                                <input type="text" class="form-control" />
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class='col-sm-6 col-sm-6 col-xs-12 intRange' style="display: none;">
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">
                                                                             <div class="col-md-5 col-sm-5 col-xs-5">
                                                                                 <input type="text" class="form-control event-min " placeholder="1">
                                                                             </div>
@@ -219,7 +219,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class='col-sm-1 col-sm-1 col-xs-1'>
+                                                                    <div class="col-sm-1 col-sm-1 col-xs-1">
                                                                         <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
                                                                         <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
                                                                     </div>
@@ -227,18 +227,18 @@
                                                             </div>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% translate "Frequency" %}:</label>
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">{% translate "Frequency" %}:</label>
                                                             <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                                                <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">-</div>
                                                             <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                                                <input type="text" id="max_user_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">{% translate "In the" %}  </label>
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="freq_time">{% translate "In the" %}  </label>
                                                             <div class="col-md-2 col-sm-2 col-xs-5 float-left">
                                                                 <select class="form-select select2-single range-select first">
                                                                     <option>{% translate "first" %}</option>
@@ -246,7 +246,7 @@
                                                                 </select>
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">
+                                                                <input type="text" id="freq_time" required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px; font-weight: 800;">{% translate "day(s)" %}</div>
                                                         </div>
@@ -287,21 +287,21 @@
                                                                         <div class="col-md-6 col-sm-6 col-xs-12 float-left">
                                                                             <select class="form-select second-stage"> </select>
                                                                         </div>
-                                                                        <div class='col-sm-6 col-sm-6 col-xs-12 datetimepicker' style="display: none;">
-                                                                            <div class='input-group date date1'>
-                                                                                <input type='text' class="form-control" />
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
+                                                                            <div class="input-group date date1">
+                                                                                <input type="text" class="form-control" />
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
-                                                                            <div class='input-group date date2'>
-                                                                                <input type='text' class="form-control" />
+                                                                            <div class="input-group date date2">
+                                                                                <input type="text" class="form-control" />
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class='col-sm-6 col-sm-6 col-xs-12 intRange' style="display: none;">
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">
                                                                             <div class="col-md-5 col-sm-5 col-xs-5">
                                                                                 <input type="text" class="form-control event-min " placeholder="1">
                                                                             </div>
@@ -319,13 +319,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min">{% translate "Frequency" %}:</label>
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_birth_freq">{% translate "Frequency" %}:</label>
                                                             <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" name="min" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                                                <input type="text" id="min_birth_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>
                                                             <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" name="max" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                                                <input type="text" id="max_birth_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
                                                         </div>
@@ -360,7 +360,7 @@
                                                                 </div>
                                                                 <label class="control-label col-md-1 col-sm-1 col-xs-12 ">{% translate "Log Scale" %}:</label>
                                                                 <div class="col-md-1 col-sm-1 col-xs-12">
-                                                                    <input style="margin-top:12px;" class='adv4' type="checkbox" name="" >
+                                                                    <input style="margin-top:12px;" class="adv4" type="checkbox" name="" >
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -499,4 +499,5 @@
 {% endblock right-body %}
 
 {% block    scripts %}
+    <script src='{% static "static/js/retention.js" %}'></script>
 {% endblock scripts %}
