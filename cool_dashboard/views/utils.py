@@ -1,3 +1,6 @@
+import os
+import yaml
+
 from django.http import JsonResponse
 import random
 from datetime import datetime
@@ -75,6 +78,88 @@ def analyze_columns(request):
         res['types'] = list(fieldTypes.keys())
         return JsonResponse(res)
 
+
+def return_measures(request):
+    if request.method == 'POST':
+        cube_id = request.POST['cube_id']
+        # logger.info(cube_id)
+
+        demoYaml = os.path.join(data_path, cube_id, "demographic.yaml")
+        if os.path.exists(demoYaml):
+            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
+        else:
+            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
+        # logger.info(demoYaml)
+        res = []
+        for key in demoYaml['UserKey']:
+            name = demoYaml['Details'][key]['name']
+            res.append({"id": name, "text": name})
+        logger.info(res)
+        return JsonResponse(res, safe=False)
+
+def return_groupby(request):
+    if request.method == 'POST':
+        cube_id = request.POST['cube_id']
+        # logger.info(cube_id)
+
+        demoYaml = os.path.join(data_path, cube_id, "demographic.yaml")
+        if os.path.exists(demoYaml):
+            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
+        else:
+            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
+        # logger.info(demoYaml)
+        res = []
+        for i in range(len(demoYaml['Fields'])):
+            if demoYaml['Details'][i]['invariant']:
+                res.append({"id": i, "text": demoYaml['Details'][i]['name']})
+        logger.info(res)
+        return JsonResponse(res, safe=False)
+
+
+def return_fileds(request):
+    if request.method == 'POST':
+        cube_id = request.POST['cube_id']
+        logger.info(cube_id)
+
+        demoYaml = os.path.join(data_path, cube_id, "demographic.yaml")
+        if os.path.exists(demoYaml):
+            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
+        else:
+            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
+
+        logger.info(demoYaml)
+        res = []
+        for i, field in enumerate(demoYaml['Fields']):
+            if demoYaml['Details'][i]['type'] in ['UserKey', 'ActionTime']:
+                continue
+            if demoYaml['Details'][i]['invariant']:
+                continue
+            res.append({"id": i, "text": field})
+        logger.info(res)
+        return JsonResponse(res, safe=False)
+
+def return_field_detail(request):
+    if request.method == 'POST':
+        cube_id = request.POST['cube_id']
+        field_id = int(request.POST['field_id'])
+        logger.info(cube_id)
+
+        demoYaml = os.path.join(data_path, cube_id, "demographic.yaml")
+        if os.path.exists(demoYaml):
+            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
+        else:
+            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
+
+        logger.info(demoYaml)
+        field_type = demoYaml['Details'][field_id]['type']
+
+        if field_type in ["Segment", "Action"]:
+            res = []
+            for i, value in enumerate(demoYaml['Details'][field_id]['values']):
+                res.append({"id": value, "text": value})
+
+        logger.info(res)
+        return JsonResponse(res, safe=False)
 
 def test_request(request):
     # query = {

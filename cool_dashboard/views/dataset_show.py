@@ -1,3 +1,4 @@
+import yaml
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views import View
@@ -31,11 +32,18 @@ class DatasetDetail(View):
     def get(self, request, set_id):
         context = {}
         cube = cube_details.objects.filter(user_id=request.user.id, file_id=set_id)
-        cube.values()
+        # cube.values()
         if not cube.exists():
             return render(request, "error-500.html", {'error': "Could not find the dataset under this account."})
         cube = cube[0]
-        logger.info(cube)
+        # logger.info(cube)
+
+        tableYaml = os.path.join(data_path, str(cube.cube_name), "table.yaml")
+        logger.info(yaml.load(open(tableYaml), Loader=yaml.Loader))
+        if os.path.exists(tableYaml):
+            tableYaml = yaml.load(open(tableYaml), Loader=yaml.Loader)
+            context['tableYaml'] = tableYaml['fields']
+
         context['set_id'] = cube.file_id
         context['set_name'] = cube.set_name
         context['set_size'] = cube.cube_size

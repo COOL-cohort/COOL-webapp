@@ -24,7 +24,13 @@ urlpatterns = [
     path('', login_required(dashboard.Dashboard.as_view()), name="Dashboard"),
     path('dashboard/', login_required(dashboard.Dashboard.as_view()), name="Dashboard"),
     path('upload/', login_required(Upload.as_view()), name='Upload'),
+
     path('return_columns/', analyze_columns, name='return the columns'),
+    path('return_measure/', return_measures, name='return the measure'),
+    path('return_groupby/', return_groupby, name='return the groupby'),
+    path('return_fileds/', return_fileds, name='return the fields'),
+    path('return_field_detail/', return_field_detail, name='return the contents of the field'),
+
     path('dataset/<int:set_id>', DatasetDetail.as_view(), name="illustrate a dataset"),
     path('dataset-show/', login_required(DatasetShow.as_view()), name='Show datasets'),
     path('error-500/', test_error_500, name='Test internal system error'),

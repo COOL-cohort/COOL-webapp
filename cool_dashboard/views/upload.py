@@ -101,6 +101,9 @@ class Upload(View):
         with open(os.path.join(new_path, 'demographic.yaml'), 'w') as f:
             f.write(yaml.dump(results, default_flow_style=False))
 
+        logger.info(results)
+        # logger.info(results['Details'][results['UserKey'][0]])
+
         user = User.objects.get(id=request.user.id)
         new_file = cube_details(
             user_id=user,
@@ -108,10 +111,10 @@ class Upload(View):
             set_details=details,
             cube_name=filename,
             cube_size=getFoldSize(os.path.join(new_path, version)),
-            num_ids=results[results['UserKey']]['size'],
+            num_ids=results['Details'][results['UserKey'][0]]['size'],
             num_records=size,
-            start_time=results[results['Time']]['start'],
-            end_time=results[results['Time']]['end'],
+            start_time=results['Details'][results['ActionTime'][0]]['start'],
+            end_time=results['Details'][results['ActionTime'][0]]['end'],
         )
         new_file.save()
 
@@ -120,8 +123,17 @@ class Upload(View):
 
     def get_demo_info(self, cubename, fields):
         base_time = datetime.datetime.strptime(base_day, "%Y-%m-%d %H:%M:%S")
-        results = {}
-        for field in fields:
+        results = {
+            "UserKey": [],
+            "ActionTime": [],
+            "Event": [],
+            "Event Related": [],
+            "Segment": [],
+            "Metrix": [],
+            "Fields": [],
+            "Details": {}
+        }
+        for fid, field in enumerate(fields):
             query = {
                 "cube": cubename,
                 "col": field['name']
@@ -129,20 +141,26 @@ class Upload(View):
             out = pass_read_col(query)
             # logger.info(out.text)
             out = eval(out.text)
+            out['name'] = field['name']
+            out['invariant'] = field['invariantField']
+
             if out['type'] == 'UserKey':
                 out['size'] = len(out['values'])
-                results['UserKey'] = field['name']
+                out.pop('values')
+                results['UserKey'].append(fid)
             elif out['type'] == 'Segment':
                 out['size'] = len(out['values'])
+                results['Segment'].append(fid)
             elif out['type'] == 'ActionTime':
-                results['Time'] = field['name']
+                results['ActionTime'].append(fid)
                 # min_day = base_time + datetime.timedelta(days=int(out['min']))
                 # max_day = base_time + datetime.timedelta(days=int(out['max']))
                 # out['start'] = min_day.strftime("%Y-%m-%d %H:%M:%S")
                 # out['end'] = max_day.strftime("%Y-%m-%d %H:%M:%S")
                 out['start'] = base_time + datetime.timedelta(days=int(out['min']))
                 out['end'] = base_time + datetime.timedelta(days=int(out['max']))
-            results[field['name']] = out
+            results['Fields'].append(field['name'])
+            results['Details'][fid] = out
         return results
 
 

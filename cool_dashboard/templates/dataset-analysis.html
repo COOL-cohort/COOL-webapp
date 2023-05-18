@@ -4,7 +4,10 @@
 <!doctype html>
 
 {% block    css %}
-    <link href="{% static 'static/css/retention.css' %}" rel="stylesheet">
+    <!-- datepicker css -->
+    <link rel="stylesheet" href='{% static "static/css/flatpickr.min.css" %}'>
+    <link rel="stylesheet" href='{% static "static/css/select2.min.css" %}'>
+    <link rel="stylesheet" href="{% static 'static/css/retention.css' %}">
 {% endblock css %}
 
 {% block    right-body %}
@@ -40,6 +43,7 @@
                             <div class="card-header">
                                 <h4 class="card-title">{{ set_name }}</h4>
                                 <p class="card-title-desc">Details: {{ set_details }}</p>
+                                <input id="cube_id" type="hidden" value="{{ set_info.cube_name }}">
                             </div>
 
                             <div class="card-body">
@@ -103,7 +107,7 @@
                                                     <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Measure" %}</label>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                                         <select class="form-select select2-single data-cube-yaml" id='measure'>
-
+                                                            {% csrf_token %}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -111,38 +115,38 @@
                                                     <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Over" %}</label>
                                                     <i class="fa fa-plus-circle globalFilter-add globalFilter-empty-btn" style="margin-left: 11px; display: none; margin-bottom: 10px;" aria-hidden="true"></i>
                                                     <div id="global-filters-container" class=" col-md-9 col-sm-9 col-xs-12">
-                                                        <div class="row global-filter">
-                                                            <div class="col-md-3 col-sm-3 col-xs-4">
+                                                        <div class="row mb-4 global-filter select-multi-stage">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
                                                                 <select class="form-select select2-single data-table-yaml"> </select>
                                                             </div>
-                                                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 segment" >
                                                                 <select class="form-select select2-single second-stage">
                                                                 </select>
                                                             </div>
-                                                            <div class="col-sm-6 col-sm-6 col-xs-6 datetimepicker" style="display: none;">
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 datetimepicker" style="display: none;">
                                                                 <div class="input-group date date1">
-                                                                    <input type="text" class="form-control" />
+                                                                    <input type="text" class="form-control datepicker-datetime" >
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
                                                                 </div>
                                                                 <div class="input-group date date2">
-                                                                    <input type="text" class="form-control" />
+                                                                    <input type="text" class="form-control datepicker-datetime">
                                                                     <span class="input-group-addon">
                                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-6 col-sm-6 col-xs-6 intRange" style="display: none;">
-                                                                <div class="col-md-5 col-sm-5 col-xs-5">
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 intRange" style="display: none;">
+                                                                <div class="col-md-5 col-sm-5 col-xs-5 ">
                                                                     <input type="text" class="form-control min ">
                                                                 </div>
-                                                                <div style="float:left; line-height:33px;">-</div>
+                                                                <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>
                                                                 <div class="col-md-5 col-sm-5 col-xs-5">
                                                                     <input type="text" class="form-control max ">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-sm-1 col-sm-1 col-xs-1">
+                                                            <div class="col-sm-2 col-sm-2 col-xs-1">
                                                                 <i class="fa fa-plus-circle globalFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
                                                                 <i class="fa fa-minus-circle globalFilter-remove" style="padding-right:7px;" aria-hidden="true"></i>
                                                             </div>
@@ -182,44 +186,44 @@
                                                             <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Event:" %}</label>
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
                                                             <div class="col-md-9 multi-eventFilters userSelection" >
-                                                                <div class="row">
-                                                                    <label class="text-center col-md-1 col-sm-1 col-xs-12">{% translate "Their" %}</label>
-                                                                    <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
+                                                                <div class="row mb-3">
+                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
+                                                                    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
                                                                         <div class="col-md-5 col-sm-5 col-xs-5 float-left">
                                                                             <select class="form-select select2-single data-table-yaml">
                                                                             </select>
                                                                         </div>
                                                                         <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left">
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >
                                                                             <select class="form-select second-stage"> </select>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
+                                                                        <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
                                                                             <div class="input-group date date1">
-                                                                                <input type="text" class="form-control" />
+                                                                                <input type="text" class="form-control datepicker-datetime" >
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
                                                                             <div class="input-group date date2">
-                                                                                <input type="text" class="form-control" />
+                                                                                <input type="text" class="form-control datepicker-datetime" >
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">
+                                                                        <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">
                                                                             <div class="col-md-5 col-sm-5 col-xs-5">
                                                                                 <input type="text" class="form-control event-min " placeholder="1">
                                                                             </div>
-                                                                            <div style="float:left; line-height:33px;">-</div>
+                                                                            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>
                                                                             <div class="col-md-5 col-sm-5 col-xs-5">
                                                                                 <input type="text" class="form-control event-min " placeholder="100">
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-sm-1 col-sm-1 col-xs-1">
+                                                                    <div class="col-sm-2 col-sm-2 col-xs-12">
                                                                         <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
                                                                         <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
                                                                     </div>
@@ -228,11 +232,11 @@
                                                         </div>
                                                         <div class="row mb-4">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">{% translate "Frequency" %}:</label>
-                                                            <div class="col-md-1 col-sm-1 col-xs-5">
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
                                                                 <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
                                                             </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">-</div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-5">
+                                                            <div class="col-md-1 col-sm-1 col-xs-3 text-center" style="float:left; line-height:33px;">-</div>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
                                                                 <input type="text" id="max_user_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
@@ -274,28 +278,28 @@
                                                             <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Event:" %}</label>
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
                                                             <div class="col-md-9 multi-eventFilters eventSelection" >
-                                                                <div class="row">
-                                                                    <label class="text-center col-md-1 col-sm-1 col-xs-12">{% translate "Their" %}</label>
-                                                                    <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">
+                                                                <div class="row mb-3">
+                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
+                                                                    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
                                                                         <div class="col-md-5 col-sm-5 col-xs-11 float-left">
                                                                             <select class="form-select select2-single data-table-yaml">
                                                                             </select>
                                                                         </div>
                                                                         <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left">
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left" >
                                                                             <select class="form-select second-stage"> </select>
                                                                         </div>
-                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker " style="display: none;">
                                                                             <div class="input-group date date1">
-                                                                                <input type="text" class="form-control" />
+                                                                                <input type="text" class="form-control datepicker-datetime">
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
                                                                             </div>
                                                                             <div class="input-group date date2">
-                                                                                <input type="text" class="form-control" />
+                                                                                <input type="text" class="form-control datepicker-datetime">
                                                                                 <span class="input-group-addon">
                                                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                                                 </span>
@@ -311,7 +315,7 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-1 col-sm-1 col-xs-1">
+                                                                    <div class="col-md-2 col-sm-2 col-xs-2">
                                                                         <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
                                                                         <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
                                                                     </div>
@@ -320,11 +324,11 @@
                                                         </div>
                                                         <div class="row mb-4">
                                                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_birth_freq">{% translate "Frequency" %}:</label>
-                                                            <div class="col-md-1 col-sm-1 col-xs-5">
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
                                                                 <input type="text" id="min_birth_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
                                                             </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-5">
+                                                            <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
                                                                 <input type="text" id="max_birth_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
                                                             </div>
                                                             <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
@@ -350,7 +354,7 @@
                                                 <div class="row mb-4 advanced-check">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">{% translate "Group by" %}:</label>
                                                     <div class="col-md-3 col-sm-3 col-xs-12">
-                                                        <select class="form-select select2-single data-table-yaml groupby">
+                                                        <select class="form-select select2-single groupby" id="groupby">
                                                         </select>
                                                     </div>
                                                     <div class="col-md-3 col-sm-3 col-xs-12 mb-4">
@@ -361,15 +365,15 @@
                                                     </div>
                                                     <div class="advanced-container">
                                                     <div class="row mb-3 offset-md-3 offset-sm-3">
-                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Min" %}:</label>
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Min" %}</label>
                                                         <div class="col-md-2 col-sm-2 col-xs-12">
                                                             <input type="text" placeholder="0" class="form-control adv1" >
                                                         </div>
-                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Max" %}:</label>
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Max" %}</label>
                                                         <div class="col-md-2 col-sm-2 col-xs-12">
                                                             <input type="text" placeholder="10" class="form-control adv2" >
                                                         </div>
-                                                        <label class="control-label  col-md-2 col-sm-2 col-xs-3 ">{% translate "Interval" %}:</label>
+                                                        <label class="control-label  col-md-2 col-sm-2 col-xs-3 ">{% translate "Interval" %}</label>
                                                         <div class="col-md-2 col-sm-2 col-xs-12">
                                                             <input type="text" placeholder="20" class="form-control adv3" >
                                                         </div>
@@ -379,7 +383,8 @@
                                             </div>
                                             <div class="row float-end">
                                                 <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
-                                                    <button type="submit" class="btn btn-primary w-md">{% translate "Submit" %}</button>
+                                                    <button id="submit" type="submit" class="btn btn-primary w-md">{% translate "Submit" %}</button>
+                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="test()">{% translate "Generate" %}</button>
                                                     <div class="vr"></div>
                                                     <button class="btn btn-danger w-md" type="reset" onClick="window.location.reload();return false;" >{% translate "Reset" %}</button>
                                                 </div>
@@ -400,6 +405,7 @@
                     <div class="col-xl-3 col-lg-4">
                         <div class="card">
                             <div class="card-body">
+                            <h5 class="card-title mb-3">Details</h5>
                                 {% for k, v in set_info.items %}
                                     <div class="pb-3">
                                         <div class="row">
@@ -419,76 +425,6 @@
                             </div>
                         </div>
 
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title mb-3">Medicine</h5>
-
-                                <div>
-                                    <ul class="list-unstyled mb-0">
-                                        <li>
-                                            <a href="#" class="py-2 d-block text-muted"><i class="mdi mdi-baby-bottle-outline text-primary me-1"></i> Medicine A</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end card -->
-
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title mb-3">Similar Samples</h5>
-
-                                <div class="list-group list-group-flush">
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm flex-shrink-0 me-3">
-                                                <div class="avatar-title bg-light-subtle text-light rounded-circle font-size-22">
-                                                    <i class="bx bxs-user-circle"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div>
-                                                    <h5 class="font-size-14 mb-1">James Nix</h5>
-                                                    <p class="font-size-13 text-muted mb-0">Full Stack Developer</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm flex-shrink-0 me-3">
-                                                <div class="avatar-title bg-light-subtle text-light rounded-circle font-size-22">
-                                                    <i class="bx bxs-user-circle"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div>
-                                                    <h5 class="font-size-14 mb-1">Darlene Smith</h5>
-                                                    <p class="font-size-13 text-muted mb-0">UI/UX Designer</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="#" class="list-group-item list-group-item-action">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm flex-shrink-0 me-3">
-                                                <div class="avatar-title bg-light-subtle text-light rounded-circle font-size-22">
-                                                    <i class="bx bxs-user-circle"></i>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div>
-                                                    <h5 class="font-size-14 mb-1">William Swift</h5>
-                                                    <p class="font-size-13 text-muted mb-0">Backend Developer</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                            <!-- end card body -->
-                        </div>
-                        <!-- end card -->
                     </div>
                 </div>
             </div> <!-- container-fluid -->
@@ -499,5 +435,15 @@
 {% endblock right-body %}
 
 {% block    scripts %}
+    <script>
+    'use strict';
+    let True = true;
+    let False = false;
+    let tableYaml = {{ tableYaml | default:"{}" | safe }};
+    let cubeID = "{{ set_info.cube_name }}";
+    </script>
+    <!-- datepicker js -->
+    <script src='{% static "static/js/flatpickr.min.js" %}'></script>
+    <script src='{% static "static/js/select2.min.js" %}'></script>
     <script src='{% static "static/js/retention.js" %}'></script>
 {% endblock scripts %}
