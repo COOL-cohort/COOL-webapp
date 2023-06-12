@@ -21,8 +21,8 @@ def get_FileSize(filePath):
 
 def analyze_columns(request):
     if request.method == 'POST':
-        logger.info(request.POST['dataset_name'])
-        logger.info(request.POST['dataset_details'])
+        # logger.info(request.POST['dataset_name'])
+        # logger.info(request.POST['dataset_details'])
         file = request.FILES.get('csv_file')
 
         # get the new file name
@@ -43,7 +43,7 @@ def analyze_columns(request):
 
         # columns = str(title, 'utf-8')[:-1].split(",")
         columns = title[:-1].split(",")
-        logger.info(columns)
+        # logger.info(columns)
         request.session['columns'] = columns
 
         rawdata = pd.read_csv(upload_path + file_save + ".csv")
@@ -112,7 +112,7 @@ def return_groupby(request):
         for i in range(len(demoYaml['Fields'])):
             if demoYaml['Details'][i]['invariant']:
                 res.append({"id": i, "text": demoYaml['Details'][i]['name']})
-        logger.info(res)
+        # logger.info(res)
         return JsonResponse(res, safe=False)
 
 
@@ -127,7 +127,7 @@ def return_fileds(request):
         else:
             raise FileNotFoundError("[*] Could not found the demographic yaml file.")
 
-        logger.info(demoYaml)
+        # logger.info(demoYaml)
         res = []
         for i, field in enumerate(demoYaml['Fields']):
             if demoYaml['Details'][i]['type'] in ['UserKey', 'ActionTime']:
@@ -135,7 +135,7 @@ def return_fileds(request):
             if demoYaml['Details'][i]['invariant']:
                 continue
             res.append({"id": i, "text": field})
-        logger.info(res)
+        # logger.info(res)
         return JsonResponse(res, safe=False)
 
 def return_field_detail(request):
@@ -150,7 +150,7 @@ def return_field_detail(request):
         else:
             raise FileNotFoundError("[*] Could not found the demographic yaml file.")
 
-        logger.info(demoYaml)
+        # logger.info(demoYaml)
         field_type = demoYaml['Details'][field_id]['type']
 
         if field_type in ["Segment", "Action"]:
@@ -158,10 +158,11 @@ def return_field_detail(request):
             for i, value in enumerate(demoYaml['Details'][field_id]['values']):
                 res.append({"id": value, "text": value})
 
-        logger.info(res)
+        # logger.info(res)
         return JsonResponse(res, safe=False)
 
 def test_request(request):
+    ## test load query
     # query = {
     #     "dataFileType": "CSV",
     #     "cubeName": "20230504153543eTQCiLZ3",
@@ -170,26 +171,30 @@ def test_request(request):
     #     "dataPath": "/Users/peng/Documents/codeRepo/KimballCai/COOL-engine/datasets/health_raw/data.csv",
     #     "outputPath": "./%s/" % repo_name
     # }
+    # query = {'dataFileType': 'CSV', 'cubeName': '20230514144609aART2H1o',
+    #          'schemaPath': './cool_storage/20230514144609aART2H1o/table.yaml',
+    #          # "schemaPath": "/Users/peng/Documents/codeRepo/KimballCai/COOL-webapp/sample_data/example-table.yaml",
+    #          # 'dataPath': '.././cache/20230514144609aART2H1o.csv',
+    #          # 'dataPath': '/Users/peng/Documents/codeRepo/KimballCai/COOL-webapp/sample_data/example2.csv',
+    #          "dataPath": "/Users/peng/Documents/codeRepo/KimballCai/COOL-engine/datasets/health_raw/data.csv",
+    #          'outputPath': './cool_storage/'}
+    # out = pass_load(query)
 
-    query = {'dataFileType': 'CSV', 'cubeName': '20230514144609aART2H1o',
-             'schemaPath': './cool_storage/20230514144609aART2H1o/table.yaml',
-             # "schemaPath": "/Users/peng/Documents/codeRepo/KimballCai/COOL-webapp/sample_data/example-table.yaml",
-             # 'dataPath': '.././cache/20230514144609aART2H1o.csv',
-             # 'dataPath': '/Users/peng/Documents/codeRepo/KimballCai/COOL-webapp/sample_data/example2.csv',
-             "dataPath": "/Users/peng/Documents/codeRepo/KimballCai/COOL-engine/datasets/health_raw/data.csv",
-             'outputPath': './cool_storage/'}
-    out = pass_load(query)
-
+    ## test read col query
     # query = {
     #     "cube": "20230504153543eTQCiLZ3",
     #     "col": "birthyear",
     # }
     # out = pass_read_col(query)
 
+    ## test pass_create_cohort
+    query = {"birthSelector":{"birthEvents":[{"filters":[{"fieldSchema":"diagnose","type":"SET","acceptValue":["Disease-B"]}],"frequency":1}]},"outputCohort":"all","dataSource":"20230518202539EbwyTIsN","queryName":"test","saveCohort":True}
+    out = pass_create_cohort(query)
+
     logger.info(out)
     logger.info(out.text)
     logger.info(out.status_code)
-    return JsonResponse({"query": query})
+    return JsonResponse({"query": query,"out":out.text})
 
 
 def test(request):

@@ -31,8 +31,14 @@ urlpatterns = [
     path('return_fileds/', return_fileds, name='return the fields'),
     path('return_field_detail/', return_field_detail, name='return the contents of the field'),
 
-    path('dataset/<int:set_id>', DatasetDetail.as_view(), name="illustrate a dataset"),
-    path('dataset-show/', login_required(DatasetShow.as_view()), name='Show datasets'),
+    path('dataset-show/', login_required(DatasetList.as_view()), name='Show datasets'),
+    path('dataset-remove/<int:set_id>/', DatasetRemove.as_view(), name="remove a dataset"),
+    path('dataset/<int:set_id>/', DatasetDetail.as_view(), name="illustrate a dataset"),
+    path('dataset/<int:set_id>/cohort-create/', CohortCreateInDataset.as_view(), name="create cohort"),
+    path('dataset/<int:set_id>/cohort-analysis/', CohortAnalysis.as_view(), name="cohort analysis"),
+
+    path('cohort-show/', login_required(CohortList.as_view()), name='Show cohorts'),
+
     path('error-500/', test_error_500, name='Test internal system error'),
     path('request/', test_request, name='test request'),
     path('test/', test, name='test function'),

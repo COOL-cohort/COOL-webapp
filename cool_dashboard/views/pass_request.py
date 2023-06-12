@@ -19,7 +19,13 @@ def pass_load(query):
     return r
 
 def pass_read_col(query):
-    url=SERVER + '/cohort/list_col_info?cube=%s&col=%s'%(query['cube'], query['col'])
+    url = SERVER + '/cohort/list_col_info?cube=%s&col=%s' % (query['cube'], query['col'])
     logger.info("pass read col: " + url)
     r = requests.get(url, headers=headers)
+    return r
+
+def pass_create_cohort(query):
+    url = SERVER + '/cohort/selection'
+    logger.info("pass create cohort: " + url)
+    r = requests.post(url, headers=headers, data=json.dumps(query))
     return r

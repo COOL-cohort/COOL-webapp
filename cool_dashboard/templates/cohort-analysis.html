@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+<!doctype html>
+
+{% block    css %}
+    <!-- datepicker css -->
+    <link rel="stylesheet" href='{% static "static/css/flatpickr.min.css" %}'>
+    <link rel="stylesheet" href='{% static "static/css/select2.min.css" %}'>
+    <link rel="stylesheet" href="{% static 'static/css/retention.css' %}">
+{% endblock css %}
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Datasets Analysis</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dataset</a></li>
+                                    <li class="breadcrumb-item active">Dataset Details</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{{ set_name }}</h4>
+                                <p class="card-title-desc">Details: {{ set_details }}</p>
+                                <input id="cube_id" type="hidden" value="{{ set_info.cube_name }}">
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm order-2 order-sm-1">
+                                        <div class="d-flex align-items-start mt-3 mt-sm-0">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-xl me-3">
+                                                    <a href="/dataset/{{ set_id }}"><img src="{% static 'static/picture/avatar-2.jpg' %}" alt="" class="img-fluid rounded-circle d-block">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div>
+                                                    <h5 class="font-size-16 mb-1">ID: {{ set_id }}</h5>
+                                                    <p class="text-muted font-size-13">Name: {{ set_name }}</p>
+
+                                                    <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Size: {{ set_size }} MB</div>
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>No.IDs: {{ set_ids }}</div>
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>No.Records: {{ set_records }}</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row float-end">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
+                                        <a href="/dataset/{{ set_id }}/cohort-create/" class="btn btn-primary w-md"> Create Cohort </a>
+                                        <div class="vr"></div>
+                                        <a href="/dataset/{{ set_id }}/cohort-analysis/" class="btn btn-primary w-md"> Cohort Analysis </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="float-end"> Advanced </h4>
+                                <h4 class="card-title">Cohort Analysis</h4>
+                                <p class="card-title-desc">Customise features for analysis</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                        <form id="query-form" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="row mb-4">
+                                                        <label for="query-name" class="col-sm-2 col-form-label">Name</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" type="text" name="query-name" id="query-name" placeholder="Enter the Query Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Cohort Metrix-->
+                                            <div class="row">
+                                                <!-- GLOBAL OPTIONS-->
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Cohort Metric" %}</label>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Measure" %}</label>
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <select class="form-select select2-single data-cube-yaml" id='measure'>
+                                                            {% csrf_token %}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <label class="control-label col-md-2 col-sm-2 col-xs-12">{% translate "Over" %}</label>
+                                                    <i class="fa fa-plus-circle globalFilter-add globalFilter-empty-btn" style="margin-left: 11px; display: none; margin-bottom: 10px;" aria-hidden="true"></i>
+                                                    <div id="global-filters-container" class=" col-md-9 col-sm-9 col-xs-12">
+                                                        <div class="row mb-4 global-filter select-multi-stage">
+                                                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                                                <select class="form-select select2-single data-table-yaml"> </select>
+                                                            </div>
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 segment" >
+                                                                <select class="form-select select2-single second-stage">
+                                                                </select>
+                                                            </div>
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 datetimepicker" style="display: none;">
+                                                                <div class="input-group date date1">
+                                                                    <input type="text" class="form-control datepicker-datetime" >
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                                <div class="input-group date date2">
+                                                                    <input type="text" class="form-control datepicker-datetime">
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row col-md-6 col-sm-6 col-xs-6 intRange" style="display: none;">
+                                                                <div class="col-md-5 col-sm-5 col-xs-5 ">
+                                                                    <input type="text" class="form-control min ">
+                                                                </div>
+                                                                <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>
+                                                                <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                    <input type="text" class="form-control max ">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-2 col-sm-2 col-xs-1">
+                                                                <i class="fa fa-plus-circle globalFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                                                <i class="fa fa-minus-circle globalFilter-remove" style="padding-right:7px;" aria-hidden="true"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min-age">{% translate "Time Range" %}</label>
+                                                    <div class="col-md-1 col-sm-1 col-xs-3">
+                                                        <input type="text" id="min-age" required="required" class="form-control col-md-1 col-xs-1" placeholder="0">
+                                                    </div>
+                                                    <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">-</div>
+                                                    <div class="col-md-1 col-sm-1 col-xs-3">
+                                                        <input type="text" id="max-age" required="required" class="form-control col-md-1 col-xs-1" placeholder="30">
+                                                    </div>
+                                                    <label class="control-label " style="width: auto; float:left;">&nbsp;{% translate "by" %}&nbsp;</label>
+                                                    <div class="col-md-3 col-sm-3 col-xs-6" style="float:left; line-height:33px;">
+                                                        <select class="form-select select2-single range-select" id='age-type'>
+                                                            <option value="days">{% translate "days" %}</option>
+                                                            <option value="weeks">{% translate "weeks" %}</option>
+                                                            <option value="months">{% translate "months" %}</option>
+                                                            <option value="years">{% translate "years" %}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--USER SELECTION-->
+                                            <div class="row">
+                                                <div class=" form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">{% translate "User Selection" %}
+                                                        <input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked> </label>
+                                                </div>
+                                                <div id="users-events-container" class="events-container">
+                                                    <div class="event-container">
+                                                        <div class="row mb-4">
+                                                            <label class="col-sm-offset-2 control-label birthEvent-label">{% translate "Event" %} </label>
+                                                            <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="row mb-4">
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
+                                                            <div class="col-md-9 multi-eventFilters userSelection" >
+                                                                <div class="row mb-3">
+                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
+                                                                    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
+                                                                        <div class="col-md-5 col-sm-5 col-xs-5 float-left">
+                                                                            <select class="form-select select2-single data-table-yaml">
+                                                                            </select>
+                                                                        </div>
+                                                                        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >
+                                                                            <select class="form-select second-stage"> </select>
+                                                                        </div>
+                                                                        <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">
+                                                                            <div class="input-group date date1">
+                                                                                <input type="text" class="form-control datepicker-datetime" >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="input-group date date2">
+                                                                                <input type="text" class="form-control datepicker-datetime" >
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">
+                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                                <input type="text" class="form-control event-min " placeholder="1">
+                                                                            </div>
+                                                                            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>
+                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                                <input type="text" class="form-control event-min " placeholder="100">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-sm-2 col-xs-12">
+                                                                        <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                                                        <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-4">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">{% translate "Frequency" %}:</label>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
+                                                                <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-3 text-center" style="float:left; line-height:33px;">-</div>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
+                                                                <input type="text" id="max_user_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
+                                                        </div>
+                                                        <div class="row mb-4">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="freq_time">{% translate "In the" %}  </label>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5 float-left">
+                                                                <select class="form-select select2-single range-select first">
+                                                                    <option>{% translate "first" %}</option>
+                                                                    <option>{% translate "any" %}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-5">
+                                                                <input type="text" id="freq_time" required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px; font-weight: 800;">{% translate "day(s)" %}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group users-add-event-btn">
+                                                    <div class="col-md-11 col-sm-11 col-xs-12 col-md-offset-2">
+                                                        <button onclick="handleNewUserEvent()" type=button class="btn btn-primary float-end">
+                                                            <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
+                                                            {% translate "Add Event" %}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--COHORT SELECTION-->
+                                            <div class="row">
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Start Condition" %}</label>
+                                                </div>
+                                                <div id="events-container" class="events-container">
+                                                    <!--BEGIN COHORT EVENT-->
+                                                    <div class="event-container">
+                                                        <div class="row mb-4">
+                                                            <label class="col-sm-offset-2 control-label birthEvent-label">{% translate "Event" %} </label>
+                                                            <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
+                                                        </div>
+                                                        <div class="row mb-4">
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
+                                                            <div class="col-md-9 multi-eventFilters eventSelection" >
+                                                                <div class="row mb-3">
+                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
+                                                                    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
+                                                                        <div class="col-md-5 col-sm-5 col-xs-11 float-left">
+                                                                            <select class="form-select select2-single data-table-yaml">
+                                                                            </select>
+                                                                        </div>
+                                                                        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
+                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left" >
+                                                                            <select class="form-select second-stage"> </select>
+                                                                        </div>
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker " style="display: none;">
+                                                                            <div class="input-group date date1">
+                                                                                <input type="text" class="form-control datepicker-datetime">
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="input-group date date2">
+                                                                                <input type="text" class="form-control datepicker-datetime">
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">
+                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                                <input type="text" class="form-control event-min " placeholder="1">
+                                                                            </div>
+                                                                            <div style="float:left; line-height:33px;">-</div>
+                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                                <input type="text" class="form-control event-max " placeholder="100">
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-2 col-sm-2 col-xs-2">
+                                                                        <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
+                                                                        <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mb-4">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_birth_freq">{% translate "Frequency" %}:</label>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
+                                                                <input type="text" id="min_birth_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>
+                                                            <div class="col-md-2 col-sm-2 col-xs-5">
+                                                                <input type="text" id="max_birth_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
+                                                            </div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
+                                                        </div>
+                                                    </div>
+                                                    <!--END COHORT EVENT-->
+                                                </div>
+
+                                                <div class="add-event-btn">
+                                                    <div class="col-md-11 col-sm-11 col-xs-12 col-md-offset-2">
+                                                        <button onclick="handleNewEvent()" type=button class="btn btn-primary float-end">
+                                                            <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
+                                                            {% translate "Add Event" %}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--GROUP BY-->
+                                            <div class="row">
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Cohort Partition" %}</label>
+                                                </div>
+                                                <div class="row mb-4 advanced-check">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">{% translate "Group by" %}:</label>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <select class="form-select select2-single groupby" id="groupby">
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-3 col-sm-3 col-xs-12 mb-4">
+                                                        <label class="control-label float-left">{% translate "Advanced" %}:</label>
+                                                        <div class="float-left">
+                                                            <input style="margin-top:12px; margin-left: 8px;" class="advanced-checkbox adv" type="checkbox" name="" >
+                                                        </div>
+                                                    </div>
+                                                    <div class="advanced-container">
+                                                    <div class="row mb-3 offset-md-3 offset-sm-3">
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Min" %}</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="0" class="form-control adv1" >
+                                                        </div>
+                                                        <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Max" %}</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="10" class="form-control adv2" >
+                                                        </div>
+                                                        <label class="control-label  col-md-2 col-sm-2 col-xs-3 ">{% translate "Interval" %}</label>
+                                                        <div class="col-md-2 col-sm-2 col-xs-12">
+                                                            <input type="text" placeholder="20" class="form-control adv3" >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="row float-end">
+                                                <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
+                                                    <button id="submit" type="submit" class="btn btn-primary w-md">{% translate "Submit" %}</button>
+                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="test()">{% translate "Generate" %}</button>
+                                                    <div class="vr"></div>
+                                                    <button class="btn btn-danger w-md" type="reset" onClick="window.location.reload();return false;" >{% translate "Reset" %}</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div id="line" style="height:0px"></div>
+                                    <div id="heat" style="height:0px"></div>
+                                    <div id="range" style="height:0px"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                            <h5 class="card-title mb-3">Details</h5>
+                                {% for k, v in set_info.items %}
+                                    <div class="pb-3">
+                                        <div class="row">
+                                            <div class="col-xl-4">
+                                                <div>
+                                                    <h5 class="font-size-15">{{ k }}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl">
+                                                <div class="text-muted">
+                                                    <p class="mb-2">{{ v }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+    <script>
+    'use strict';
+    let True = true;
+    let False = false;
+    let tableYaml = {{ tableYaml | default:"{}" | safe }};
+    let cubeID = "{{ set_info.cube_name }}";
+    </script>
+    <!-- datepicker js -->
+    <script src='{% static "static/js/flatpickr.min.js" %}'></script>
+    <script src='{% static "static/js/select2.min.js" %}'></script>
+    <script src='{% static "static/js/retention.js" %}'></script>
+{% endblock scripts %}

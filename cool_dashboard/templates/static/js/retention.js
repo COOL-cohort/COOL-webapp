@@ -2,48 +2,48 @@
 
 let cohortUserHtml = '<div class="event-container">'+
 '    <div class="row mb-4">'+
-'        <label class="col-sm-offset-2 control-label birthEvent-label">Event</label>'+
+'        <label class="col-sm-offset-2 control-label birthEvent-label">Event </label>'+
 '        <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>'+
 '    </div>'+
 '    <div class="row mb-4">'+
-'        <label class="control-label col-md-2 col-sm-2 col-xs-12"> Event: </label>'+
+'        <label class="control-label col-md-1 col-sm-1 col-xs-12">Event:</label>'+
 '        <div class="col-md-9 multi-eventFilters userSelection" >'+
-'            <div class="row">'+
-'                <label class="text-center col-md-1 col-sm-1 col-xs-12">Their</label>'+
-'                <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">'+
-'                    <div class="col-md-3 col-sm-3 col-xs-5 float-left">'+
+'            <div class="row mb-3">'+
+'                <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
+'                <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
+'                    <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
 '                        <select class="form-select select2-single data-table-yaml">'+
 '                        </select>'+
 '                    </div>'+
 '                    <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
-'                    <div class="col-md-6 col-sm-6 col-xs-12 float-left">'+
+'                    <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
 '                        <select class="form-select second-stage"> </select>'+
 '                    </div>'+
-'                    <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
+'                    <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
 '                        <div class="input-group date date1">'+
-'                            <input type="text" class="form-control" />'+
+'                            <input type="text" class="form-control datepicker-datetime" >'+
 '                            <span class="input-group-addon">'+
 '                                <span class="glyphicon glyphicon-calendar"></span>'+
 '                            </span>'+
 '                        </div>'+
 '                        <div class="input-group date date2">'+
-'                            <input type="text" class="form-control" />'+
+'                            <input type="text" class="form-control datepicker-datetime" >'+
 '                            <span class="input-group-addon">'+
 '                                <span class="glyphicon glyphicon-calendar"></span>'+
 '                            </span>'+
 '                        </div>'+
 '                    </div>'+
-'                    <div class="row col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
+'                    <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
 '                        <div class="col-md-5 col-sm-5 col-xs-5">'+
 '                            <input type="text" class="form-control event-min " placeholder="1">'+
 '                        </div>'+
-'                        <div style="float:left; line-height:33px;">-</div>'+
+'                        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
 '                        <div class="col-md-5 col-sm-5 col-xs-5">'+
 '                            <input type="text" class="form-control event-min " placeholder="100">'+
 '                        </div>'+
 '                    </div>'+
 '                </div>'+
-'                <div class="col-sm-1 col-sm-1 col-xs-1">'+
+'                <div class="col-sm-2 col-sm-2 col-xs-12">'+
 '                    <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
 '                    <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
 '                </div>'+
@@ -51,28 +51,11 @@ let cohortUserHtml = '<div class="event-container">'+
 '        </div>'+
 '    </div>'+
 '    <div class="row mb-4">'+
-'        <label class="control-label col-md-3 col-sm-3 col-xs-12" >Frequency:</label>'+
-'        <div class="col-md-1 col-sm-1 col-xs-5">'+
-'            <input type="text"  required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">'+
-'        </div>'+
-'        <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">-</div>'+
-'        <div class="col-md-1 col-sm-1 col-xs-5">'+
-'            <input type="text"  required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">'+
+'        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">Minimal Frequency:</label>'+
+'        <div class="col-md-5 col-sm-5 col-xs-5">'+
+'            <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">'+
 '        </div>'+
 '        <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">time(s)</div>'+
-'    </div>'+
-'    <div class="row mb-4">'+
-'        <label class="control-label col-md-3 col-sm-3 col-xs-12" >In the </label>'+
-'        <div class="col-md-2 col-sm-2 col-xs-5 float-left">'+
-'            <select class="form-select select2-single range-select first">'+
-'                <option>first</option>'+
-'                <option>any</option>'+
-'            </select>'+
-'        </div>'+
-'        <div class="col-md-1 col-sm-1 col-xs-5">'+
-'            <input type="text"  required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">'+
-'        </div>'+
-'        <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px; font-weight: 800;">day(s)</div>'+
 '    </div>'+
 '</div>';
 
@@ -84,46 +67,46 @@ let cohortEventHtml = '<div class="event-container">' +
     '    <div class="row mb-4">' +
     '        <label class="control-label col-md-2 col-sm-2 col-xs-12">Event:</label>' +
     '        <div class="col-md-9 multi-eventFilters eventSelection" >' +
-    '            <div class="form-group row">' +
-    '                <label class="text-center col-md-1 col-sm-1 col-xs-12">Their</label>' +
-    '                <div class="select-multi-stage col-md-10 col-sm-10 col-xs-12">' +
-    '                    <div class="col-md-5 col-sm-5 col-xs-11 float-left">' +
-    '                        <select class="form-select select2-single data-table-yaml">' +
-    '                        </select>' +
-    '                    </div>' +
-    '                    <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>' +
-    '                    <div class="col-md-6 col-sm-6 col-xs-12 float-left">' +
-    '                        <select class="form-select second-stage"> </select>' +
-    '                    </div>' +
-    '                    <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">' +
-    '                        <div class="input-group date date1">' +
-    '                            <input type="text" class="form-control" />' +
-    '                            <span class="input-group-addon">' +
-    '                                <span class="glyphicon glyphicon-calendar"></span>' +
-    '                            </span>' +
-    '                        </div>' +
-    '                        <div class="input-group date date2">' +
-    '                            <input type="text" class="form-control" />' +
-    '                            <span class="input-group-addon">' +
-    '                                <span class="glyphicon glyphicon-calendar"></span>' +
-    '                            </span>' +
-    '                        </div>' +
-    '                    </div>' +
-    '                    <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">' +
-    '                        <div class="col-md-5 col-sm-5 col-xs-5">' +
-    '                            <input type="text" class="form-control event-min " placeholder="1">' +
-    '                        </div>' +
-    '                        <div style="float:left; line-height:33px;">-</div>' +
-    '                        <div class="col-md-5 col-sm-5 col-xs-5">' +
-    '                            <input type="text" class="form-control event-max " placeholder="100">' +
-    '                        </div>' +
-    '                    </div>' +
-    '                </div>' +
-    '                <div class="col-md-1 col-sm-1 col-xs-1">' +
-    '                    <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>' +
-    '                    <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>' +
-    '                </div>' +
-    '            </div>' +
+'            <div class="row mb-3">'+
+'                <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
+'                <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
+'                    <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
+'                        <select class="form-select select2-single data-table-yaml">'+
+'                        </select>'+
+'                    </div>'+
+'                    <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
+'                    <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
+'                        <select class="form-select second-stage"> </select>'+
+'                    </div>'+
+'                    <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
+'                        <div class="input-group date date1">'+
+'                            <input type="text" class="form-control datepicker-datetime" >'+
+'                            <span class="input-group-addon">'+
+'                                <span class="glyphicon glyphicon-calendar"></span>'+
+'                            </span>'+
+'                        </div>'+
+'                        <div class="input-group date date2">'+
+'                            <input type="text" class="form-control datepicker-datetime" >'+
+'                            <span class="input-group-addon">'+
+'                                <span class="glyphicon glyphicon-calendar"></span>'+
+'                            </span>'+
+'                        </div>'+
+'                    </div>'+
+'                    <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
+'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
+'                            <input type="text" class="form-control event-min " placeholder="1">'+
+'                        </div>'+
+'                        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
+'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
+'                            <input type="text" class="form-control event-min " placeholder="100">'+
+'                        </div>'+
+'                    </div>'+
+'                </div>'+
+'                <div class="col-sm-2 col-sm-2 col-xs-12">'+
+'                    <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
+'                    <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
+'                </div>'+
+'            </div>'+
     '        </div>' +
     '    </div>' +
     '    <div class="row mb-4">' +
@@ -138,6 +121,7 @@ let cohortEventHtml = '<div class="event-container">' +
     '        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">time(s)</div>' +
     '    </div>' +
     '</div>';
+
 
 // Add event.
 function handleNewUserEvent() {
@@ -163,6 +147,7 @@ $(document.body).on('click', '.event-remove.fa-minus-circle', function(d) {
         eventsContainer.find('.event-remove.fa-minus-circle').hide();
     }
     updateEventLabelNumbering();
+
 });
 
 function updateEventLabelNumbering() {
@@ -554,57 +539,167 @@ function EventSelect2(jqObj){
     });
 }
 
+var loyalTemplate = '{"birthSelector":{"birthEvents":[]},"outputCohort":"all"}';
+function buildCohort(){
+    var query = JSON.parse(loyalTemplate);
+    query['dataSource'] = cubeID;
+    query['queryName'] = $("#query-name")[0].value;
+
+    var eventSelectSize = $(".event-container .userSelection").length;
+    // console.log("eventSelectSize:", eventSelectSize)
+    var eventSelects = [];
+    for(var h = 0; h < eventSelectSize; h++){
+        var eventDiv = $($($(".event-container .userSelection")[h]).parent('div').parent('div')[0]);
+        var eventSize = $($(".event-container .userSelection")[h]).find(".row .data-table-yaml").length;
+        // console.log("eventSize:", eventSize)
+        var events = [];
+        for(var i = 0; i < eventSize; i++){
+            // var event = JSON.parse(eventTemplate);
+            var event = {};
+            var index = $($($(".event-container .userSelection")[h]).find(".row .data-table-yaml")[i]).val();
+            // console.log("index", index)
+            var obj = tableYaml[index];
+            // console.log("obj", obj)
+            event['fieldSchema'] = obj.name;
+            if(obj.fieldType === "Segment"){
+                event['type'] = 'SET'
+                event['acceptValue'] = $($($(".event-container .userSelection")[h]).find(".row .second-stage")[i]).val();
+                // events.push(event);
+            }
+            // else if(obj.fieldType === 'ActionTime'){
+            //     var v1 = $($($(".event-container .userSelection")[h]).find(".row .date1")[i]).find('input').val();
+            //     var v2 = $($($(".event-container .userSelection")[h]).find(".row .date2")[i]).find('input').val();
+            //     var range = v1 + "|" + v2;
+            //     var value = [];
+            //     value.push(range);
+            //     event['fieldValue']['values'] = value;
+            // }
+            else{
+                var v1 = parseInt($($($(".event-container .userSelection")[h]).find(".row .event-min")[i]).val());
+                var v2 = parseInt($($($(".event-container .userSelection")[h]).find(".row .event-max")[i]).val());
+                v1 = Number.isInteger(v1)?v1:'MIN';
+                v2 = Number.isInteger(v2)?v2:'MAX';
+                if(Number.isInteger(v1) && Number.isInteger(v2)){
+                    if (v2 < v1){
+                        v2 = 'MAX';
+                    }
+                }
+                var range = v1 + "-" + v2;
+                var value = [];
+                value.push(range);
+                event['type'] = 'RANGE'
+                event['acceptValue'] = value;
+            }
+            events.push(event);
+            // console.log("events", events)
+        }
+        var eventSelect = {};
+        eventSelect['filters'] = events
+        var min_freq = parseInt($(eventDiv.find('.min')[0]).val());
+        min_freq = Number.isInteger(min_freq)?min_freq:1;
+        eventSelect['frequency'] = min_freq
+
+        eventSelects.push(eventSelect);
+    }
+    query['birthSelector']['birthEvents'] = eventSelects;
+    if($('#save-cohort-checkbox')[0].checked){
+        query['saveCohort'] = true
+    }
+    return query;
+}
+
+
 
 // $('#query-form')[0].onsubmit = function() {
 // $('#generate').click = function() {
-function test() {
-    // console.log($('#measure').val())
-    // if ($('#measure').val() === "") {
-    //     alert("Please select measure.");
-    //     return false;
-    // }
+// $('#submit').click = function() {
+function CohortCreate() {
+    // console.log($('#query-name')[0].value)
+    if ($('#query-name')[0].value === "") {
+        alert("Please input the name of the query.");
+        return false;
+    }
 
-    // console.log($('#groupby').val())
-    // if ($('#groupby').val() === "") {
-    //     alert("Please select field to partition cohorts.");
-    //     return false;
-    // }
-
-    // var selects = $(".select2-single.data-table-yaml");
-    // console.log(selects.length)
-    // for(var i = 0; i < selects.length; i++){
-    //     if($(selects[i]).is(":visible")){
-    //         if($(selects[i]).val() === "" ){
-    //             alert("Please select an option.");
-    //             $(selects[i]).focus();
-    //             return false;
-    //         }
-    //     }
-    // }
-
-    var selects = $(".second-stage");
-    // console.log(selects.length)
+    var selects = $(".select2-single.data-table-yaml");
+    // console.log("selects1", selects.length)
     for(var i = 0; i < selects.length; i++){
         if($(selects[i]).is(":visible")){
             // console.log($(selects[i]).val())
-            if($(selects[i]).val() === null){
-                alert("Please select at least one value.");
+            if($(selects[i]).val() === "" ){
+                alert("Please select an option for event.");
                 $(selects[i]).focus();
                 return false;
             }
         }
     }
 
-    if($('#filter-users-checkbox').is(":checked")){
-        var loyalCreate = buildLoyal();
-        var query = buildQuery();
-        query['inputCohort'] = 'loyal';
-        loyalQuery(query, loyalCreate);
-    }else{
-        var query = buildQuery();
-        singleQuery(query);
+    var selects = $(".second-stage");
+    // console.log("selects2", selects.length)
+    for(var i = 0; i < selects.length; i++){
+        if($(selects[i]).is(":visible")){
+            // console.log($(selects[i]).val())
+            if($(selects[i]).val().length === 0){
+                alert("Please select at least one value for event.");
+                $(selects[i]).focus();
+                return false;
+            }
+        }
     }
 
-    alert("Wait.");
+    // console.log(tableYaml)
+    var cohortCreateQury = buildCohort();
+    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortCreateQury, null, 4)
+    // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortCreateQury, null, 4);
+    // console.log(cohortCreateQury)
+
+    processCohortCreateQuery(cohortCreateQury);
     return false;
+}
+
+function processCohortCreateQuery(query){
+    $("#loading").show();
+    let formdata = new FormData();
+    formdata.append('cube_id', cubeID);
+    formdata.append('mode', 'CreateCohort');
+    formdata.append('query', JSON.stringify(query));
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        delay: 250,
+        data: formdata,
+        url: "/dataset/"+set_id+"/cohort-create/",
+        success: function(response) {
+            // console.log(response)
+            if(response.status_code === 200){
+                $("#loading").hide();
+                // document.getElementById("cohortResults").innerHTML = JSON.stringify(response.text, null, 4);
+                // $(".generate-cohort")[0].style.visibility = 'visible'
+                var obj = response.text['cohortResList']
+                var tbody=$('tbody');
+                tbody.empty();
+                $(obj).each(function (index) {
+                    var val = obj[index];
+                    var content = '<tr>';
+                    content += '<td>' + index + '</td>';
+                    content += '<td>' + val.cohortName + '</td>';
+                    content += '<td>' + val.cohortSize + '</td>';
+                    content += '<td>' + dataset + '</td>';
+                    tbody.append(content);
+                });
+                $("#generate-cohort").show();
+                $("#generate-cohort")[0].scrollIntoView();
+            } else {
+                $("#loading").hide();
+                alert("Errors: "+response.text);
+            }
+        },
+        error: function(response) {
+            $("#loading").hide();
+            alert("Invalid Query: "+response.text);
+        }
+    });
 }

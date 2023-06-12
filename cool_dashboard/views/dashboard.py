@@ -32,16 +32,16 @@ class Dashboard(View):
         # logging.info(request.user)
         if request.user.is_superuser:
             all_users = User.objects.count()
-            all_figures = analysis.objects.count()
-            all_datasets = cube_details.objects.count()
+            all_figures = Analysis.objects.count()
+            all_datasets = Dataset.objects.count()
             all_storage = 0
             root_flag =True
-            for db in cube_details.objects.all():
+            for db in Dataset.objects.all():
                 all_storage += db.cube_size
 
         databases = {}
         count = 0
-        selected_datasets = cube_details.objects.filter(user_id=request.user.id)
+        selected_datasets = Dataset.objects.filter(user_id=request.user.id)
         user_datasets = selected_datasets.count()
         user_figures = 0
         user_storage = 0
@@ -59,7 +59,7 @@ class Dashboard(View):
             databases[count]['start'] = dataset.start_time
             databases[count]['end'] = dataset.end_time
 
-            user_figures += analysis.objects.filter(file_id=dataset.file_id).count()
+            user_figures += Analysis.objects.filter(set_id=dataset.set_id).count()
             user_storage += dataset.cube_size
 
             with open(data_path + dataset.cube_name + "/demographic.yaml", 'r') as stream:
