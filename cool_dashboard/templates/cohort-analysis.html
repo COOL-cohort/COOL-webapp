@@ -186,23 +186,42 @@
                                                     <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">{% translate "User Selection" %}
                                                         <input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked> </label>
                                                 </div>
-                                                <div id="users-events-container" class="events-container">
+                                                <div class="row mb-4" id="users-events-container">
+                                                    <div class="col-md-12">
+                                                        <div class="row mb-4">
+                                                            <label for="cohort-name" class="col-sm-2 col-form-label">Cohort</label>
+                                                            <div class="col-sm-6">
+                                                                <select class="form-select select2-single cohort-select">
+{#                                                                    <option value="-1">ALL Users</option>#}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--COHORT SELECTION-->
+                                            <div class="row">
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Start Condition" %}</label>
+                                                </div>
+                                                <div id="events-container" class="events-container">
+                                                    <!--BEGIN COHORT EVENT-->
                                                     <div class="event-container">
                                                         <div class="row mb-4">
-                                                            <label class="col-sm-offset-2 control-label birthEvent-label">{% translate "Event" %} </label>
+                                                            <label class="col-sm-offset-2 control-label birthEvent-label">Event </label>
                                                             <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
-                                                            <div class="col-md-9 multi-eventFilters userSelection" >
+                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Event:</label>
+                                                            <div class="col-md-9 multi-eventFilters eventSelection" >
                                                                 <div class="row mb-3">
-                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
+                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>
                                                                     <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
                                                                         <div class="col-md-5 col-sm-5 col-xs-5 float-left">
                                                                             <select class="form-select select2-single data-table-yaml">
                                                                             </select>
                                                                         </div>
-                                                                        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
+                                                                        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>
                                                                         <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >
                                                                             <select class="form-select second-stage"> </select>
                                                                         </div>
@@ -238,107 +257,11 @@
                                                             </div>
                                                         </div>
                                                         <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">{% translate "Frequency" %}:</label>
-                                                            <div class="col-md-2 col-sm-2 col-xs-5">
-                                                                <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
+                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_freq">Minimal Frequency:</label>
+                                                            <div class="col-md-5 col-sm-5 col-xs-5">
+                                                                <input type="text" id="min_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
                                                             </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-3 text-center" style="float:left; line-height:33px;">-</div>
-                                                            <div class="col-md-2 col-sm-2 col-xs-5">
-                                                                <input type="text" id="max_user_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
-                                                            </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
-                                                        </div>
-                                                        <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="freq_time">{% translate "In the" %}  </label>
-                                                            <div class="col-md-2 col-sm-2 col-xs-5 float-left">
-                                                                <select class="form-select select2-single range-select first">
-                                                                    <option>{% translate "first" %}</option>
-                                                                    <option>{% translate "any" %}</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-5">
-                                                                <input type="text" id="freq_time" required="required" class="form-control col-md-2 col-xs-2 day" placeholder="7">
-                                                            </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px; font-weight: 800;">{% translate "day(s)" %}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group users-add-event-btn">
-                                                    <div class="col-md-11 col-sm-11 col-xs-12 col-md-offset-2">
-                                                        <button onclick="handleNewUserEvent()" type=button class="btn btn-primary float-end">
-                                                            <i class="fa fa-plus-circle" style="padding-right:7px;" aria-hidden="true"></i>
-                                                            {% translate "Add Event" %}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--COHORT SELECTION-->
-                                            <div class="row">
-                                                <div class="form-section-label">
-                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Start Condition" %}</label>
-                                                </div>
-                                                <div id="events-container" class="events-container">
-                                                    <!--BEGIN COHORT EVENT-->
-                                                    <div class="event-container">
-                                                        <div class="row mb-4">
-                                                            <label class="col-sm-offset-2 control-label birthEvent-label">{% translate "Event" %} </label>
-                                                            <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>
-                                                        </div>
-                                                        <div class="row mb-4">
-                                                            <label class="control-label col-md-1 col-sm-1 col-xs-12">{% translate "Event:" %}</label>
-                                                            <div class="col-md-9 multi-eventFilters eventSelection" >
-                                                                <div class="row mb-3">
-                                                                    <label class="text-center col-md-2 col-sm-2 col-xs-12">{% translate "Their" %}</label>
-                                                                    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">
-                                                                        <div class="col-md-5 col-sm-5 col-xs-11 float-left">
-                                                                            <select class="form-select select2-single data-table-yaml">
-                                                                            </select>
-                                                                        </div>
-                                                                        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">{% translate "is" %}</label>
-                                                                        <div class="col-md-6 col-sm-6 col-xs-12 float-left" >
-                                                                            <select class="form-select second-stage"> </select>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 datetimepicker " style="display: none;">
-                                                                            <div class="input-group date date1">
-                                                                                <input type="text" class="form-control datepicker-datetime">
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                            <div class="input-group date date2">
-                                                                                <input type="text" class="form-control datepicker-datetime">
-                                                                                <span class="input-group-addon">
-                                                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-sm-6 col-sm-6 col-xs-12 intRange" style="display: none;">
-                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
-                                                                                <input type="text" class="form-control event-min " placeholder="1">
-                                                                            </div>
-                                                                            <div style="float:left; line-height:33px;">-</div>
-                                                                            <div class="col-md-5 col-sm-5 col-xs-5">
-                                                                                <input type="text" class="form-control event-max " placeholder="100">
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-md-2 col-sm-2 col-xs-2">
-                                                                        <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>
-                                                                        <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row mb-4">
-                                                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_birth_freq">{% translate "Frequency" %}:</label>
-                                                            <div class="col-md-2 col-sm-2 col-xs-5">
-                                                                <input type="text" id="min_birth_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">
-                                                            </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>
-                                                            <div class="col-md-2 col-sm-2 col-xs-5">
-                                                                <input type="text" id="max_birth_freq" required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">
-                                                            </div>
-                                                            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">{% translate "time(s)" %}</div>
+                                                            <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">time(s)</div>
                                                         </div>
                                                     </div>
                                                     <!--END COHORT EVENT-->

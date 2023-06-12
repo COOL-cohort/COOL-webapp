@@ -37,7 +37,7 @@ class Cohort(models.Model):
     set_id = models.ForeignKey(Dataset,on_delete=models.CASCADE)
     query_id = models.ForeignKey(Query,on_delete=models.CASCADE)
     cohort_size = models.FloatField()
-    cohort_name = models.CharField(max_length=20, unique=True)
+    cohort_name = models.CharField(max_length=20)
     save_time = models.DateTimeField(auto_now=True)
 
 class Analysis(models.Model):

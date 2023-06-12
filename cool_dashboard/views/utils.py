@@ -6,7 +6,7 @@ import random
 from datetime import datetime
 import string
 import pandas as pd
-from ..models import User, upload_history
+from ..models import *
 from .pass_request import *
 
 from ..config import *
@@ -96,6 +96,23 @@ def return_measures(request):
             res.append({"id": name, "text": name})
         logger.info(res)
         return JsonResponse(res, safe=False)
+
+
+def return_cohorts(request):
+    if request.method == 'POST':
+        set_id = request.POST['cube_id']
+        logger.info(set_id)
+
+        dataset = Dataset.objects.get(cube_name=set_id)
+        user = User.objects.get(id=request.user.id)
+        cohort = Cohort.objects.filter(set_id=dataset, user_id=user)
+        res = [{"id":-1, "text": "ALL Users size:%d"%dataset.num_ids}]
+        for c in cohort:
+            name = "%s-%s[%s] size:%d"%(c.query_id.query_name, c.cohort_name, str(c.save_time)[:-7], c.cohort_size)
+            res.append({"id": c.cohort_id, "text": name})
+        logger.info(res)
+        return JsonResponse(res, safe=False)
+
 
 def return_groupby(request):
     if request.method == 'POST':

@@ -8,5 +8,6 @@ from .cohort_create import CohortCreateInDataset
 from .cohort_list import CohortList
 from .cohort_analysis import CohortAnalysis
 from .error import test_error_500
-from .utils import analyze_columns, test_request, test, return_measures, return_fileds, return_field_detail, return_groupby
+from .utils import analyze_columns, test_request, test, return_measures, return_fileds, \
+    return_field_detail, return_groupby, return_cohorts
 from .pass_request import pass_load, pass_read_col

@@ -1,13 +1,13 @@
 'use strict';
 
-let cohortUserHtml = '<div class="event-container">'+
+let cohortHtml = '<div class="event-container">'+
 '    <div class="row mb-4">'+
 '        <label class="col-sm-offset-2 control-label birthEvent-label">Event </label>'+
 '        <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>'+
 '    </div>'+
 '    <div class="row mb-4">'+
 '        <label class="control-label col-md-1 col-sm-1 col-xs-12">Event:</label>'+
-'        <div class="col-md-9 multi-eventFilters userSelection" >'+
+'        <div class="col-md-9 multi-eventFilters eventSelection" >'+
 '            <div class="row mb-3">'+
 '                <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
 '                <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
@@ -51,81 +51,19 @@ let cohortUserHtml = '<div class="event-container">'+
 '        </div>'+
 '    </div>'+
 '    <div class="row mb-4">'+
-'        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_user_freq">Minimal Frequency:</label>'+
+'        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="min_freq">Minimal Frequency:</label>'+
 '        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'            <input type="text" id="min_user_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">'+
+'            <input type="text" id="min_freq" required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">'+
 '        </div>'+
 '        <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">time(s)</div>'+
 '    </div>'+
 '</div>';
 
-let cohortEventHtml = '<div class="event-container">' +
-    '    <div class="row mb-4">' +
-    '        <label class="col-sm-offset-2 control-label birthEvent-label">Event </label>' +
-    '        <i class="fa fa-minus-circle event-remove" style="display:none;padding-left:7px;" aria-hidden="true"></i>' +
-    '    </div>' +
-    '    <div class="row mb-4">' +
-    '        <label class="control-label col-md-2 col-sm-2 col-xs-12">Event:</label>' +
-    '        <div class="col-md-9 multi-eventFilters eventSelection" >' +
-'            <div class="row mb-3">'+
-'                <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
-'                <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
-'                    <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
-'                        <select class="form-select select2-single data-table-yaml">'+
-'                        </select>'+
-'                    </div>'+
-'                    <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
-'                    <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
-'                        <select class="form-select second-stage"> </select>'+
-'                    </div>'+
-'                    <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
-'                        <div class="input-group date date1">'+
-'                            <input type="text" class="form-control datepicker-datetime" >'+
-'                            <span class="input-group-addon">'+
-'                                <span class="glyphicon glyphicon-calendar"></span>'+
-'                            </span>'+
-'                        </div>'+
-'                        <div class="input-group date date2">'+
-'                            <input type="text" class="form-control datepicker-datetime" >'+
-'                            <span class="input-group-addon">'+
-'                                <span class="glyphicon glyphicon-calendar"></span>'+
-'                            </span>'+
-'                        </div>'+
-'                    </div>'+
-'                    <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
-'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                            <input type="text" class="form-control event-min " placeholder="1">'+
-'                        </div>'+
-'                        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
-'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                            <input type="text" class="form-control event-min " placeholder="100">'+
-'                        </div>'+
-'                    </div>'+
-'                </div>'+
-'                <div class="col-sm-2 col-sm-2 col-xs-12">'+
-'                    <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
-'                    <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
-'                </div>'+
-'            </div>'+
-    '        </div>' +
-    '    </div>' +
-    '    <div class="row mb-4">' +
-    '        <label class="control-label col-md-3 col-sm-3 col-xs-12" >Frequency:</label>' +
-    '        <div class="col-md-1 col-sm-1 col-xs-5">' +
-    '            <input type="text"  required="required" class="form-control col-md-2 col-xs-2 min" placeholder="1">' +
-    '        </div>' +
-    '        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>' +
-    '        <div class="col-md-1 col-sm-1 col-xs-5">' +
-    '            <input type="text"  required="required" class="form-control col-md-2 col-xs-2 max" placeholder="∞">' +
-    '        </div>' +
-    '        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">time(s)</div>' +
-    '    </div>' +
-    '</div>';
 
 
 // Add event.
 function handleNewUserEvent() {
-    var added = $(cohortUserHtml);
+    var added = $(cohortHtml);
     $("#users-events-container").append(added);
     EventSelect2(added.find(".data-table-yaml"));
     // added.find(".select2-multiple-remote").select2({
@@ -138,29 +76,9 @@ function handleNewUserEvent() {
     updateEventLabelNumbering();
 };
 
-// Remove event.
-$(document.body).on('click', '.event-remove.fa-minus-circle', function(d) {
-    var eventContainer = $(this).parents(".event-container");
-    var eventsContainer = $(this).parents(".events-container");
-    eventContainer.remove();
-    if(eventsContainer.children(".event-container").length <= 1) {
-        eventsContainer.find('.event-remove.fa-minus-circle').hide();
-    }
-    updateEventLabelNumbering();
-
-});
-
-function updateEventLabelNumbering() {
-    var $userLabels = $("#users-events-container").find(".birthEvent-label");
-    var $cohortLabels = $("#events-container").find(".birthEvent-label");
-
-    $userLabels.each(function(i) { $(this).html("Event " + ++i); });
-    $cohortLabels.each(function(i) { $(this).html("Event " + ++i); });
-}
-
 // Add event.
 function handleNewEvent() {
-    var added = $(cohortEventHtml);
+    var added = $(cohortHtml);
     $("#events-container").append(added);
     EventSelect2(added.find(".data-table-yaml"));
     // added.find(".select2-multiple-remote").select2({
@@ -171,6 +89,26 @@ function handleNewEvent() {
     var eventsContainer = $("#events-container");
     eventsContainer.find('.event-remove.fa-minus-circle').show();
     updateEventLabelNumbering();
+}
+
+
+// Remove event.
+$(document.body).on('click', '.event-remove.fa-minus-circle', function(d) {
+    var eventContainer = $(this).parents(".event-container");
+    var eventsContainer = $(this).parents(".events-container");
+    eventContainer.remove();
+    if(eventsContainer.children(".event-container").length <= 1) {
+        eventsContainer.find('.event-remove.fa-minus-circle').hide();
+    }
+    updateEventLabelNumbering();
+});
+
+function updateEventLabelNumbering() {
+    var $userLabels = $("#users-events-container").find(".birthEvent-label");
+    var $cohortLabels = $("#events-container").find(".birthEvent-label");
+
+    $userLabels.each(function(i) { $(this).html("Event " + ++i); });
+    $cohortLabels.each(function(i) { $(this).html("Event " + ++i); });
 }
 
 
@@ -290,6 +228,7 @@ $(document.body).on('click', '.eventFilter-add.fa-plus-circle', function(d) {
     // If going from 1 to 2, show del btn
     container.find(".eventFilter-remove").show();
 });
+
 // Remove eventFilter.
 $(document.body).on('click', '.eventFilter-remove.fa-minus-circle', function(d) {
     var container = $(this).parents(".multi-eventFilters");
@@ -317,19 +256,6 @@ $("#filter-users-checkbox").on('change', function(d) {
 });
 
 
-// Show/Hide Advanced options.
-$(document.body).on('click', '.advanced-checkbox', function(d) {
-    // console.log($(this).parent().parents('.advanced-check').siblings())
-    var advancedForm = $(this).parents('.advanced-check').children(".advanced-container");
-    if($(this).is(':checked')) {
-        advancedForm.show();
-    } else {
-        advancedForm.hide();
-    }
-});
-
-
-
 
 
 
@@ -338,12 +264,14 @@ $(document).ready(function (){
     // MeasureSelect2($(".select2-single.data-cube-yaml"));
     MeasureSelect2($("#measure"));
     EventSelect2($(".select2-single.data-table-yaml"));
+    CohortSelect2($(".cohort-select"));
     GroupBySelect2($("#groupby"));
     flatpickr(".datepicker-datetime",{enableTime:!0,dateFormat:"m-d-Y H:i",defaultDate:new Date});
     updateEventLabelNumbering();
 
     $("#line").hide();
     $("#heat").hide();
+    $("#Range").hide();
     $("#loading").hide();
 })
 
@@ -361,6 +289,34 @@ function MeasureSelect2(jqObj){
         placeholder: 'Select an option',
         ajax: {
             url: '/return_measure/',
+            type: 'post',
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            delay: 250,
+            data: formdata,
+            processResults: function (data) {
+                // console.log(data[0])
+                // return {results: [{id: String(data['id']), text: String(data['text'])}]};
+                return {results: data};
+            },
+            cache: true
+        },
+    });
+}
+
+//process measure selectors
+function CohortSelect2(jqObj){
+    jqObj.append('<option></option>'); // for select2 placeholder
+    let formdata = new FormData();
+    // formdata.append('cube_id', $("#cube_id").val());
+    formdata.append('cube_id', cubeID);
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+    jqObj.select2({
+        // minimumResultsForSearch: 5,
+        placeholder: 'Select an option',
+        ajax: {
+            url: '/return_cohorts/',
             type: 'post',
             dataType: 'json',
             processData: false,
@@ -545,38 +501,38 @@ function buildCohort(){
     query['dataSource'] = cubeID;
     query['queryName'] = $("#query-name")[0].value;
 
-    var eventSelectSize = $(".event-container .userSelection").length;
+    var eventSelectSize = $(".event-container .eventSelection").length;
     // console.log("eventSelectSize:", eventSelectSize)
     var eventSelects = [];
     for(var h = 0; h < eventSelectSize; h++){
-        var eventDiv = $($($(".event-container .userSelection")[h]).parent('div').parent('div')[0]);
-        var eventSize = $($(".event-container .userSelection")[h]).find(".row .data-table-yaml").length;
+        var eventDiv = $($($(".event-container .eventSelection")[h]).parent('div').parent('div')[0]);
+        var eventSize = $($(".event-container .eventSelection")[h]).find(".row .data-table-yaml").length;
         // console.log("eventSize:", eventSize)
         var events = [];
         for(var i = 0; i < eventSize; i++){
             // var event = JSON.parse(eventTemplate);
             var event = {};
-            var index = $($($(".event-container .userSelection")[h]).find(".row .data-table-yaml")[i]).val();
+            var index = $($($(".event-container .eventSelection")[h]).find(".row .data-table-yaml")[i]).val();
             // console.log("index", index)
             var obj = tableYaml[index];
             // console.log("obj", obj)
             event['fieldSchema'] = obj.name;
             if(obj.fieldType === "Segment"){
                 event['type'] = 'SET'
-                event['acceptValue'] = $($($(".event-container .userSelection")[h]).find(".row .second-stage")[i]).val();
+                event['acceptValue'] = $($($(".event-container .eventSelection")[h]).find(".row .second-stage")[i]).val();
                 // events.push(event);
             }
             // else if(obj.fieldType === 'ActionTime'){
-            //     var v1 = $($($(".event-container .userSelection")[h]).find(".row .date1")[i]).find('input').val();
-            //     var v2 = $($($(".event-container .userSelection")[h]).find(".row .date2")[i]).find('input').val();
+            //     var v1 = $($($(".event-container .eventSelection")[h]).find(".row .date1")[i]).find('input').val();
+            //     var v2 = $($($(".event-container .eventSelection")[h]).find(".row .date2")[i]).find('input').val();
             //     var range = v1 + "|" + v2;
             //     var value = [];
             //     value.push(range);
             //     event['fieldValue']['values'] = value;
             // }
             else{
-                var v1 = parseInt($($($(".event-container .userSelection")[h]).find(".row .event-min")[i]).val());
-                var v2 = parseInt($($($(".event-container .userSelection")[h]).find(".row .event-max")[i]).val());
+                var v1 = parseInt($($($(".event-container .eventSelection")[h]).find(".row .event-min")[i]).val());
+                var v2 = parseInt($($($(".event-container .eventSelection")[h]).find(".row .event-max")[i]).val());
                 v1 = Number.isInteger(v1)?v1:'MIN';
                 v2 = Number.isInteger(v2)?v2:'MAX';
                 if(Number.isInteger(v1) && Number.isInteger(v2)){

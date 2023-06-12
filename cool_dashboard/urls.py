@@ -30,6 +30,7 @@ urlpatterns = [
     path('return_groupby/', return_groupby, name='return the groupby'),
     path('return_fileds/', return_fileds, name='return the fields'),
     path('return_field_detail/', return_field_detail, name='return the contents of the field'),
+    path('return_cohorts/', return_cohorts, name='return the cohorts'),
 
     path('dataset-show/', login_required(DatasetList.as_view()), name='Show datasets'),
     path('dataset-remove/<int:set_id>/', DatasetRemove.as_view(), name="remove a dataset"),

@@ -50,6 +50,9 @@ class CohortCreateInDataset(View):
         assert request.POST['mode'] == 'CreateCohort'
         query = request.POST['query']
         query = json.loads(query)
+        if query['queryName'] in list(Query.objects.values_list('query_name',flat=True)):
+            res["status_code"] = 500
+            res['text'] = "[x] Query name is already used in the system: %s"%query['queryName']
         start = time.time()
         out = pass_create_cohort(query)
         exe_time = time.time()-start
