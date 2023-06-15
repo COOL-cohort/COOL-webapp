@@ -64,6 +64,8 @@ def analyze_columns(request):
                 col_types[col] = "String"
             else:
                 col_types[col] = "Value"
+            logger.info(col)
+            logger.info(col_types[col])
 
         for col in event_related:
             col_types[col] = "Event Related"
@@ -91,12 +93,53 @@ def return_measures(request):
             raise FileNotFoundError("[*] Could not found the demographic yaml file.")
         # logger.info(demoYaml)
         res = []
-        for key in demoYaml['UserKey']:
+        accept_keys = []
+        accept_keys.extend(demoYaml['UserKey'])
+        accept_keys.extend(demoYaml['Metric'])
+        accept_keys.extend(demoYaml['Float'])
+        for key in accept_keys:
             name = demoYaml['Details'][key]['name']
             res.append({"id": name, "text": name})
         logger.info(res)
         return JsonResponse(res, safe=False)
 
+def return_functions(request):
+    if request.method == 'POST':
+        res = []
+        for key,value in Functions.items():
+            res.append({"id": key, "text": value})
+        logger.info(res)
+        return JsonResponse(res, safe=False)
+
+
+def save_query_page(request, set_id):
+    if request.method == 'POST':
+        content = request.POST['content']
+        query_name = request.POST['queryName']
+        cube = Dataset.objects.get(set_id=set_id)
+        out = pass_get_version({'cube':cube.cube_name})
+        version = eval(out.text)
+        save_path = os.path.join(data_path, cube.cube_name, version[-1], 'cohort', query_name)
+        if not os.path.exists(save_path):
+            os.mkdir(save_path)
+        f = open(os.path.join(save_path, "query.html"), 'w')
+        f.write(content)
+        f.close()
+        return JsonResponse({'code': 200, 'text': "This Query has been saved successfully!"}, safe=False)
+
+
+def load_query_page(request, set_id, query_id):
+    if request.method == 'GET':
+        cube = Dataset.objects.get(set_id=set_id)
+        out = pass_get_version({'cube': cube.cube_name})
+        version = eval(out.text)
+        query_name = 'demo'
+        save_path = os.path.join(data_path, cube.cube_name, version[-1], 'cohort', query_name)
+        logger.info(save_path)
+        f = open(os.path.join(save_path, "query.html"), 'r')
+        content = f.read()
+        f.close()
+        return JsonResponse({'code': 200, 'text': content}, safe=False)
 
 def return_cohorts(request):
     if request.method == 'POST':
@@ -109,7 +152,7 @@ def return_cohorts(request):
         res = [{"id":-1, "text": "ALL Users size:%d"%dataset.num_ids}]
         for c in cohort:
             name = "%s-%s[%s] size:%d"%(c.query_id.query_name, c.cohort_name, str(c.save_time)[:-7], c.cohort_size)
-            res.append({"id": c.cohort_id, "text": name})
+            res.append({"id": "%s/%s.cohort" % (c.query_id.query_name, c.cohort_name), "text": name})
         logger.info(res)
         return JsonResponse(res, safe=False)
 
@@ -126,14 +169,14 @@ def return_groupby(request):
             raise FileNotFoundError("[*] Could not found the demographic yaml file.")
         # logger.info(demoYaml)
         res = []
-        for i in range(len(demoYaml['Fields'])):
-            if demoYaml['Details'][i]['invariant']:
-                res.append({"id": i, "text": demoYaml['Details'][i]['name']})
+        for name, col in demoYaml['Details'].items():
+            if col['invariant']:
+                res.append({"id": demoYaml['Fields'].index(name), "text": name})
         # logger.info(res)
         return JsonResponse(res, safe=False)
 
 
-def return_fileds(request):
+def return_fields(request):
     if request.method == 'POST':
         cube_id = request.POST['cube_id']
         logger.info(cube_id)
@@ -147,15 +190,15 @@ def return_fileds(request):
         # logger.info(demoYaml)
         res = []
         for i, field in enumerate(demoYaml['Fields']):
-            if demoYaml['Details'][i]['type'] in ['UserKey', 'ActionTime']:
+            if demoYaml['Details'][field]['type'] in ['UserKey', 'ActionTime']:
                 continue
-            if demoYaml['Details'][i]['invariant']:
+            if demoYaml['Details'][field]['invariant']:
                 continue
             res.append({"id": i, "text": field})
         # logger.info(res)
         return JsonResponse(res, safe=False)
 
-def return_field_detail(request):
+def return_seg_field_detail(request):
     if request.method == 'POST':
         cube_id = request.POST['cube_id']
         field_id = int(request.POST['field_id'])
@@ -175,6 +218,35 @@ def return_field_detail(request):
             for i, value in enumerate(demoYaml['Details'][field_id]['values']):
                 res.append({"id": value, "text": value})
 
+        # logger.info(res)
+        return JsonResponse(res, safe=False)
+
+def return_field_detail(request, set_id, f_id):
+    if request.method == 'POST':
+        # logger.info(request.POST)
+        cube = Dataset.objects.get(set_id=set_id)
+        demoYaml = os.path.join(data_path, cube.cube_name, "demographic.yaml")
+        if os.path.exists(demoYaml):
+            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
+        else:
+            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
+
+        # logger.info(demoYaml)
+        f_name = demoYaml['Fields'][f_id]
+        field_type = demoYaml['Details'][f_name]['type']
+
+        if field_type in ["Metric"]:
+            res = {
+                "min": eval(demoYaml['Details'][f_name]['min']),
+                "max": eval(demoYaml['Details'][f_name]['max']),
+                "interval": eval(demoYaml['Details'][f_name]['max']) - eval(demoYaml['Details'][f_name]['min'])
+            }
+        elif field_type in ["Segment", "Action"]:
+            res = []
+            for i, value in enumerate(demoYaml['Details'][f_name]['values']):
+                res.append({"id": value, "text": value})
+        else:
+            res = None
         # logger.info(res)
         return JsonResponse(res, safe=False)
 

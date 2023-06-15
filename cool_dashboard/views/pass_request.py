@@ -29,3 +29,15 @@ def pass_create_cohort(query):
     logger.info("pass create cohort: " + url)
     r = requests.post(url, headers=headers, data=json.dumps(query))
     return r
+
+def pass_cohort_analysis(query):
+    url = SERVER + '/cohort/cohort-analysis'
+    logger.info("pass cohort analysis: " + url)
+    r = requests.post(url, headers=headers, data=json.dumps(query))
+    return r
+
+def pass_get_version(query):
+    url = SERVER + '/cohort/list_cube_version?cube=%s' % (query['cube'])
+    logger.info("pass list_cube_version: " + url)
+    r = requests.get(url, headers=headers)
+    return r

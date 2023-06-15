@@ -1,5 +1,46 @@
 'use strict';
 
+let eventFilterHtml = '<div class="row mb-3">'+
+'    <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
+'    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
+'        <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
+'            <select class="form-select select2-single data-table-yaml">'+
+'            </select>'+
+'        </div>'+
+'        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
+'        <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
+'            <select class="form-select second-stage"> </select>'+
+'        </div>'+
+'        <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
+'            <div class="input-group date date1">'+
+'                <input type="text" class="form-control datepicker-datetime" >'+
+'                <span class="input-group-addon">'+
+'                    <span class="glyphicon glyphicon-calendar"></span>'+
+'                </span>'+
+'            </div>'+
+'            <div class="input-group date date2">'+
+'                <input type="text" class="form-control datepicker-datetime" >'+
+'                <span class="input-group-addon">'+
+'                    <span class="glyphicon glyphicon-calendar"></span>'+
+'                </span>'+
+'            </div>'+
+'        </div>'+
+'        <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
+'            <div class="col-md-5 col-sm-5 col-xs-5">'+
+'                <input type="text" class="form-control event-min " placeholder="MIN">'+
+'            </div>'+
+'            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
+'            <div class="col-md-5 col-sm-5 col-xs-5">'+
+'                <input type="text" class="form-control event-min " placeholder="MAX">'+
+'            </div>'+
+'        </div>'+
+'    </div>'+
+'    <div class="col-sm-2 col-sm-2 col-xs-12">'+
+'        <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
+'        <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
+'    </div>'+
+'</div>'
+
 let cohortHtml = '<div class="event-container">'+
 '    <div class="row mb-4">'+
 '        <label class="col-sm-offset-2 control-label birthEvent-label">Event </label>'+
@@ -7,47 +48,7 @@ let cohortHtml = '<div class="event-container">'+
 '    </div>'+
 '    <div class="row mb-4">'+
 '        <label class="control-label col-md-1 col-sm-1 col-xs-12">Event:</label>'+
-'        <div class="col-md-9 multi-eventFilters eventSelection" >'+
-'            <div class="row mb-3">'+
-'                <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
-'                <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
-'                    <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
-'                        <select class="form-select select2-single data-table-yaml">'+
-'                        </select>'+
-'                    </div>'+
-'                    <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
-'                    <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
-'                        <select class="form-select second-stage"> </select>'+
-'                    </div>'+
-'                    <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
-'                        <div class="input-group date date1">'+
-'                            <input type="text" class="form-control datepicker-datetime" >'+
-'                            <span class="input-group-addon">'+
-'                                <span class="glyphicon glyphicon-calendar"></span>'+
-'                            </span>'+
-'                        </div>'+
-'                        <div class="input-group date date2">'+
-'                            <input type="text" class="form-control datepicker-datetime" >'+
-'                            <span class="input-group-addon">'+
-'                                <span class="glyphicon glyphicon-calendar"></span>'+
-'                            </span>'+
-'                        </div>'+
-'                    </div>'+
-'                    <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
-'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                            <input type="text" class="form-control event-min " placeholder="1">'+
-'                        </div>'+
-'                        <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
-'                        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                            <input type="text" class="form-control event-min " placeholder="100">'+
-'                        </div>'+
-'                    </div>'+
-'                </div>'+
-'                <div class="col-sm-2 col-sm-2 col-xs-12">'+
-'                    <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
-'                    <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
-'                </div>'+
-'            </div>'+
+'        <div class="col-md-9 multi-eventFilters eventSelection" >'+ eventFilterHtml +
 '        </div>'+
 '    </div>'+
 '    <div class="row mb-4">'+
@@ -58,7 +59,6 @@ let cohortHtml = '<div class="event-container">'+
 '        <div class="col-md-1 col-sm-1 col-xs-3" style="float:left; line-height:33px;">time(s)</div>'+
 '    </div>'+
 '</div>';
-
 
 
 // Add event.
@@ -115,7 +115,6 @@ function updateEventLabelNumbering() {
 
 
 
-
 let globalFilterHtml = '<div class="row mb-4 global-filter select-multi-stage">'+
 '    <div class="col-md-4 col-sm-4 col-xs-4">'+
 '        <select class="form-select select2-single data-table-yaml"> </select>'+
@@ -140,11 +139,11 @@ let globalFilterHtml = '<div class="row mb-4 global-filter select-multi-stage">'
 '    </div>'+
 '    <div class="row col-md-6 col-sm-6 col-xs-6 intRange" style="display: none;">'+
 '        <div class="col-md-5 col-sm-5 col-xs-5 ">'+
-'            <input type="text" class="form-control min ">'+
+'            <input type="text" class="form-control min " placeholder="MIN">'+
 '        </div>'+
 '        <div class="col-md-1 col-sm-1 col-xs-1 text-center" style="float:left; line-height:33px;">-</div>'+
 '        <div class="col-md-5 col-sm-5 col-xs-5">'+
-'            <input type="text" class="form-control max ">'+
+'            <input type="text" class="form-control max " placeholder="MAX">'+
 '        </div>'+
 '    </div>'+
 '    <div class="col-sm-2 col-sm-2 col-xs-1">'+
@@ -173,49 +172,6 @@ $(document.body).on('click', '.globalFilter-remove.fa-minus-circle', function(d)
 
 });
 
-
-
-
-let eventFilterHtml = '<div class="row mb-3">'+
-'    <label class="text-center col-md-2 col-sm-2 col-xs-12">Their</label>'+
-'    <div class="select-multi-stage col-md-8 col-sm-8 col-xs-12">'+
-'        <div class="col-md-5 col-sm-5 col-xs-5 float-left">'+
-'            <select class="form-select select2-single data-table-yaml">'+
-'            </select>'+
-'        </div>'+
-'        <label class="text-center col-md-1 col-sm-1 col-xs-12 float-left">is</label>'+
-'        <div class="col-md-6 col-sm-6 col-xs-12 float-left segment" >'+
-'            <select class="form-select second-stage"> </select>'+
-'        </div>'+
-'        <div class="row md-3 col-sm-6 col-sm-6 col-xs-12 datetimepicker" style="display: none;">'+
-'            <div class="input-group date date1">'+
-'                <input type="text" class="form-control datepicker-datetime" >'+
-'                <span class="input-group-addon">'+
-'                    <span class="glyphicon glyphicon-calendar"></span>'+
-'                </span>'+
-'            </div>'+
-'            <div class="input-group date date2">'+
-'                <input type="text" class="form-control datepicker-datetime" >'+
-'                <span class="input-group-addon">'+
-'                    <span class="glyphicon glyphicon-calendar"></span>'+
-'                </span>'+
-'            </div>'+
-'        </div>'+
-'        <div class="row col-md-6 col-sm-6 col-xs-12 intRange" style="display: none;">'+
-'            <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                <input type="text" class="form-control event-min " placeholder="1">'+
-'            </div>'+
-'            <div class="col-md-1 col-sm-1 col-xs-1" style="float:left; line-height:33px;">-</div>'+
-'            <div class="col-md-5 col-sm-5 col-xs-5">'+
-'                <input type="text" class="form-control event-min " placeholder="100">'+
-'            </div>'+
-'        </div>'+
-'    </div>'+
-'    <div class="col-sm-2 col-sm-2 col-xs-12">'+
-'        <i class="fa fa-plus-circle eventFilter-add" style="padding-right:7px;" aria-hidden="true"></i>'+
-'        <i class="fa fa-minus-circle eventFilter-remove" style="display:none;padding-right:7px;" aria-hidden="true"></i>'+
-'    </div>'+
-'</div>'
 
 
 // Add eventFilter.
@@ -247,22 +203,251 @@ $(document.body).on('click', '.eventFilter-remove.fa-minus-circle', function(d) 
 $("#filter-users-checkbox").on('change', function(d) {
     if($(this).is(':checked')) {
         $("#users-events-container").show();
-        $(".users-add-event-btn").show();
 
     } else {
         $("#users-events-container").hide();
-        $(".users-add-event-btn").hide();
+    }
+});
+
+// Show/Hide Filter Users.
+$("#group-users-checkbox").on('change', function(d) {
+    if($(this).is(':checked')) {
+        $("#group-events-container").show();
+
+    } else {
+        $("#group-events-container").hide();
     }
 });
 
 
+// // Show/Hide Advanced options.
+// $(document.body).on('click', '.advanced-checkbox', function(d) {
+//     // console.log($(this).parent().parents('.advanced-check').siblings())
+//     var advancedForm = $(this).parents('.advanced-check').children(".advanced-container");
+//     if($(this).is(':checked')) {
+//         advancedForm.show();
+//     } else {
+//         advancedForm.hide();
+//     }
+// });
 
 
-
+// function showFigures() {
+//        var line_chart = echarts.init(document.getElementById("line"));
+//     var option_0 = {
+//         title: {
+//             text: 'demo(line map)'
+//         },
+//         tooltip: {
+//             trigger: 'axis',
+//             axisPointer: {
+//                 type: 'shadow'        // 'line' | 'shadow'
+//             }
+//         },
+//         toolbox: {
+//             show: true,
+//             feature: {
+//                 dataZoom: {
+//                     yAxisIndex: 'none'
+//                 },
+//                 dataView: {
+//                     readOnly: false
+//                 },
+//                 magicType: {
+//                     type: ['line', 'bar']
+//                 },
+//                 restore: {},
+//                 saveAsImage: {
+//                     show: true
+//                 }
+//             }
+//         },
+//         legend: {
+//             data: ['(1950, 1960]', '(1960, 1970]', '(1970, 1980]', '(1980, 1990]', '(1990, inf)'],
+//             top: "6%"
+//         },
+//         xAxis: {
+//             data: [0, 1, 2, 3, 4, 5, 6, 7]
+//         },
+//         yAxis: {},
+//         series: [
+//
+//                 {
+//                     name: '(1950, 1960]',
+//                     type: 'line',
+//                     data: [[7, 6], [6, 8], [5, 14], [4, 13], [3, 9], [2, 19], [1, 12], [0, 231]],
+//                     label: {
+//                         show: true
+//                     },
+//                 },
+//
+//                 {
+//                     name: '(1960, 1970]',
+//                     type: 'line',
+//                     data: [[7, 9], [6, 16], [5, 18], [4, 13], [3, 16], [2, 15], [1, 19], [0, 393]],
+//                     label: {
+//                         show: true
+//                     },
+//                 },
+//
+//                 {
+//                     name: '(1970, 1980]',
+//                     type: 'line',
+//                     data: [[7, 13], [6, 8], [5, 18], [4, 21], [3, 30], [2, 39], [1, 35], [0, 654]],
+//                     label: {
+//                         show: true
+//                     },
+//                 },
+//
+//                 {
+//                     name: '(1980, 1990]',
+//                     type: 'line',
+//                     data: [[7, 7], [6, 13], [5, 15], [4, 28], [3, 36], [2, 38], [1, 50], [0, 681]],
+//                     label: {
+//                         show: true
+//                     },
+//                 },
+//
+//                 {
+//                     name: '(1990, inf)',
+//                     type: 'line',
+//                     data: [[7, 5], [6, 7], [5, 7], [4, 8], [3, 11], [2, 17], [1, 20], [0, 407]],
+//                     label: {
+//                         show: true
+//                     },
+//                 },
+//
+//         ]
+//     };
+//         var heatmap_chart = echarts.init(document.getElementById("heat"));
+//         var option_1 = {
+//             title: {
+//                 text: 'demo(heat map)'
+//             },
+//             tooltip: {
+//                 position: 'top'
+//             },
+//             animation: false,
+//             grid: {
+//                 height: '50%',
+//                 top: '10%'
+//             },
+//             xAxis: {
+//                 type: 'category',
+//                 data: [0, 1, 2, 3, 4, 5, 6, 7],
+//                 splitArea: {
+//                     show: true
+//                 }
+//             },
+//             yAxis: {
+//                 type: 'category',
+//                 data: ['(1950, 1960]', '(1960, 1970]', '(1970, 1980]', '(1980, 1990]', '(1990, inf)'],
+//                 splitArea: {
+//                     show: true
+//                 }
+//             },
+//             visualMap: {
+//                 min: 0,
+//                 max: 100,
+//                 calculable: true,
+//                 orient: 'horizontal',
+//                 left: 'center',
+//                 bottom: '25%'
+//             },
+//             series: [{
+//                 name: 'value',
+//                 type: 'heatmap',
+//                 data: [[0, 0, 100], [1, 0, 5], [2, 0, 8], [3, 0, 3], [4, 0, 5], [5, 0, 6], [6, 0, 3], [7, 0, 2], [0, 1, 100], [1, 1, 4], [2, 1, 3], [3, 1, 4], [4, 1, 3], [5, 1, 4], [6, 1, 4], [7, 1, 2], [0, 2, 100], [1, 2, 5], [2, 2, 5], [3, 2, 4], [4, 2, 3], [5, 2, 2], [6, 2, 1], [7, 2, 1], [0, 3, 100], [1, 3, 7], [2, 3, 5], [3, 3, 5], [4, 3, 4], [5, 3, 2], [6, 3, 1], [7, 3, 1], [0, 4, 100], [1, 4, 4], [2, 4, 4], [3, 4, 2], [4, 4, 1], [5, 4, 1], [6, 4, 1], [7, 4, 1]],
+//                 label: {
+//                     show: true
+//                 },
+//                 emphasis: {
+//                     itemStyle: {
+//                         shadowBlur: 10,
+//                         shadowColor: 'rgba(0, 0, 0, 0.5)'
+//                     }
+//                 }
+//             }]
+//         };
+//
+//         var range_chart = echarts.init(document.getElementById("range"));
+//         var option_2 = {
+//             tooltip: {
+//                 trigger: 'axis',
+//                 axisPointer: {
+//                     type: 'shadow'        // 'line' | 'shadow'
+//                 }
+//             },
+//             title: {
+//                 text: 'demo(range map)'
+//             },
+//             legend: {
+//                 data: ['(1950, 1960]_max', '(1950, 1960]_min', '(1950, 1960]_avg', '(1960, 1970]_max', '(1960, 1970]_min', '(1960, 1970]_avg', '(1970, 1980]_max', '(1970, 1980]_min', '(1970, 1980]_avg', '(1980, 1990]_max', '(1980, 1990]_min', '(1980, 1990]_avg', '(1990, inf)_max', '(1990, inf)_min', '(1990, inf)_avg'],
+//                 orient: 'horizontal',
+//                  y: '5%',
+//             },
+//             grid:{
+//                 top:'30%',
+//             },
+//             xAxis: {},
+//             yAxis: {},
+//             series: [
+//                         {
+//                             type: 'custom',
+//                             name: '(1950, 1960]_max',
+//                             renderItem: renderItem,
+//                             data: [[0, 76.0, 54.78], [1, 64.0, 54.6], [2, 81.0, 59.38], [3, 72.0, 57.3], [4, 79.0, 56.62], [5, 55.0, 50.33], [6, 67.0, 56.1], [7, 78.0, 58.38]],
+//                             z:3,
+//                         },
+//
+//
+//
+//                         {
+//                             type: 'custom',
+//                             name: '(1950, 1960]_min',
+//                             renderItem: renderItem,
+//                             data: [[0, 45.0, 54.78], [1, 47.0, 54.6], [2, 47.0, 59.38], [3, 47.0, 57.3], [4, 45.0, 56.62], [5, 45.0, 50.33], [6, 46.0, 56.1], [7, 47.0, 58.38]],
+//                             z:3,
+//                         },
+//
+//
+//
+//                         {
+//                             type: 'line',
+//                             name: '(1950, 1960]_avg',
+//                             data: [[0, 54.78], [1, 54.6], [2, 59.38], [3, 57.3], [4, 56.62], [5, 50.33], [6, 56.1], [7, 58.38]],
+//                             label: {
+//                                 show: true
+//                             },
+//                         },
+//             ]
+//         };
+//
+//     line_chart.setOption(option_0);
+//     heatmap_chart.setOption(option_1);
+//     range_chart.setOption(option_2)
+//
+//     $("#line").css("height", "450px");
+//     $("#line").show();
+//     line_chart.resize();
+//
+//     $("#heat").css("height", "450px");
+//     heatmap_chart.resize();
+//     $("#heat").show();
+//     heatmap_chart.resize();
+//
+//     $("#range").css("height", "450px");
+//     range_chart.resize();
+//     $("#heat").show();
+//     range_chart.resize();
+//
+//     $("#line").focus();
+// }
 
 $(document).ready(function (){
     // MeasureSelect2($(".select2-single.data-cube-yaml"));
     MeasureSelect2($("#measure"));
+    FunctionSelect2($("#function"));
     EventSelect2($(".select2-single.data-table-yaml"));
     CohortSelect2($(".cohort-select"));
     GroupBySelect2($("#groupby"));
@@ -271,8 +456,9 @@ $(document).ready(function (){
 
     $("#line").hide();
     $("#heat").hide();
-    $("#Range").hide();
+    $("#range").hide();
     $("#loading").hide();
+    // showFigures();
 })
 
 
@@ -282,9 +468,9 @@ function MeasureSelect2(jqObj){
     jqObj.append('<option></option>'); // for select2 placeholder
     let formdata = new FormData();
     // formdata.append('cube_id', $("#cube_id").val());
-    formdata.append('cube_id', cubeID);
+    formdata.append('cube_id', cubeName);
     formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
-    jqObj.select2({
+    jqObj.empty().select2({
         // minimumResultsForSearch: 5,
         placeholder: 'Select an option',
         ajax: {
@@ -302,6 +488,35 @@ function MeasureSelect2(jqObj){
             },
             cache: true
         },
+         multiple: true,
+         cache: true
+    });
+}
+
+//process function selectors
+function FunctionSelect2(jqObj){
+    jqObj.append('<option></option>'); // for select2 placeholder
+    let formdata = new FormData();
+    // formdata.append('cube_id', $("#cube_id").val());
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+    jqObj.empty().select2({
+        // minimumResultsForSearch: 5,
+        placeholder: 'Select an option',
+        ajax: {
+            url: '/return_function/',
+            type: 'post',
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            delay: 250,
+            data: formdata,
+            processResults: function (data) {
+                return {results: data};
+            },
+            cache: true
+        },
+        multiple: true,
+        cache: true,
     });
 }
 
@@ -310,7 +525,7 @@ function CohortSelect2(jqObj){
     jqObj.append('<option></option>'); // for select2 placeholder
     let formdata = new FormData();
     // formdata.append('cube_id', $("#cube_id").val());
-    formdata.append('cube_id', cubeID);
+    formdata.append('cube_id', cubeName);
     formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     jqObj.select2({
         // minimumResultsForSearch: 5,
@@ -339,7 +554,7 @@ function GroupBySelect2(jqObj){
     jqObj.append('<option></option>'); // for select2 placeholder
     let formdata = new FormData();
     // formdata.append('cube_id', $("#cube_id").val());
-    formdata.append('cube_id', cubeID);
+    formdata.append('cube_id', cubeName);
     formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     jqObj.select2({
         // minimumResultsForSearch: 5,
@@ -359,6 +574,36 @@ function GroupBySelect2(jqObj){
             },
             cache: true
         },
+    }).on('change', function(d) {
+        var idx = $(this).val();
+        var obj = tableYaml[idx];
+        var advancedForm = $('.advanced-check').children(".advanced-container");
+        let formdata = new FormData();
+        formdata.append('cube_id', cubeName);
+        formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+        if(obj.fieldType === 'Metric'){
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                delay: 250,
+                data: formdata,
+                url: "/return_field_detail/"+set_id+'/'+idx+'/',
+                success: function (response) {
+                    // console.log(response)
+                    var adv1 = advancedForm.find('.adv1')[0]
+                    adv1.value=""+response['min']
+                    var adv2 = advancedForm.find('.adv2')[0]
+                    adv2.value=response['max']
+                    var adv3 = advancedForm.find('.adv3')[0]
+                    adv3.value=response['interval']
+                }
+            })
+            advancedForm.show()
+        }else{
+            advancedForm.hide()
+        }
     });
 }
 
@@ -370,7 +615,7 @@ function EventSelect2(jqObj){
         disabled: true
     });
     let formdata = new FormData();
-    formdata.append('cube_id', cubeID);
+    formdata.append('cube_id', cubeName);
     formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
     jqObj.select2({
         minimumResultsForSearch: 5,
@@ -379,7 +624,7 @@ function EventSelect2(jqObj){
         //     return { id: String(i), text: d.name };
         // })
         ajax: {
-            url: '/return_fileds/',
+            url: '/return_fields/',
             type: 'post',
             dataType: 'json',
             processData: false,
@@ -407,13 +652,13 @@ function EventSelect2(jqObj){
             secondStage.show();
 
             let formdata = new FormData();
-            formdata.append('cube_id', cubeID);
+            formdata.append('cube_id', cubeName);
             formdata.append('field_id', idx);
             formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
             secondStage.select2('destroy').empty().select2({
                 multiple: true,
                 ajax: {
-                    url: '/return_field_detail/',
+                    url: '/return_field_detail/'+set_id+'/'+idx+'/',
                     type: 'post',
                     dataType: 'json',
                     processData: false,
@@ -456,7 +701,7 @@ function EventSelect2(jqObj){
 
             // // The following codes cannot be used.
             // let formdata = new FormData();
-            // formdata.append('cube_id', cubeID);
+            // formdata.append('cube_id', cubeName);
             // formdata.append('field_id', idx);
             // formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
             // $.ajax({
@@ -495,12 +740,47 @@ function EventSelect2(jqObj){
     });
 }
 
-var loyalTemplate = '{"birthSelector":{"birthEvents":[]},"outputCohort":"all"}';
-function buildCohort(){
-    var query = JSON.parse(loyalTemplate);
-    query['dataSource'] = cubeID;
-    query['queryName'] = $("#query-name")[0].value;
 
+
+
+
+function QueryCheck() {
+    // console.log($('#query-name')[0].value)
+    if ($('#query-name')[0].value === "") {
+        alert("Please input the name of the query.");
+        return false;
+    }
+
+    var selects = $(".select2-single.data-table-yaml");
+    // console.log("selects1", selects.length)
+    for(var i = 0; i < selects.length; i++){
+        if($(selects[i]).is(":visible")){
+            // console.log($(selects[i]).val())
+            if($(selects[i]).val() === "" ){
+                alert("Please select an option for event.");
+                $(selects[i]).focus();
+                return false;
+            }
+        }
+    }
+
+    var selects = $(".second-stage");
+    // console.log("selects2", selects.length)
+    for(var i = 0; i < selects.length; i++){
+        if($(selects[i]).is(":visible")){
+            // console.log($(selects[i]).val())
+            if($(selects[i]).val().length === 0){
+                alert("Please select at least one value for event.");
+                $(selects[i]).focus();
+                return false;
+            }
+        }
+    }
+}
+
+
+
+function generateBirthEvent(){
     var eventSelectSize = $(".event-container .eventSelection").length;
     // console.log("eventSelectSize:", eventSelectSize)
     var eventSelects = [];
@@ -557,65 +837,27 @@ function buildCohort(){
 
         eventSelects.push(eventSelect);
     }
-    query['birthSelector']['birthEvents'] = eventSelects;
+    return eventSelects
+}
+
+
+var loyalTemplate = '{"birthSelector":{"birthEvents":[]},"outputCohort":"all"}';
+function buildCohortCreateQuery(){
+    var query = JSON.parse(loyalTemplate);
+    query['dataSource'] = cubeName;
+    query['queryName'] = $("#query-name")[0].value;
+
+    query['birthSelector']['birthEvents'] = generateBirthEvent();
     if($('#save-cohort-checkbox')[0].checked){
         query['saveCohort'] = true
     }
     return query;
 }
 
-
-
-// $('#query-form')[0].onsubmit = function() {
-// $('#generate').click = function() {
-// $('#submit').click = function() {
-function CohortCreate() {
-    // console.log($('#query-name')[0].value)
-    if ($('#query-name')[0].value === "") {
-        alert("Please input the name of the query.");
-        return false;
-    }
-
-    var selects = $(".select2-single.data-table-yaml");
-    // console.log("selects1", selects.length)
-    for(var i = 0; i < selects.length; i++){
-        if($(selects[i]).is(":visible")){
-            // console.log($(selects[i]).val())
-            if($(selects[i]).val() === "" ){
-                alert("Please select an option for event.");
-                $(selects[i]).focus();
-                return false;
-            }
-        }
-    }
-
-    var selects = $(".second-stage");
-    // console.log("selects2", selects.length)
-    for(var i = 0; i < selects.length; i++){
-        if($(selects[i]).is(":visible")){
-            // console.log($(selects[i]).val())
-            if($(selects[i]).val().length === 0){
-                alert("Please select at least one value for event.");
-                $(selects[i]).focus();
-                return false;
-            }
-        }
-    }
-
-    // console.log(tableYaml)
-    var cohortCreateQury = buildCohort();
-    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortCreateQury, null, 4)
-    // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortCreateQury, null, 4);
-    // console.log(cohortCreateQury)
-
-    processCohortCreateQuery(cohortCreateQury);
-    return false;
-}
-
 function processCohortCreateQuery(query){
     $("#loading").show();
     let formdata = new FormData();
-    formdata.append('cube_id', cubeID);
+    formdata.append('cube_id', cubeName);
     formdata.append('mode', 'CreateCohort');
     formdata.append('query', JSON.stringify(query));
     formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
@@ -658,4 +900,444 @@ function processCohortCreateQuery(query){
             alert("Invalid Query: "+response.text);
         }
     });
+}
+
+// $('#query-form')[0].onsubmit = function() {
+// $('#generate').click = function() {
+// $('#submit').click = function() {
+function CohortCreate() {
+    QueryCheck()
+    // console.log(tableYaml)
+    var cohortCreateQury = buildCohortCreateQuery();
+    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortCreateQury, null, 4)
+    // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortCreateQury, null, 4);
+    // console.log(cohortCreateQury)
+
+    processCohortCreateQuery(cohortCreateQury);
+    return false;
+}
+
+
+function buildAnalysisQuery(){
+    var query = JSON.parse(loyalTemplate);
+    query['dataSource'] = cubeName;
+    query['queryName'] = $("#query-name")[0].value;
+
+    // step 1
+    if($('#filter-users-checkbox')[0].checked){
+        var cohort = $($('#cohort-container').find(".cohort-select")[0]).val();
+        // console.log(cohort)
+        if(cohort !== "-1"){
+            query['inputCohort'] = cohort
+        }
+    }
+
+    // step 2
+    if($('#group-users-checkbox')[0].checked){
+        var cohortSelector = {}
+        var idx = $($('#groupby-container').find(".groupby")[0]).val();
+        var obj = tableYaml[idx];
+        // console.log(idx, obj)
+        cohortSelector['fieldSchema'] = obj.name
+       if(obj.fieldType === "Segment"){
+            cohortSelector['type'] = "SET"
+        } else if (obj.fieldType === "Metric" ) {
+           cohortSelector['type'] = "RANGE"
+           cohortSelector['min'] = parseInt($($('.advanced-container').find(".adv1")[0])[0].value);
+           cohortSelector['max'] = parseInt($($('.advanced-container').find(".adv2")[0])[0].value);
+           cohortSelector['interval'] = parseInt($($('.advanced-container').find(".adv3")[0])[0].value);
+       } else if (obj.fieldType === "Float" ) {
+           cohortSelector['type'] = "RANGE"
+           cohortSelector['min'] = parseFloat($($('.advanced-container').find(".adv1")[0])[0].value);
+           cohortSelector['max'] = parseFloat($($('.advanced-container').find(".adv2")[0])[0].value);
+           cohortSelector['interval'] = parseFloat($($('.advanced-container').find(".adv3")[0])[0].value);
+       }
+       query['cohortSelector'] = cohortSelector
+    }
+
+    // step 3
+    query['birthSelector']['birthEvents'] = generateBirthEvent();
+    if($('#save-cohort-checkbox')[0].checked){
+        query['saveCohort'] = true;
+    }
+
+    // step 4
+    var valueSelector = {};
+    var gFilterSize = $("#global-filters-container").find('.data-table-yaml').length;
+    var filters = [];
+    for (var i = 0; i < gFilterSize; i++) {
+        var filter = {};
+        var index = $($("#global-filters-container").find('.data-table-yaml')[i]).val();
+        var obj = tableYaml[index];
+        filter['fieldSchema'] = obj.name;
+        if (obj.fieldType === 'Segment' || obj.fieldType === 'Action') {
+            filter['type'] = "SET";
+            filter['acceptValue'] = $($("#global-filters-container").find('.second-stage')[i]).val();
+        }
+        // else if (obj.fieldType === 'ActionTime') {
+        //     var v1 = $($("#global-filters-container").find('.date1')[i]).find('input').val();
+        //     var v2 = $($("#global-filters-container").find('.date2')[i]).find('input').val();
+        //     var range = v1 + "|" + v2;
+        //     var value = [];
+        //     value.push(range);
+        //     filter['fieldValue']['values'] = value;
+        // }
+        else if (obj.fieldType === 'Float' || obj.fieldType === 'Metric' ){
+            filter['type'] = "RANGE";
+            if (obj.fieldType === 'Float'){
+                var v1 = parseFloat($($("#global-filters-container").find('.min')[i]).val());
+                var v2 = parseFloat($($("#global-filters-container").find('.max')[i]).val());
+            } else {
+                var v1 = parseInt($($("#global-filters-container").find('.min')[i]).val());
+                var v2 = parseInt($($("#global-filters-container").find('.max')[i]).val());
+            }
+            v1 = Number.isNaN(v1) ? 'MIN': v1;
+            v2 = Number.isNaN(v2) ? 'MAX': v2;
+            if (v2 !== 'MAX' && v1 !== 'MIN') {
+                if (v2<v1){
+                    v2 = 'MAX'
+                }
+            }
+            var range = v1 + " to " + v2;
+            var value = [];
+            value.push(range);
+            filter['acceptValue'] = value;
+        }
+        filters.push(filter);
+    }
+    valueSelector['filters'] = filters
+    valueSelector['observedSchema'] = $("#measure").val();
+    valueSelector['function'] = $("#function").val();
+    query['valueSelector'] = valueSelector
+
+    var ageSelector = {};
+    ageSelector['unit'] = $($("#cohort-metrix-container").find(".range-select")[0]).val();
+    var minAge = parseInt(document.getElementById("min-age").value)
+    ageSelector['min'] = Number.isNaN(minAge)?0:minAge;
+    var maxAge = parseInt(document.getElementById("max-age").value)
+    ageSelector['max'] = Number.isNaN(maxAge)?30:maxAge;
+    var intervalAge = parseInt(document.getElementById("interval-age").value)
+    ageSelector['interval'] = Number.isNaN(intervalAge)?1:intervalAge;
+    query['ageSelector'] = ageSelector
+
+    return query;
+}
+
+
+
+
+function processCohortAnalysisQuery(query) {
+    $("#loading").show();
+    let formdata = new FormData();
+    formdata.append('cube_id', cubeName);
+    formdata.append('mode', 'CohortAnalysis');
+    formdata.append('query', JSON.stringify(query));
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        delay: 250,
+        data: formdata,
+        url: "/dataset/"+set_id+"/cohort-analysis/",
+        success: function(response) {
+            console.log(response)
+            if(response.status_code === 200){
+                $("#loading").hide();
+
+                var option_line = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'        // 'line' | 'shadow'
+                        }
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {
+                                readOnly: false
+                            },
+                            magicType: {
+                                type: ['line', 'bar']
+                            },
+                            restore: {},
+                            saveAsImage: {
+                                show: true
+                            }
+                        }
+                    },
+                    legend: {
+                        data: [],
+                        top: "6%"
+                    },
+                    xAxis: {
+                        data: []
+                    },
+                    yAxis: {},
+                    series: []
+                };
+                var option_heat = {
+                    title: {
+                        text: ''
+                    },
+                    tooltip: {
+                        position: 'top',
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: {
+                                show: true
+                            }
+                        }
+                    },
+                    animation: false,
+                    grid: {
+                        height: '50%',
+                        top: '10%'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: [],
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: [],
+                        splitArea: {
+                            show: true
+                        }
+                    },
+                    visualMap: {
+                        min: 0,
+                        max: 100,
+                        calculable: true,
+                        orient: 'horizontal',
+                        left: 'center',
+                        bottom: '25%'
+                    },
+                    series: [{
+                        name: 'value',
+                        type: 'heatmap',
+                        data: [],
+                        label: {
+                            show: true
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }]
+                };
+                var option_range = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'        // 'line' | 'shadow'
+                        },
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: {
+                                show: true
+                            }
+                        }
+                    },
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        data: [],
+                        orient: 'horizontal',
+                         y: '5%',
+                    },
+                    grid:{
+                        top:'30%',
+                    },
+                    xAxis: {},
+                    yAxis: {},
+                    series: []
+                };
+
+                var context = response.text
+                for (var obs in context){
+                    for (var func in context[obs]) {
+                        if (func === 'DISTINCT' || func === 'COUNT'){
+                            $(".cohort-analysis-figures").append('<div id=\"line'+obs+func+'\" style=\"height:0px\"></div>')
+                            var line_chart = echarts.init(document.getElementById("line"+obs+func));
+                            var new_op = option_line;
+                            new_op['title']['text'] = context[obs][func]['line']['title']
+                            new_op['legend']['data'] = context[obs][func]['line']['legend']
+                            new_op['xAxis']['data'] = context[obs][func]['line']['xdata']
+                            new_op['series'] = context[obs][func]['line']['series']
+                            $("#line"+obs+func).css("height", "450px");
+                            $("#line"+obs+func).show();
+                            line_chart.resize();
+                            line_chart.setOption(new_op);
+
+                            $(".cohort-analysis-figures").append('<div id=\"heat'+obs+func+'\" style=\"height:0px\"></div>')
+                            var heatmap_chart = echarts.init(document.getElementById("heat"+obs+func));
+                            var new_op = option_heat;
+                            new_op['title']['text'] = context[obs][func]['heat']['title']
+                            new_op['xAxis']['data'] = context[obs][func]['heat']['xdata']
+                            new_op['yAxis']['data'] = context[obs][func]['heat']['legend']
+                            new_op['series'][0]['data'] = context[obs][func]['heat']['series']
+                            $("#heat"+obs+func).css("height", "450px");
+                            $("#heat"+obs+func).show();
+                            heatmap_chart.resize();
+                            heatmap_chart.setOption(new_op);
+                        }
+                        else if (func === 'RANGE'){
+                            $(".cohort-analysis-figures").append('<div id=\"range'+obs+func+'\" style=\"height:0px\"></div>')
+                            var range_chart = echarts.init(document.getElementById("range"+obs+func));
+                            var new_op = option_range;
+                            new_op['title']['text'] = context[obs][func]['title']
+                            new_op['xAxis']['data'] = context[obs][func]['xdata']
+                            new_op['legend']['data'] = context[obs][func]['legend']
+                            for (var i=0; i<context[obs][func]['series'].length; i++) {
+                                 if (context[obs][func]['series'][i]['type'] === 'custom') {
+                                     context[obs][func]['series'][i]['renderItem'] = renderItem
+                                 }
+                            }
+                            new_op['series'] = context[obs][func]['series']
+                            $("#range"+obs+func).css("height", "450px");
+                            $("#range"+obs+func).show();
+                            range_chart.resize();
+                            range_chart.setOption(option_range)
+                        }
+                    }
+
+                }
+                $("#cohort-analysis")[0].scrollIntoView();
+                // document.getElementById("cohortResults").innerHTML = JSON.stringify(response.text, null, 4);
+
+            } else {
+                $("#loading").hide();
+                alert("Errors: "+response.text);
+            }
+        },
+        error: function(response) {
+            $("#loading").hide();
+            alert("Invalid Query: "+response.text);
+        }
+    });
+}
+
+function CohortAnalysis() {
+    // QueryCheck();
+    console.log(tableYaml)
+    // var cohortAnalysisQuery = buildAnalysisQuery();
+    // document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4)
+    // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4);
+    // console.log(cohortAnalysisQuery)
+
+    var cohortAnalysisQuery = {}
+    processCohortAnalysisQuery(cohortAnalysisQuery);
+    return false;
+}
+
+function SavePage() {
+    var content = $('.container-fluid').html()
+    console.log(content)
+    let formdata = new FormData();
+    formdata.append('content', content);
+    formdata.append('queryName', $("#query-name")[0].value);
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        delay: 250,
+        data: formdata,
+        url: "/save_query_page/"+set_id+'/',
+        success: function (response) {
+            console.log(response)
+            if (response.code == 200){
+                 alert(response.text)
+            } else {
+                alert("Errors: "+response.text);
+            }
+        },
+        error: function(response) {
+            alert("Invalid Query: "+response.text);
+        }
+    })
+}
+
+function LoadPage() {
+    let formdata = new FormData();
+    // formdata.append('content', content);
+    // formdata.append('queryName', $("#query-name")[0].value);
+    formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+    $.ajax({
+        type: "GET",
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        delay: 250,
+        data: formdata,
+        url: "/load_query_page/"+set_id+'/' +'1/',
+        success: function (response) {
+            // console.log(response)
+            if (response.code == 200){
+                 // alert(response.text)
+                var content = $('.container-fluid')
+                content.empty()
+                content.append(response.text)
+            } else {
+                alert("Errors: "+response.text);
+            }
+        },
+        error: function(response) {
+            alert("Invalid Query: "+response.text);
+        }
+    })
+}
+
+function renderItem(params, api) {
+    var xValue = api.value(0);
+    var highPoint = api.coord([xValue, api.value(1)]);
+    var lowPoint = api.coord([xValue, api.value(2)]);
+    var halfWidth = 10;
+    var style = api.style({
+        stroke: api.visual('color'),
+        fill: null
+    });
+
+    return {
+        type: 'group',
+        children: [
+            {
+                type: 'line',
+                shape: {
+                    x1: highPoint[0] - halfWidth, y1: highPoint[1],
+                    x2: highPoint[0] + halfWidth, y2: highPoint[1]
+                },
+                style: style
+            },
+            {
+                type: 'line',
+                shape: {
+                    x1: highPoint[0], y1: highPoint[1],
+                    x2: lowPoint[0], y2: lowPoint[1]
+                },
+                style: style
+            },
+        ]
+    };
 }

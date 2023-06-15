@@ -27,10 +27,14 @@ urlpatterns = [
 
     path('return_columns/', analyze_columns, name='return the columns'),
     path('return_measure/', return_measures, name='return the measure'),
+    path('return_function/', return_functions, name='return the function'),
     path('return_groupby/', return_groupby, name='return the groupby'),
-    path('return_fileds/', return_fileds, name='return the fields'),
-    path('return_field_detail/', return_field_detail, name='return the contents of the field'),
+    path('return_fields/', return_fields, name='return the fields'),
+    path('return_seg_field_detail/', return_seg_field_detail, name='return the contents of the field'),
+    path('return_field_detail/<int:set_id>/<int:f_id>/', return_field_detail, name='return the contents of the field'),
     path('return_cohorts/', return_cohorts, name='return the cohorts'),
+    path('save_query_page/<int:set_id>/', save_query_page, name='save the query page'),
+    path('load_query_page/<int:set_id>/<int:query_id>/', load_query_page, name='load the query page'),
 
     path('dataset-show/', login_required(DatasetList.as_view()), name='Show datasets'),
     path('dataset-remove/<int:set_id>/', DatasetRemove.as_view(), name="remove a dataset"),

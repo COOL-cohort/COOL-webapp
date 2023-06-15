@@ -126,10 +126,11 @@ class Upload(View):
         results = {
             "UserKey": [],
             "ActionTime": [],
-            "Event": [],
-            "Event Related": [],
+            "Action": [],
+            "Action Related": [],
             "Segment": [],
-            "Metrix": [],
+            "Metric": [],  # Metric == int
+            "Float": [],
             "Fields": [],
             "Details": {}
         }
@@ -147,12 +148,19 @@ class Upload(View):
             if out['type'] == 'UserKey':
                 out['size'] = len(out['values'])
                 out.pop('values')
-                results['UserKey'].append(fid)
-            elif out['type'] == 'Segment':
+                results['UserKey'].append(field['name'])
+            elif out['type'] == 'Segment' and not out['invariant']:
                 out['size'] = len(out['values'])
-                results['Segment'].append(fid)
+                results['Segment'].append(field['name'])
+            elif out['type'] == 'Metric' and not out['invariant']:
+                results['Metric'].append(field['name'])
+            elif out['type'] == 'Float' and not out['invariant']:
+                results['Float'].append(field['name'])
+            elif out['type'] == 'Action':
+                results['Action'].append(field['name'])
+                results['Action Related'] = out['values']
             elif out['type'] == 'ActionTime':
-                results['ActionTime'].append(fid)
+                results['ActionTime'].append(field['name'])
                 # min_day = base_time + datetime.timedelta(days=int(out['min']))
                 # max_day = base_time + datetime.timedelta(days=int(out['max']))
                 # out['start'] = min_day.strftime("%Y-%m-%d %H:%M:%S")
@@ -160,7 +168,7 @@ class Upload(View):
                 out['start'] = base_time + datetime.timedelta(seconds=int(out['min']))
                 out['end'] = base_time + datetime.timedelta(seconds=int(out['max']))
             results['Fields'].append(field['name'])
-            results['Details'][fid] = out
+            results['Details'][field['name']] = out
         return results
 
 

@@ -20,43 +20,178 @@ if not os.path.exists(upload_path):
 fieldTypes = {
     'User ID':{
         'type': "UserKey",
-        "datatype": "String",
+        # "datatype": "String",
         "invariantField": False,
     },
     'Event':{
         'type': "Action",
-        "datatype": "String",
+        # "datatype": "String",
         "invariantField": False,
     },
     'Event Related':{
         'type': "Segment",
-        "datatype": "String",
+        # "datatype": "String",
         "invariantField": False,
     },
     'Time':{
         'type': "ActionTime",
-        "datatype": "Int32",
+        # "datatype": "Int",
         "invariantField": False,
     },
-    'Value':{
+    'IntValue':{
         'type': "Metric",
-        "datatype": "Int32",
+        # "datatype": "Int",
         "invariantField": False,
     },
-    'Value(Invariant)': {
+    'IntValue(Invariant)': {
         'type': "Metric",
-        "datatype": "Int32",
+        # "datatype": "Int",
+        "invariantField": True,
+    },
+    'FloatValue': {
+        'type': "Float",
+        # "datatype": "Float",
+        "invariantField": False,
+    },
+    'FloatValue(Invariant)': {
+        'type': "Float",
+        # "datatype": "Float",
         "invariantField": True,
     },
     'String':{
         'type': "Segment",
-        "datatype": "String",
+        # "datatype": "String",
         "invariantField": False,
 
     },
     'String(Invariant)': {
         'type': "Segment",
-        "datatype": "String",
+        # "datatype": "String",
         "invariantField": True,
     },
+}
+
+Functions = {
+    "DISTINCT": "DISTINCT",
+    "COUNT": "COUNT",
+    "MIN": "MIN",
+    "MAX": "MAX",
+    # "SUM": "SUM",
+    "AVERAGE": "AVERAGE",
+}
+
+
+# QUERY = {
+#     "birthSelector": {
+#         "birthEvents": [
+#             {
+#                 "filters": [
+#                     {
+#                         "fieldSchema": "prescribe",
+#                         "type": "SET",
+#                         "acceptValue": [
+#                             "Medicine-A"
+#                         ]
+#                     }
+#                 ],
+#                 "frequency": 1
+#             }
+#         ]
+#     },
+#     "outputCohort": "all",
+#     "dataSource": "20230612163532ijHxy9m7",
+#     "queryName": "demo",
+#     "cohortSelector": {
+#         "fieldSchema": "birthyear",
+#         "type": "RANGE",
+#         "min": 1950,
+#         "max": 2000,
+#         "interval": 10
+#     },
+#     "saveCohort": True,
+#     "valueSelector": {
+#         "filters": [
+#             {
+#                 "fieldSchema": "labtest",
+#                 "type": "SET",
+#                 "acceptValue": [
+#                     "Labtest-C"
+#                 ]
+#             },
+#             {
+#                 "fieldSchema": "value",
+#                 "type": "RANGE",
+#                 "acceptValue": ["MIN to 45", "131 to MAX"]
+#             }
+#         ],
+#         "observedSchema": "id",
+#         "function": [
+#             "DISTINCT",
+#             "AVERAGE"
+#         ]
+#     },
+#     "ageSelector": {
+#         "unit": "DAY",
+#         "min": 0,
+#         "max": 7,
+#         "interval": 1
+#     }
+# }
+
+QUERY = {
+    "birthSelector": {
+        "birthEvents": [
+            {
+                "filters": [
+                    {
+                        "fieldSchema": "prescribe",
+                        "type": "SET",
+                        "acceptValue": [
+                            "Medicine-A"
+                        ]
+                    }
+                ],
+                "frequency": 1
+            }
+        ]
+    },
+    "outputCohort": "all",
+    "dataSource": "20230615161708C0H2dfUQ",
+    "queryName": "demo",
+    "cohortSelector": {
+        "fieldSchema": "birthyear",
+        "type": "RANGE",
+        "min": 1950,
+        "max": 2000,
+        "interval": 10
+    },
+    "saveCohort": True,
+    "valueSelector": {
+        "filters": [
+            {
+                "fieldSchema": "labtest",
+                "type": "SET",
+                "acceptValue": [
+                    "Labtest-C"
+                ]
+            },
+            {
+                "fieldSchema": "value",
+                "type": "RANGE",
+                "acceptValue": [
+                    "MIN to MAX"
+                ]
+            }
+        ],
+        "observedSchema": [
+            "id",
+            "value"
+        ]
+    },
+    "ageSelector": {
+        "unit": "DAY",
+        "min": 0,
+        "max": 7,
+        "interval": 1
+    }
 }

@@ -105,7 +105,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="mb-3">
-                                                            <label for="dataset-file">Dataset File</label>
+                                                            <label for="csv_file">Dataset File</label>
                                                             <div>
                                                             <input name='csv_file' id="csv_file" accept='.csv' type="file" multiple="multiple">
                                                             </div>
@@ -260,6 +260,7 @@
             success: function (res) {
                 console.log(res)
                 let columns = res['columns']
+                $("#columns").empty()
                 $("#columns").append('<input type="hidden" name="setname" value="'+res["setname"]+'" />')
                 $("#columns").append('<input type="hidden" name="filename" value="'+res["filename"]+'" />')
                 $("#columns").append('<input type="hidden" name="details" value="'+res["details"]+'" />')
@@ -269,9 +270,9 @@
                 $.each(columns, function (index, item) {
                     var name = columns[index];
                     let pattern = '<div class="col-lg-12"> \
-                                    <div class="mb-3"> \
-                                        <label for="col-'+name+'" class="form-label">' + name + '</label> \
-                                        <select class="form-select" name="'+name+'">'
+                                    <div class="row mb-3"> \
+                                        <label class="form-label">' + name + ' \
+                                        <select class="form-select" name="'+name+'"> </label>'
 
                     for(var type of res['types']){
                         if(res['col_type'][name] === type){

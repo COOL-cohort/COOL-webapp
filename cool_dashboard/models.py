@@ -28,8 +28,23 @@ class Query(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     set_id = models.ForeignKey(Dataset,on_delete=models.CASCADE)
     query_name = models.CharField(max_length=50)
+    CC = 'CC'
+    CA = 'CA'
+    OS = "OS"
+    MODE_CHOICES = [
+        (CC, 'Cohort-Create'),
+        (CA, 'Cohort-Analysis'),
+        (OS, 'Others'),
+    ]
+    query_mode = models.CharField(
+        max_length=2,
+        choices=MODE_CHOICES,
+        default=OS,
+    )
     save_time = models.DateTimeField(auto_now=True)
     exe_time = models.FloatField()
+    class Meta:
+        unique_together = [['query_name', 'user_id', 'set_id'], ]
 
 class Cohort(models.Model):
     cohort_id = models.AutoField(primary_key=True)
