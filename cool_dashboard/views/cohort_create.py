@@ -9,6 +9,7 @@ from .pass_request import *
 from ..config import *
 from ..models import Dataset, Cohort, Query
 import time
+import datetime
 
 logger = logging.getLogger('django')
 
@@ -44,15 +45,16 @@ class CohortCreateInDataset(View):
 
     def post(self, request, set_id):
         res = {}
-        logger.info(request.POST)
+        # logger.info(request.POST)
         user = User.objects.get(id=request.user.id)
         cube = Dataset.objects.get(user_id=request.user.id, set_id=set_id)
         assert request.POST['mode'] == 'CreateCohort'
         query = request.POST['query']
         query = json.loads(query)
-        if query['queryName'] in list(Query.objects.values_list('query_name',flat=True)):
+        if query['queryName'] in list(Query.objects.filter(user_id=user, set_id=cube).values_list('query_name',flat=True)):
             res["status_code"] = 500
-            res['text'] = "[x] Query name is already used in the system: %s"%query['queryName']
+            res['text'] = "[x] Query name is already used in the system: %s" % query['queryName']
+            return JsonResponse(res, safe=False)
         start = time.time()
         out = pass_create_cohort(query)
         exe_time = time.time()-start
@@ -60,23 +62,23 @@ class CohortCreateInDataset(View):
         res['text'] = out.text
         if res["status_code"] == 200:
             res['text'] = json.loads(res['text'])
-            q = Query(
-                user_id=user,
-                set_id=cube,
-                query_name=query['queryName'],
-                exe_time=exe_time
-            )
-            q.save()
-
             if query['saveCohort']:
+                q = Query(
+                    user_id=user,
+                    set_id=cube,
+                    query_name=query['queryName'],
+                    query_mode='CA',
+                    exe_time=exe_time,
+                )
+                q.save()
                 for c in res['text']['cohortResList']:
-                    cohort = Cohort(
+                    c = Cohort(
                         user_id=user,
                         set_id=cube,
                         cohort_size=c['cohortSize'],
                         cohort_name=c['cohortName'],
                         query_id=q,
                     )
-                    cohort.save()
+                    c.save()
         return JsonResponse(res, safe=False)
 

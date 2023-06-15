@@ -84,7 +84,7 @@
                         </div>
                         <!-- end card -->
 
-                        <div class="card">
+                        <div class="card mb-3">
                             <div class="card-header">
                                 <h4 class="float-end"> Advanced </h4>
                                 <h4 class="card-title">Cohort Analysis</h4>
@@ -101,8 +101,8 @@
                                                         <div class="col-sm-6">
                                                             <input class="form-control" type="text" name="query-name" id="query-name" placeholder="Enter the Query Name">
                                                         </div>
-                                                        <label class="col-form-label col-md-3 col-sm-3 col-xs-12 save-cohort">{% translate "Cohort Save" %}
-                                                                <input id="save-cohort-checkbox" type="checkbox" name="save-cohort" value="save-cohort" checked> </label>
+                                                        <label class="col-form-label col-md-3 col-sm-3 col-xs-12 save-query">{% translate "Query Save" %}
+                                                                <input id="save-query-checkbox" type="checkbox" name="save-query" value="save-Query"> </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,7 +111,8 @@
                                             <div class="row">
                                                 <div class=" form-section-label">
                                                     <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">{% translate "Step1: select the precalculated cohort" %}
-                                                        <input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked> </label>
+                                                        <input id="filter-users-checkbox" type="checkbox" name="filter-users" value="filter-users" checked>
+                                                    </label>
                                                 </div>
                                                 <div class="row mb-4" id="cohort-container">
                                                     <div class="col-md-12">
@@ -347,8 +348,8 @@
                                             <div class="row float-end">
                                                 <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
                                                     <button id="generate" type="button" class="btn btn-primary w-md" onclick="CohortAnalysis()">{% translate "Submit" %}</button>
-                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="SavePage()">{% translate "Save" %}</button>
-                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="LoadPage()">{% translate "Load" %}</button>
+{#                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="SavePage()">{% translate "Save" %}</button>#}
+{#                                                    <button id="generate" type="button" class="btn btn-primary w-md" onclick="LoadPage()">{% translate "Load" %}</button>#}
                                                     <div class="vr"></div>
                                                     <button class="btn btn-danger w-md" type="reset" onClick="window.location.reload();return false;" >{% translate "Reset" %}</button>
                                                 </div>
@@ -364,6 +365,8 @@
                         <div id="cohort-analysis" class="row cohort-analysis" >
                             <div class="card">
                                 <div class="card-header">
+                                    <h4 id="save_flag" class="float-end" style="display: none"> Saved </h4>
+                                    <h4 id="not_save_flag" class="float-end" style="display: none"> Not Saved </h4>
                                     <h4 class="card-title">Cohorts Analysis Results</h4>
                                     <p class="card-title-desc">Multiple presentation formats</p>
                                 </div>

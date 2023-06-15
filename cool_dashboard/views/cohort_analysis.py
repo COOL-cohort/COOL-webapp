@@ -1,3 +1,6 @@
+import datetime
+import os
+
 import numpy as np
 import copy
 import yaml
@@ -50,11 +53,16 @@ class CohortAnalysis(View):
         user = User.objects.get(id=request.user.id)
         cube = Dataset.objects.get(user_id=request.user.id, set_id=set_id)
         assert request.POST['mode'] == 'CohortAnalysis'
-        # query = request.POST['query']
-        # query = json.loads(query)
-        query = QUERY
+        query = request.POST['query']
+        query = json.loads(query)
+        # query = QUERY
 
-        cube = Dataset.objects.get(set_id=set_id)
+        if query['queryName'] in list(Query.objects.filter(user_id=user, set_id=cube).values_list('query_name', flat=True)):
+            res["status_code"] = 500
+            res['text'] = "[x] Query name is already used in the system: %s" % query['queryName']
+            return JsonResponse(res, safe=False)
+
+        save_flag = query.pop('saveQuery')
         demoYaml = os.path.join(data_path, cube.cube_name, "demographic.yaml")
         if os.path.exists(demoYaml):
             demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
@@ -95,16 +103,29 @@ class CohortAnalysis(View):
             out_data[obs] = transfer_plot_data(results, query['queryName'], obs)
         exe_time = time.time()-start
         res['text'] = out_data
-        logger.info(out_data)
+        # logger.info(out_data)
         # logger.info(res)
 
-        # q = Query(
-        #     user_id=user,
-        #     set_id=cube,
-        #     query_name=query['queryName'],
-        #     exe_time=exe_time
-        # )
-        # q.save()
+        if save_flag:
+            q = Query(
+                user_id=user,
+                set_id=cube,
+                query_name=query['queryName'],
+                query_mode='CA',
+                exe_time=exe_time,
+            )
+            q.save()
+
+            out = pass_get_version({'cube': cube.cube_name})
+            version = eval(out.text)
+            save_path = os.path.join(data_path, cube.cube_name, version[-1], 'cohort', query['queryName'])
+
+            f = open(os.path.join(save_path,'query_chart.json'), 'w')
+            f.write(json.dumps(out_data))
+            f.close()
+
+
+
         #
         # if query['saveCohort']:
         #     for c in res['text']['cohortResList']:

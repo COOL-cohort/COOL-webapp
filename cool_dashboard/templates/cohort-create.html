@@ -100,14 +100,14 @@
                                                             <input class="form-control" type="text" name="query-name" id="query-name" placeholder="Enter the Query Name" required>
                                                         </div>
                                                         <label class="col-form-label col-md-3 col-sm-3 col-xs-12 save-cohort">{% translate "Cohort Save" %}
-                                                                <input id="save-cohort-checkbox" type="checkbox" name="save-cohort" value="save-cohort" checked> </label>
+                                                                <input id="save-cohort-checkbox" type="checkbox" name="save-cohort" value="save-cohort"> </label>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!--USER SELECTION-->
                                             <div class="row mb-4">
                                                 <div class=" form-section-label">
-                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">{% translate "User Selection" %}</label>
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12 filter-users">Step1: create filters to select users</label>
                                                 </div>
                                                 <div id="users-events-container" class="events-container">
                                                     <div class="event-container">
@@ -178,6 +178,48 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <!--GROUP BY-->
+                                            <div class="row mb-3">
+                                                <div class="form-section-label">
+                                                    <label class="control-label section-title col-md-12 col-sm-12 col-xs-12">{% translate "Step2: partition users into different cohorts" %}
+                                                    <input id="group-users-checkbox" type="checkbox" name="group-users" value="group-users" checked> </label></label>
+                                                </div>
+                                                <div class="row mb-4" id="groupby-container">
+                                                    <div class="row mb-3">
+                                                        <label class="control-label col-md-3 col-sm-3 col-xs-12">{% translate "Group by" %}:</label>
+                                                        <div class="col-md-3 col-sm-3 col-xs-12">
+                                                            <select class="form-select select2-single groupby" id="groupby">
+                                                            </select>
+                                                        </div>
+    {#                                                    <div class="col-md-3 col-sm-3 col-xs-12 mb-4">#}
+    {#                                                        <label class="control-label float-left">{% translate "Advanced" %}:</label>#}
+    {#                                                        <div class="float-left">#}
+    {#                                                            <input style="margin-top:12px; margin-left: 8px;" class="advanced-checkbox adv" type="checkbox" name="" >#}
+    {#                                                        </div>#}
+    {#                                                    </div>#}
+                                                    </div>
+                                                    <div class="row advanced-check">
+                                                        <div class="advanced-container">
+                                                            <div class="row offset-md-3 offset-sm-3">
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Min" %}</label>
+                                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                                    <input type="text" placeholder="0" class="form-control adv1" >
+                                                                </div>
+                                                                <label class="control-label col-md-1 col-sm-1 col-xs-3 ">{% translate "Max" %}</label>
+                                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                                    <input type="text" placeholder="10" class="form-control adv2" >
+                                                                </div>
+                                                                <label class="control-label  col-md-2 col-sm-2 col-xs-3 ">{% translate "Interval" %}</label>
+                                                                <div class="col-md-2 col-sm-2 col-xs-12">
+                                                                    <input type="text" placeholder="20" class="form-control adv3" >
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <!-- BUTTON -->
                                             <div class="row float-end">
                                                 <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
@@ -198,6 +240,8 @@
                         <div id="generate-cohort" class="row generate-cohort" style="display: none">
                             <div class="card">
                                 <div class="card-header">
+                                    <h4 id="save_flag" class="float-end" style="display: none"> Saved </h4>
+                                    <h4 id="not_save_flag" class="float-end" style="display: none"> Not Saved </h4>
                                     <h4 class="card-title">Generated Cohorts</h4>
                                     <p class="card-title-desc">Cohorts generated via this query</p>
                                 </div>

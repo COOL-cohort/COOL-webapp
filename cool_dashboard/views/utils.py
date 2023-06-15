@@ -235,12 +235,14 @@ def return_field_detail(request, set_id, f_id):
         f_name = demoYaml['Fields'][f_id]
         field_type = demoYaml['Details'][f_name]['type']
 
-        if field_type in ["Metric"]:
+        if field_type in ["Metric", 'Float']:
             res = {
                 "min": eval(demoYaml['Details'][f_name]['min']),
                 "max": eval(demoYaml['Details'][f_name]['max']),
-                "interval": eval(demoYaml['Details'][f_name]['max']) - eval(demoYaml['Details'][f_name]['min'])
+                "interval": (eval(demoYaml['Details'][f_name]['max']) - eval(demoYaml['Details'][f_name]['min']))/5
             }
+            if field_type == 'Metric':
+                res['interval'] = int(res['interval'])
         elif field_type in ["Segment", "Action"]:
             res = []
             for i, value in enumerate(demoYaml['Details'][f_name]['values']):

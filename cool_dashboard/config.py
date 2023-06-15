@@ -80,63 +80,7 @@ Functions = {
     "AVERAGE": "AVERAGE",
 }
 
-
-# QUERY = {
-#     "birthSelector": {
-#         "birthEvents": [
-#             {
-#                 "filters": [
-#                     {
-#                         "fieldSchema": "prescribe",
-#                         "type": "SET",
-#                         "acceptValue": [
-#                             "Medicine-A"
-#                         ]
-#                     }
-#                 ],
-#                 "frequency": 1
-#             }
-#         ]
-#     },
-#     "outputCohort": "all",
-#     "dataSource": "20230612163532ijHxy9m7",
-#     "queryName": "demo",
-#     "cohortSelector": {
-#         "fieldSchema": "birthyear",
-#         "type": "RANGE",
-#         "min": 1950,
-#         "max": 2000,
-#         "interval": 10
-#     },
-#     "saveCohort": True,
-#     "valueSelector": {
-#         "filters": [
-#             {
-#                 "fieldSchema": "labtest",
-#                 "type": "SET",
-#                 "acceptValue": [
-#                     "Labtest-C"
-#                 ]
-#             },
-#             {
-#                 "fieldSchema": "value",
-#                 "type": "RANGE",
-#                 "acceptValue": ["MIN to 45", "131 to MAX"]
-#             }
-#         ],
-#         "observedSchema": "id",
-#         "function": [
-#             "DISTINCT",
-#             "AVERAGE"
-#         ]
-#     },
-#     "ageSelector": {
-#         "unit": "DAY",
-#         "min": 0,
-#         "max": 7,
-#         "interval": 1
-#     }
-# }
+true=True
 
 QUERY = {
     "birthSelector": {
@@ -158,6 +102,7 @@ QUERY = {
     "outputCohort": "all",
     "dataSource": "20230615161708C0H2dfUQ",
     "queryName": "demo",
+    "inputCohort": "test/all.cohort",
     "cohortSelector": {
         "fieldSchema": "birthyear",
         "type": "RANGE",

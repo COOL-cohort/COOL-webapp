@@ -202,20 +202,20 @@ $(document.body).on('click', '.eventFilter-remove.fa-minus-circle', function(d) 
 // Show/Hide Filter Users.
 $("#filter-users-checkbox").on('change', function(d) {
     if($(this).is(':checked')) {
-        $("#users-events-container").show();
+        $("#cohort-container").show();
 
     } else {
-        $("#users-events-container").hide();
+        $("#cohort-container").hide();
     }
 });
 
 // Show/Hide Filter Users.
 $("#group-users-checkbox").on('change', function(d) {
     if($(this).is(':checked')) {
-        $("#group-events-container").show();
+        $("#groupby-container").show();
 
     } else {
-        $("#group-events-container").hide();
+        $("#groupby-container").hide();
     }
 });
 
@@ -458,6 +458,7 @@ $(document).ready(function (){
     $("#heat").hide();
     $("#range").hide();
     $("#loading").hide();
+    $('#cohort-analysis').hide();
     // showFigures();
 })
 
@@ -581,7 +582,7 @@ function GroupBySelect2(jqObj){
         let formdata = new FormData();
         formdata.append('cube_id', cubeName);
         formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
-        if(obj.fieldType === 'Metric'){
+        if(obj.fieldType === 'Metric' || obj.fieldType === 'Float' ){
             $.ajax({
                 type: "POST",
                 dataType: 'json',
@@ -776,6 +777,7 @@ function QueryCheck() {
             }
         }
     }
+    return true;
 }
 
 
@@ -847,10 +849,39 @@ function buildCohortCreateQuery(){
     query['dataSource'] = cubeName;
     query['queryName'] = $("#query-name")[0].value;
 
-    query['birthSelector']['birthEvents'] = generateBirthEvent();
     if($('#save-cohort-checkbox')[0].checked){
         query['saveCohort'] = true
+    } else {
+        query['saveCohort'] = false
     }
+
+    // step 1
+    query['birthSelector']['birthEvents'] = generateBirthEvent();
+
+
+    // step 2
+    if($('#group-users-checkbox')[0].checked){
+        var cohortSelector = {}
+        var idx = $($('#groupby-container').find(".groupby")[0]).val();
+        var obj = tableYaml[idx];
+        // console.log(idx, obj)
+        cohortSelector['fieldSchema'] = obj.name
+       if(obj.fieldType === "Segment"){
+            cohortSelector['type'] = "SET"
+        } else if (obj.fieldType === "Metric" ) {
+           cohortSelector['type'] = "RANGE"
+           cohortSelector['min'] = parseInt($($('.advanced-container').find(".adv1")[0])[0].value);
+           cohortSelector['max'] = parseInt($($('.advanced-container').find(".adv2")[0])[0].value);
+           cohortSelector['interval'] = parseInt($($('.advanced-container').find(".adv3")[0])[0].value);
+       } else if (obj.fieldType === "Float" ) {
+           cohortSelector['type'] = "RANGE"
+           cohortSelector['min'] = parseFloat($($('.advanced-container').find(".adv1")[0])[0].value);
+           cohortSelector['max'] = parseFloat($($('.advanced-container').find(".adv2")[0])[0].value);
+           cohortSelector['interval'] = parseFloat($($('.advanced-container').find(".adv3")[0])[0].value);
+       }
+       query['cohortSelector'] = cohortSelector
+    }
+
     return query;
 }
 
@@ -889,6 +920,14 @@ function processCohortCreateQuery(query){
                     tbody.append(content);
                 });
                 $("#generate-cohort").show();
+                if(query['saveCohort']){
+                    $("#not_save_flag").hide();
+                    $("#save_flag").show();
+                } else {
+                    $("#save_flag").hide();
+                    $("#not_save_flag").show();
+                }
+
                 $("#generate-cohort")[0].scrollIntoView();
             } else {
                 $("#loading").hide();
@@ -906,14 +945,16 @@ function processCohortCreateQuery(query){
 // $('#generate').click = function() {
 // $('#submit').click = function() {
 function CohortCreate() {
-    QueryCheck()
+    if (QueryCheck()===false){
+        return false
+    }
     // console.log(tableYaml)
-    var cohortCreateQury = buildCohortCreateQuery();
-    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortCreateQury, null, 4)
+    var cohortCreateQuery = buildCohortCreateQuery();
+    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortCreateQuery, null, 4)
     // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortCreateQury, null, 4);
     // console.log(cohortCreateQury)
 
-    processCohortCreateQuery(cohortCreateQury);
+    processCohortCreateQuery(cohortCreateQuery);
     return false;
 }
 
@@ -957,8 +998,10 @@ function buildAnalysisQuery(){
 
     // step 3
     query['birthSelector']['birthEvents'] = generateBirthEvent();
-    if($('#save-cohort-checkbox')[0].checked){
-        query['saveCohort'] = true;
+    if($('#save-query-checkbox')[0].checked){
+        query['saveQuery'] = true;
+    } else {
+        query['saveQuery'] = false;
     }
 
     // step 4
@@ -1174,6 +1217,7 @@ function processCohortAnalysisQuery(query) {
                 };
 
                 var context = response.text
+                $('#cohort-analysis').show();
                 for (var obs in context){
                     for (var func in context[obs]) {
                         if (func === 'DISTINCT' || func === 'COUNT'){
@@ -1220,8 +1264,16 @@ function processCohortAnalysisQuery(query) {
                             range_chart.setOption(option_range)
                         }
                     }
-
                 }
+
+                if(query['saveQuery']){
+                    $("#not_save_flag").hide();
+                    $("#save_flag").show();
+                } else {
+                    $("#save_flag").hide();
+                    $("#not_save_flag").show();
+                }
+
                 $("#cohort-analysis")[0].scrollIntoView();
                 // document.getElementById("cohortResults").innerHTML = JSON.stringify(response.text, null, 4);
 
@@ -1238,20 +1290,22 @@ function processCohortAnalysisQuery(query) {
 }
 
 function CohortAnalysis() {
-    // QueryCheck();
-    console.log(tableYaml)
-    // var cohortAnalysisQuery = buildAnalysisQuery();
-    // document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4)
-    // $("#generateQuery")[0].innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4);
+    if (QueryCheck()===false){
+        return false
+    }
+    // console.log(tableYaml)
+    var cohortAnalysisQuery = buildAnalysisQuery();
+    document.getElementById("generateQuery").innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4)
+    $("#generateQuery")[0].innerHTML=JSON.stringify(cohortAnalysisQuery, null, 4);
     // console.log(cohortAnalysisQuery)
 
-    var cohortAnalysisQuery = {}
+    // var cohortAnalysisQuery = {}
     processCohortAnalysisQuery(cohortAnalysisQuery);
     return false;
 }
 
 function SavePage() {
-    var content = $('.container-fluid').html()
+    var content = $('.container-fluid').innerHTML()
     console.log(content)
     let formdata = new FormData();
     formdata.append('content', content);
@@ -1266,7 +1320,7 @@ function SavePage() {
         data: formdata,
         url: "/save_query_page/"+set_id+'/',
         success: function (response) {
-            console.log(response)
+            // console.log(response)
             if (response.code == 200){
                  alert(response.text)
             } else {

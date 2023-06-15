@@ -24,8 +24,10 @@ class CohortList(View):
             subset['cohort_size'] = cohort.cohort_size
             subset['user_name'] = cohort.user_id.username
             subset['set_name'] = cohort.set_id.set_name
+            subset['cube_name'] = cohort.set_id.cube_name
             subset['save_time'] = cohort.save_time
-            subset['query_name'] = cohort.query_name
+            subset['query_name'] = cohort.query_id.query_name
+            subset['set_id'] = cohort.set_id.set_id
             context['cohorts'][index] = subset
         # logger.info(context)
         return render(request, "cohort-list.html", context)

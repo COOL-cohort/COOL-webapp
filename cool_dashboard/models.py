@@ -22,6 +22,7 @@ class Dataset(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     save_time = models.DateTimeField(auto_now=True)
+    create_time = models.DateTimeField(auto_now=True)
 
 class Query(models.Model):
     query_id = models.AutoField(primary_key=True)
@@ -43,6 +44,7 @@ class Query(models.Model):
     )
     save_time = models.DateTimeField(auto_now=True)
     exe_time = models.FloatField()
+    create_time = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = [['query_name', 'user_id', 'set_id'], ]
 
@@ -54,6 +56,7 @@ class Cohort(models.Model):
     cohort_size = models.FloatField()
     cohort_name = models.CharField(max_length=20)
     save_time = models.DateTimeField(auto_now=True)
+    create_time = models.DateTimeField(auto_now=True)
 
 class Analysis(models.Model):
     analysis_id = models.AutoField(primary_key=True)
@@ -62,3 +65,4 @@ class Analysis(models.Model):
     set_id = models.ForeignKey(Dataset, on_delete=models.CASCADE)
     analysis_type = models.CharField(max_length=50)
     save_time = models.DateTimeField(auto_now=True)
+    create_time = models.DateTimeField(auto_now=True)

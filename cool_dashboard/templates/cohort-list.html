@@ -47,10 +47,11 @@
                                                 <th>Cohort Size</th>
                                                 <th>Query Name</th>
                                                 <th>Dataset</th>
+                                                <th>Cube Name</th>
                                                 <th>Creator</th>
                                                 <th>Save Time</th>
                                                 <th>Action</th>
-                                                <th></th>
+{#                                                <th></th>#}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -61,6 +62,7 @@
                                                     <td>{{ set.cohort_size }}</td>
                                                     <td>{{ set.query_name }}</td>
                                                     <td>{{ set.set_name }}</td>
+                                                    <td>{{ set.cube_name }}</td>
                                                     <td>{{ set.user_name }}</td>
                                                     <td>{{ set.save_time }}</td>
                                                     <td>
@@ -69,11 +71,11 @@
 {#                                                            <input name="operation" value="show" type="hidden">#}
 {#                                                            <button type="submit" class="btn btn-light btn-sm">View</button>#}
 {#                                                        </form>#}
-                                                        <a type="button" class="btn btn-light btn-sm" href="/cohort/{{ set.set_id }}/">View</a></td>
+                                                        <a type="button" class="btn btn-light btn-sm" href="/dataset/{{ set.set_id }}/">View</a></td>
                                                     </td>
-                                                    <td>
-                                                        <a type="button" class="btn btn-danger btn-sm" href="/cohort-remove/{{ set.set_id }}/">Delete</a></td>
-                                                    </td>
+{#                                                    <td>#}
+{#                                                        <a type="button" class="btn btn-danger btn-sm" href="/cohort-remove/{{ set.set_id }}/">Delete</a></td>#}
+{#                                                    </td>#}
                                                 </tr>
                                             {% endfor %}
                                         </tbody>
