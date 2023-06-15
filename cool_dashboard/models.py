@@ -24,23 +24,20 @@ class Dataset(models.Model):
     save_time = models.DateTimeField(auto_now=True)
     create_time = models.DateTimeField(auto_now=True)
 
+class MODE_CHOICES(models.TextChoices):
+    CC = 'CC', 'Cohort-Create'
+    CA = 'CA', 'Cohort-Analysis'
+    OS = 'OS', 'Others'
+
 class Query(models.Model):
     query_id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     set_id = models.ForeignKey(Dataset,on_delete=models.CASCADE)
     query_name = models.CharField(max_length=50)
-    CC = 'CC'
-    CA = 'CA'
-    OS = "OS"
-    MODE_CHOICES = [
-        (CC, 'Cohort-Create'),
-        (CA, 'Cohort-Analysis'),
-        (OS, 'Others'),
-    ]
     query_mode = models.CharField(
         max_length=2,
-        choices=MODE_CHOICES,
-        default=OS,
+        choices=MODE_CHOICES.choices,
+        default=MODE_CHOICES.OS,
     )
     save_time = models.DateTimeField(auto_now=True)
     exe_time = models.FloatField()

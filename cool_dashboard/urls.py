@@ -30,7 +30,6 @@ urlpatterns = [
     path('return_function/', return_functions, name='return the function'),
     path('return_groupby/', return_groupby, name='return the groupby'),
     path('return_fields/', return_fields, name='return the fields'),
-    path('return_seg_field_detail/', return_seg_field_detail, name='return the contents of the field'),
     path('return_field_detail/<int:set_id>/<int:f_id>/', return_field_detail, name='return the contents of the field'),
     path('return_cohorts/', return_cohorts, name='return the cohorts'),
     path('save_query_page/<int:set_id>/', save_query_page, name='save the query page'),
@@ -43,6 +42,9 @@ urlpatterns = [
     path('dataset/<int:set_id>/cohort-analysis/', CohortAnalysis.as_view(), name="cohort analysis"),
 
     path('cohort-show/', login_required(CohortList.as_view()), name='Show cohorts'),
+    path('query-show/', login_required(QueryList.as_view()), name='Show queries'),
+    path('query-detail/<int:query_id>/', login_required(QueryDetail.as_view()), name='Show queries'),
+    path('query-remove/<int:query_id>/', login_required(QueryRemove.as_view()), name='Show queries'),
 
     path('error-500/', test_error_500, name='Test internal system error'),
     path('request/', test_request, name='test request'),

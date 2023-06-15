@@ -198,28 +198,6 @@ def return_fields(request):
         # logger.info(res)
         return JsonResponse(res, safe=False)
 
-def return_seg_field_detail(request):
-    if request.method == 'POST':
-        cube_id = request.POST['cube_id']
-        field_id = int(request.POST['field_id'])
-        logger.info(cube_id)
-
-        demoYaml = os.path.join(data_path, cube_id, "demographic.yaml")
-        if os.path.exists(demoYaml):
-            demoYaml = yaml.load(open(demoYaml), Loader=yaml.Loader)
-        else:
-            raise FileNotFoundError("[*] Could not found the demographic yaml file.")
-
-        # logger.info(demoYaml)
-        field_type = demoYaml['Details'][field_id]['type']
-
-        if field_type in ["Segment", "Action"]:
-            res = []
-            for i, value in enumerate(demoYaml['Details'][field_id]['values']):
-                res.append({"id": value, "text": value})
-
-        # logger.info(res)
-        return JsonResponse(res, safe=False)
 
 def return_field_detail(request, set_id, f_id):
     if request.method == 'POST':
