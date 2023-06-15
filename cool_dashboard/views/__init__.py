@@ -11,5 +11,5 @@ from .cohort_analysis import CohortAnalysis
 from .error import test_error_500
 from .utils import analyze_columns, test_request, test, return_measures, return_fields, \
     return_field_detail, return_groupby, return_cohorts, return_functions, \
-    load_query_page, save_query_page
+    load_query_page, save_query_page, return_query, return_query_results
 from .pass_request import pass_load, pass_read_col

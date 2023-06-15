@@ -44,6 +44,8 @@ urlpatterns = [
     path('cohort-show/', login_required(CohortList.as_view()), name='Show cohorts'),
     path('query-show/', login_required(QueryList.as_view()), name='Show queries'),
     path('query-detail/<int:query_id>/', login_required(QueryDetail.as_view()), name='Show queries'),
+    path('return_query/<int:query_id>/', return_query, name='return the query'),
+    path('return_query_results/<int:query_id>/', return_query_results, name='return the query results'),
     path('query-remove/<int:query_id>/', login_required(QueryRemove.as_view()), name='Show queries'),
 
     path('error-500/', test_error_500, name='Test internal system error'),

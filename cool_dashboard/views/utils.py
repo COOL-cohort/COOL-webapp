@@ -144,7 +144,7 @@ def load_query_page(request, set_id, query_id):
 def return_cohorts(request):
     if request.method == 'POST':
         set_id = request.POST['cube_id']
-        logger.info(set_id)
+        # logger.info(set_id)
 
         dataset = Dataset.objects.get(cube_name=set_id)
         user = User.objects.get(id=request.user.id)
@@ -153,7 +153,55 @@ def return_cohorts(request):
         for c in cohort:
             name = "%s-%s[%s] size:%d"%(c.query_id.query_name, c.cohort_name, str(c.save_time)[:-7], c.cohort_size)
             res.append({"id": "%s/%s.cohort" % (c.query_id.query_name, c.cohort_name), "text": name})
-        logger.info(res)
+        # logger.info(res)
+        return JsonResponse(res, safe=False)
+
+def return_query(request, query_id):
+    if request.method == 'GET':
+        res = {}
+        user = User.objects.get(id=request.user.id)
+        q = Query.objects.get(query_id=query_id, user_id=user)
+        cube = q.set_id
+
+        out = pass_get_version({'cube': cube.cube_name})
+        version = eval(out.text)
+        save_path = os.path.join(data_path, cube.cube_name, version[-1], 'cohort', q.query_name)
+        f = open(os.path.join(save_path, "query.json"), 'r')
+        file_contents = f.read()
+        f.close()
+
+        res['code'] = 200
+        res['text'] = json.loads(file_contents)
+        return JsonResponse(res, safe=False)
+
+def return_query_results(request, query_id):
+    if request.method == 'GET':
+        res = {}
+        user = User.objects.get(id=request.user.id)
+        q = Query.objects.get(query_id=query_id, user_id=user)
+        query_mode = MODE_CHOICES(q.query_mode).label
+        dataset = q.set_id
+
+        out = pass_get_version({'cube': dataset.cube_name})
+        version = eval(out.text)
+        save_path = os.path.join(data_path, dataset.cube_name, version[-1], 'cohort', q.query_name)
+
+        logger.info(query_mode)
+        if query_mode == 'Cohort-Analysis':
+            f = open(os.path.join(save_path, "query_chart.json"), 'r')
+            file_contents = f.read()
+            f.close()
+        elif query_mode == 'Cohort-Create':
+            f = open(os.path.join(save_path, "query_res.json"), 'r')
+            file_contents = f.read()
+            f.close()
+        else:
+            raise NotImplemented("Not support this query mode: "+query_mode)
+        res['code'] = 200
+        res['text'] = {
+            "type": query_mode,
+            "content": json.loads(file_contents)
+        }
         return JsonResponse(res, safe=False)
 
 

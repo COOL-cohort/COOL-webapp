@@ -47,5 +47,25 @@ class QueryDetail(View):
         context = {}
         q = Query.objects.get(query_id=query_id)
 
-        return render(request, "query-list.html", context)
+        cube = q.set_id
+        # tableYaml = os.path.join(data_path, str(cube.cube_name), "table.yaml")
+        # # logger.info(yaml.load(open(tableYaml), Loader=yaml.Loader))
+        # if os.path.exists(tableYaml):
+        #     tableYaml = yaml.load(open(tableYaml), Loader=yaml.Loader)
+        #     context['tableYaml'] = tableYaml['fields']
+
+        context['set_id'] = cube.set_id
+        context['set_name'] = cube.set_name
+        context['set_size'] = cube.cube_size
+        context['set_records'] = cube.num_records
+        context['set_ids'] = cube.num_ids
+        context['set_details'] = cube.set_details
+
+        context['set_info'] = model_to_dict(cube)
+        context['set_info'].pop('set_id')
+        context['set_info'].pop('user_id')
+        context['set_info'].pop('cube_size')
+        context['query_id'] = query_id
+
+        return render(request, "query-show.html", context)
 

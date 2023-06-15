@@ -67,7 +67,7 @@ class CohortCreateInDataset(View):
                     user_id=user,
                     set_id=cube,
                     query_name=query['queryName'],
-                    query_mode='CA',
+                    query_mode='CC',
                     exe_time=exe_time,
                 )
                 q.save()

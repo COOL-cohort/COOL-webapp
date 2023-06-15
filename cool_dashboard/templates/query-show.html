@@ -84,11 +84,24 @@
                         </div>
                         <!-- end card -->
 
-                        <div class="card">
+                        <div class="card" id="cohort-query">
                             <div class="card-header">
                                 <h4 class="float-end"> Advanced </h4>
-                                <h4 class="card-title">Cohort List</h4>
-                                <p class="card-title-desc">Customise features for cohorts</p>
+                                <h4 class="card-title">Query</h4>
+                                <p class="card-title-desc">Customise query for cohorts</p>
+                            </div>
+                            <div class="card-body">
+                                <pre id="generateQuery"></pre>
+                            </div>
+                        </div>
+                        <!-- end card -->
+
+                        <!-- create cohort -->
+                        <div class="card" id="cohort-create-results" style="display: none">
+                            <div class="card-header">
+                                <h4 class="float-end"> Create Cohort </h4>
+                                <h4 class="card-title">Query Results</h4>
+                                <p class="card-title-desc">query results for the cohorts</p>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -98,39 +111,32 @@
                                                 <th>#</th>
                                                 <th>Cohort Name</th>
                                                 <th>Cohort Size</th>
-                                                <th>Query Name</th>
                                                 <th>Dataset</th>
-                                                <th>Creator</th>
-                                                <th>Save Time</th>
-{#                                                <th>Action</th>#}
-{#                                                <th></th>#}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for index, set in cohorts.items %}
-                                                <tr>
-                                                    <th scope="row">{{ index }}</th>
-                                                    <td>{{ set.cohort_name }}</td>
-                                                    <td>{{ set.cohort_size }}</td>
-                                                    <td>{{ set.query_name }}</td>
-                                                    <td>{{ set.set_name }}</td>
-                                                    <td>{{ set.user_name }}</td>
-                                                    <td>{{ set.save_time }}</td>
-{#                                                    <td>#}
-{#                                                        <a type="button" class="btn btn-light btn-sm" href="/cohort/{{ set.set_id }}/">View</a></td>#}
-{#                                                    </td>#}
-{#                                                    <td>#}
-{#                                                        <a type="button" class="btn btn-danger btn-sm" href="/cohort-remove/{{ set.set_id }}/">Delete</a></td>#}
-{#                                                    </td>#}
-                                                </tr>
-                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
                         <!-- end card -->
+
+                        <!-- cohort analysis -->
+                        <div class="card" id="cohort-analysis-results" style="display: none">
+                            <div class="card-header">
+                                <h4 class="float-end"> Cohort Analysis</h4>
+                                <h4 class="card-title">Query Results</h4>
+                                <p class="card-title-desc">query results for the cohorts</p>
+                            </div>
+                            <div class="card-body cohort-analysis-figures">
+
+                            </div>
+                        </div>
+                        <!-- end card -->
                     </div>
+
+
                     <!-- end col -->
                     <div class="col-xl-3 col-lg-4">
                         <div class="card">
@@ -167,12 +173,12 @@
 {% block    scripts %}
     <script>
     'use strict';
-    let True = true;
-    let False = false;
-    let tableYaml = {{ tableYaml | default:"{}" | safe }};
-    let cubeID = "{{ set_info.cube_name }}";
+    let queryID = "{{ query_id }}";
+    let dataset = "{{ set_info.set_name }}";
     </script>
     <!-- datepicker js -->
     <script src='{% static "static/js/flatpickr.min.js" %}'></script>
     <script src='{% static "static/js/select2.min.js" %}'></script>
+    <script src='{% static "static/js/echarts.min.js" %}'></script>
+    <script src='{% static "static/js/query-show.js" %}'></script>
 {% endblock scripts %}
