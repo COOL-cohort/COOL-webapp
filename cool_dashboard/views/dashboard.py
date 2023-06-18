@@ -32,8 +32,9 @@ class Dashboard(View):
         # logging.info(request.user)
         if request.user.is_superuser:
             all_users = User.objects.count()
-            all_figures = Analysis.objects.count()
+            all_queries = Query.objects.count()
             all_datasets = Dataset.objects.count()
+            all_cohorts = Cohort.objects.count()
             all_storage = 0
             root_flag =True
             for db in Dataset.objects.all():
@@ -43,7 +44,10 @@ class Dashboard(View):
         count = 0
         selected_datasets = Dataset.objects.filter(user_id=request.user.id)
         user_datasets = selected_datasets.count()
-        user_figures = 0
+        selected_query = Query.objects.filter(user_id=request.user.id)
+        user_queries = selected_query.count()
+        selected_cohorts = Cohort.objects.filter(user_id=request.user.id)
+        user_cohorts = selected_cohorts.count()
         user_storage = 0
         last_dataset = ""
 
@@ -51,15 +55,18 @@ class Dashboard(View):
         figure_index = 0
         for dataset in selected_datasets:
             databases[count] = {}
+            databases[count]["id"] = dataset.set_id
             databases[count]["name"] = dataset.set_name
             last_dataset = dataset.set_name
             databases[count]['date'] = strTotime(dataset.cube_name)
             databases[count]['num_ids'] = dataset.num_ids
             databases[count]['num_records'] = dataset.num_records
-            databases[count]['start'] = dataset.start_time
-            databases[count]['end'] = dataset.end_time
+            sub_queries = Query.objects.filter(set_id=dataset)
+            databases[count]['num_queries'] = sub_queries.count()
+            databases[count]['start'] = dataset.start_time.strftime('%Y-%m-%d %H:%M:%S')
+            databases[count]['end'] = dataset.end_time.strftime('%Y-%m-%d %H:%M:%S')
 
-            user_figures += Analysis.objects.filter(set_id=dataset.set_id).count()
+            # user_figures += Analysis.objects.filter(set_id=dataset.set_id).count()
             user_storage += dataset.cube_size
 
             with open(data_path + dataset.cube_name + "/demographic.yaml", 'r') as stream:
