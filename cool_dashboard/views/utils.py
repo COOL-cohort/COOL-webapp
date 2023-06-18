@@ -30,7 +30,8 @@ def analyze_columns(request):
         file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
         # load new file
-        f = open(upload_path + file_save + ".csv", 'wb')
+        logger.info(os.path.join(upload_path, file_save + ".csv"))
+        f = open(os.path.join(upload_path, file_save + ".csv"), 'wb')
         for chunk in file.chunks():
             f.write(chunk)
         f.close()
@@ -38,7 +39,7 @@ def analyze_columns(request):
         user = User.objects.get(id=request.user.id)
         upload_history.objects.create(user_id=user, file_save=file_save)
 
-        with open(upload_path + file_save + ".csv", 'r') as f:
+        with open(os.path.join(upload_path, file_save + ".csv"), 'r') as f:
             title = f.readline()
 
         # columns = str(title, 'utf-8')[:-1].split(",")
@@ -46,7 +47,7 @@ def analyze_columns(request):
         # logger.info(columns)
         request.session['columns'] = columns
 
-        rawdata = pd.read_csv(upload_path + file_save + ".csv")
+        rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"))
         columns = list(rawdata.columns)
         column_types = rawdata.dtypes.to_dict()
 

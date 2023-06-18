@@ -1,3 +1,5 @@
+import os
+
 import yaml
 import datetime
 import pandas as pd
@@ -12,8 +14,6 @@ from ..config import *
 from ..models import upload_history, Dataset
 
 logger = logging.getLogger('django')
-
-import requests
 
 class Upload(View):
     def get(self, request):
@@ -71,7 +71,7 @@ class Upload(View):
             "cubeName": "%s" % filename,
             # path to the table yaml
             "schemaPath": os.path.join(back_data_path, filename, 'table.yaml'),
-            "dataPath": os.path.join("../", upload_path, "%s.csv" % filename),
+            "dataPath": os.path.join(back_upload_path, "%s.csv" % filename),
             "outputPath": "./%s/" % repo_name
         }
         logger.info(query)
@@ -82,8 +82,8 @@ class Upload(View):
             version = out.text
 
         # save the original csv file
-        shutil.copyfile(os.path.join(upload_path, "%s.csv" % filename),
-                        os.path.join(new_path, "%s.csv" % filename))
+        # shutil.copyfile(os.path.join(upload_path, "%s.csv" % filename),
+        #                 os.path.join(new_path, "%s.csv" % filename))
         shutil.copyfile(os.path.join(new_path, 'table.yaml'),
                         os.path.join(new_path, version, 'table.yaml'))
 
@@ -95,7 +95,7 @@ class Upload(View):
         files = os.listdir(upload_path)
         for file in files:
             if file[:-4] not in his_all:
-                os.remove(upload_path + file)
+                os.remove(os.path.join(upload_path, file))
 
         results = self.get_demo_info(filename, fields)
         with open(os.path.join(new_path, 'demographic.yaml'), 'w') as f:
