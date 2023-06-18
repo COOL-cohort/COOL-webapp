@@ -30,5 +30,7 @@ RUN set -x \
 
 EXPOSE 9998
 ADD cool-queryserver-0.1-SNAPSHOT.jar cool-queryserver-0.1-SNAPSHOT.jar
+ADD application.properties application.properties
+ADD log4j.properties log4j.properties
 ADD liblinux.so /tmp/liblinux.so
 ENTRYPOINT env LD_LIBRARY_PATH=/tmp/:$LD_LIBRARY_PATH java -jar cool-queryserver-0.1-SNAPSHOT.jar cool_storage 9998
