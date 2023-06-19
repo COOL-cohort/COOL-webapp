@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Cohort</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Cohort</a></li>
+                                    <li class="breadcrumb-item active">Show Cohorts</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Show Cohorts</h4>
+                                <p class="card-title-desc">Here list all generated cohorts.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                         <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Cohort Name</th>
+                                                <th>Cohort Size</th>
+                                                <th>Query Name</th>
+                                                <th>Dataset</th>
+                                                <th>Cube Name</th>
+                                                <th>Creator</th>
+                                                <th>Save Time</th>
+                                                <th>Action</th>
+{#                                                <th></th>#}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for index, set in cohorts.items %}
+                                                <tr>
+                                                    <th scope="row">{{ index }}</th>
+                                                    <td>{{ set.cohort_name }}</td>
+                                                    <td>{{ set.cohort_size }}</td>
+                                                    <td>{{ set.query_name }}</td>
+                                                    <td>{{ set.set_name }}</td>
+                                                    <td>{{ set.cube_name }}</td>
+                                                    <td>{{ set.user_name }}</td>
+                                                    <td>{{ set.save_time }}</td>
+                                                    <td>
+{#                                                        <form method="POST" enctype="multipart/form-data" action="/dataset/{{ set.set_id }}">{% csrf_token %}#}
+{#                                                            <input name="set_id" value="{{ set.set_id }}" type="hidden">#}
+{#                                                            <input name="operation" value="show" type="hidden">#}
+{#                                                            <button type="submit" class="btn btn-light btn-sm">View</button>#}
+{#                                                        </form>#}
+                                                        <a type="button" class="btn btn-light btn-sm" href="/dataset/{{ set.set_id }}/">View</a></td>
+                                                    </td>
+{#                                                    <td>#}
+{#                                                        <a type="button" class="btn btn-danger btn-sm" href="/cohort-remove/{{ set.set_id }}/">Delete</a></td>#}
+{#                                                    </td>#}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+
+
+            </div> <!-- container-fluid -->
+            </div>
+        </div>
+        <!-- End Page-content -->
+
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+{% endblock scripts %}

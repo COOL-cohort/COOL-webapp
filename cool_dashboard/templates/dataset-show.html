@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+<!doctype html>
+
+{% block    css %}
+    <!-- datepicker css -->
+    <link rel="stylesheet" href='{% static "static/css/flatpickr.min.css" %}'>
+    <link rel="stylesheet" href='{% static "static/css/select2.min.css" %}'>
+    <link rel="stylesheet" href="{% static 'static/css/retention.css' %}">
+{% endblock css %}
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Datasets Analysis</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dataset</a></li>
+                                    <li class="breadcrumb-item active">Dataset Details</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-xl-9 col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{{ set_name }}</h4>
+                                <p class="card-title-desc">Details: {{ set_details }}</p>
+                                <input id="cube_id" type="hidden" value="{{ set_info.cube_name }}">
+                            </div>
+
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm order-2 order-sm-1">
+                                        <div class="d-flex align-items-start mt-3 mt-sm-0">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-xl me-3">
+                                                    <a href="/dataset/{{ set_id }}/">
+                                                        <img src="{% static 'static/picture/dataset.png' %}" alt="" class="img-fluid rounded-circle d-block">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div>
+                                                    <h5 class="font-size-16 mb-1">ID: {{ set_id }}</h5>
+                                                    <p class="text-muted font-size-13">Name: {{ set_name }}</p>
+
+                                                    <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>Size: {{ set_size }} MB</div>
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>No.IDs: {{ set_ids }}</div>
+                                                        <div><i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>No.Records: {{ set_records }}</div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row float-end">
+                                    <div class="col-md-12 col-sm-12 col-xs-12 col-md-offset-2 hstack gap-3 ">
+                                        <a href="/dataset/{{ set_id }}/cohort-create/" class="btn btn-primary w-md"> Create Cohort </a>
+                                        <div class="vr"></div>
+                                        <a href="/dataset/{{ set_id }}/cohort-analysis/" class="btn btn-primary w-md"> Cohort Analysis </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="float-end"> Advanced </h4>
+                                <h4 class="card-title">Cohort List</h4>
+                                <p class="card-title-desc">Customise features for cohorts</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                         <thead class="table-light">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Cohort Name</th>
+                                                <th>Cohort Size</th>
+                                                <th>Query Name</th>
+                                                <th>Dataset</th>
+                                                <th>Creator</th>
+                                                <th>Save Time</th>
+{#                                                <th>Action</th>#}
+{#                                                <th></th>#}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for index, set in cohorts.items %}
+                                                <tr>
+                                                    <th scope="row">{{ index }}</th>
+                                                    <td>{{ set.cohort_name }}</td>
+                                                    <td>{{ set.cohort_size }}</td>
+                                                    <td>{{ set.query_name }}</td>
+                                                    <td>{{ set.set_name }}</td>
+                                                    <td>{{ set.user_name }}</td>
+                                                    <td>{{ set.save_time }}</td>
+{#                                                    <td>#}
+{#                                                        <a type="button" class="btn btn-light btn-sm" href="/cohort/{{ set.set_id }}/">View</a></td>#}
+{#                                                    </td>#}
+{#                                                    <td>#}
+{#                                                        <a type="button" class="btn btn-danger btn-sm" href="/cohort-remove/{{ set.set_id }}/">Delete</a></td>#}
+{#                                                    </td>#}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                            <h5 class="card-title mb-3">Details</h5>
+                                {% for k, v in set_info.items %}
+                                    <div class="pb-3">
+                                        <div class="row">
+                                            <div class="col-xl-4">
+                                                <div>
+                                                    <h5 class="font-size-15">{{ k }}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl">
+                                                <div class="text-muted">
+                                                    <p class="mb-2">{{ v }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+    <script>
+    'use strict';
+    let True = true;
+    let False = false;
+    let tableYaml = {{ tableYaml | default:"{}" | safe }};
+    let cubeID = "{{ set_info.cube_name }}";
+    </script>
+    <!-- datepicker js -->
+    <script src='{% static "static/js/flatpickr.min.js" %}'></script>
+    <script src='{% static "static/js/select2.min.js" %}'></script>
+{% endblock scripts %}

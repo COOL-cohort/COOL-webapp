@@ -82,10 +82,16 @@ ENV/
 # mypy
 .mypy_cache/
 
+<<<<<<< HEAD
 upload/*
 cool_storage/*
+=======
+cache/*
+cool_storage/*
+*/cool_storage/*
 
 
 dim.db
 # db.sqlite3
 test.ipynb
+backup

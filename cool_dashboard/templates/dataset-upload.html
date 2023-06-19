@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+
+{% block    css %}
+    <!-- dropzone css -->
+    <link href="{% static 'static/css/dropzone.min.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Upload dataset</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dataset</a></li>
+                                    <li class="breadcrumb-item active">Upload dataset</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0">New dataset information</h4>
+                            </div>
+
+                            <div class="card-body">
+                                <div id="progrss-wizard" class="twitter-bs-wizard">
+                                    <ul class="twitter-bs-wizard-nav nav nav-pills nav-justified">
+                                        <li class="nav-item">
+                                            <a href="#progress-dataset-details" class="nav-link" data-toggle="tab">
+                                                <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                     title="Dataset Info">
+                                                    <i class="bx bx-list-ul"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+{#                                        <li class="nav-item">#}
+{#                                            <a href="#progress-dataset-file" class="nav-link" data-toggle="tab">#}
+{#                                                <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top"#}
+{#                                                     title="Dataset File">#}
+{#                                                    <i class="bx bx-list-ul"></i>#}
+{#                                                </div>#}
+{#                                            </a>#}
+{#                                        </li>#}
+                                        <li class="nav-item">
+                                            <a href="#progress-dataset-columns" class="nav-link" data-toggle="tab">
+                                                <div class="step-icon" data-bs-toggle="tooltip" data-bs-placement="top"
+                                                     title="Dataset Columns">
+                                                    <i class="bx bx-book-bookmark"></i>
+                                                </div>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                    <!-- wizard-nav -->
+
+                                    <div id="bar" class="progress mt-4">
+                                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"></div>
+                                    </div>
+                                    <div class="tab-content twitter-bs-wizard-tab-content">
+                                        <div class="tab-pane" id="progress-dataset-details">
+                                            <div class="text-center mb-4">
+                                                <h5>Dataset Info</h5>
+                                                <p class="card-title-desc">Fill all information below</p>
+                                            </div>
+                                            <form id="form1" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="dataset-name">Dataset Name</label>
+                                                            <input type="text" class="form-control" id="dataset-name" name="dataset-name"
+                                                                   placeholder="Enter Dataset Name">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="dataset-details">Dataset Details</label>
+                                                            <textarea id="dataset-details" class="form-control" rows="2" name="dataset-details"
+                                                                      placeholder="Enter Dataset Details"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="mb-3">
+                                                            <label for="csv_file">Dataset File</label>
+                                                            <div>
+                                                            <input name='csv_file' id="csv_file" accept='.csv' type="file" multiple="multiple">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <ul class="pager wizard twitter-bs-wizard-pager-link">
+{#                                                    <li class="next"><a class="btn btn-primary" onclick="fsubmit(document.forms['form1']);">Next#}
+                                                    <li class="next"><a class="btn btn-primary" id="btn1">Next
+                                                    <i class="bx bx-chevron-right ms-1"></i></a></li>
+                                                </ul>
+                                            </form>
+
+                                        </div>
+
+{#                                        <div class="tab-pane" id="progress-dataset-file">#}
+{#                                            <div class="text-center mb-4">#}
+{#                                                <h5>Dataset File</h5>#}
+{#                                                <p class="card-title-desc">Fill all information below</p>#}
+{#                                            </div>#}
+{#                                            <div class="row">#}
+{#                                                <div class="col-12">#}
+{#                                                    <div class="card">#}
+{#                                                        <div class="card-header">#}
+{#                                                            <h4 class="card-title">Dataset File</h4>#}
+{#                                                            <p class="card-title-desc">upload a csv dataset file.</p>#}
+{#                                                        </div>#}
+{#                                                        <div class="card-body">#}
+{##}
+{#                                                            <div>#}
+{#                                                                <form class="dropzone" method="POST" enctype="multipart/form-data" action="/upload/">{% csrf_token %}#}
+{#                                                                    <div class="fallback">#}
+{#                                                                        <input name='csv_file' id="csv_file" accept='.csv' type="file" multiple="multiple">#}
+{#                                                                    </div>#}
+{#                                                                    <div class="dz-message needsclick">#}
+{#                                                                        <div class="mb-3">#}
+{#                                                                            <i class="display-4 text-muted bx bx-cloud-upload"></i>#}
+{#                                                                        </div>#}
+{##}
+{#                                                                        <h5>Drop files here or click to upload.</h5>#}
+{#                                                                    </div>#}
+{#                                                                </form>#}
+{#                                                            </div>#}
+{##}
+{#                                                            <div class="text-center mt-4">#}
+{#                                                                <button type="button"#}
+{#                                                                        class="btn btn-primary waves-effect waves-light">#}
+{#                                                                    Send#}
+{#                                                                    Files#}
+{#                                                                </button>#}
+{#                                                            </div>#}
+{#                                                        </div>#}
+{#                                                    </div>#}
+{#                                                </div> <!-- end col -->#}
+{#                                            </div> <!-- end row -->#}
+{#                                            <ul class="pager wizard twitter-bs-wizard-pager-link">#}
+{#                                                    <li class="previous"><a href="javascript: void(0);" class="btn btn-primary"><i class="bx bx-chevron-left me-1"></i> Previous</a></li>#}
+{#                                                    <li class="next"><a href="javascript: void(0);" class="btn btn-primary">Next <i class="bx bx-chevron-right ms-1"></i></a></li>#}
+{#                                                </ul>#}
+{#                                        </div>#}
+
+                                        <div class="tab-pane" id="progress-dataset-columns">
+                                            <div>
+                                                <div class="text-center mb-4">
+                                                    <h5>Dataset Columns</h5>
+                                                    <p class="card-title-desc">Fill all information below</p>
+                                                </div>
+                                                <form id="form2" method="POST" enctype="multipart/form-data" action="/upload/">{% csrf_token %}
+                                                    <div class="row" id="columns"> </div>
+                                                </form>
+                                                <ul class="pager wizard twitter-bs-wizard-pager-link">
+                                                    <li class="previous"><a href="javascript: void(0);"
+                                                                            class="btn btn-primary"><i
+                                                            class="bx bx-chevron-left me-1"></i> Previous</a></li>
+                                                    <li class="float-end"><a href="javascript: void(0);"
+                                                                             class="btn btn-primary"
+                                                                             data-bs-toggle="modal"
+                                                                             data-bs-target=".confirmModal">Save
+                                                        Changes</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+
+        <!-- Modal -->
+        <div class="modal fade confirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-bottom-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <i class="bx bx-check-circle display-4 text-success"></i>
+                            </div>
+                            <h5>Confirm Save Changes</h5>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-light w-md" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary w-md" data-bs-dismiss="modal" onclick="fsubmit(document.getElementById('form2'));">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+    <!-- twitter-bootstrap-wizard js -->
+    <script src="{% static 'static/js/jquery.bootstrap.wizard.min.js' %}"></script>
+    <script src="{% static 'static/js/prettify.js' %}"></script>
+
+    <!-- form wizard init -->
+    <script src="{% static 'static/js/form-wizard.init.js' %}"></script>
+{#    <script src="{% static 'static/js/dropzone.min.js' %}"></script>#}
+
+    <script>
+    function fsubmit(obj){obj.submit();}
+    </script>
+    <script>
+    $("#btn1").click(function () {
+        let formdata = new FormData();
+        {#let file = $("#csv_file").files;#}
+        {#formdata.append('csv_file', file);#}
+        formdata.append('dataset_name', $("#dataset-name").val());
+        formdata.append('dataset_details', $("#dataset-details").val());
+        formdata.append('csv_file', document.getElementById('csv_file').files[0]);
+        formdata.append('csrfmiddlewaretoken', $('[name="csrfmiddlewaretoken"]').val());
+        $.ajax({
+            url: '/return_columns/',
+            type: 'post',
+            processData: false,//不让jQuery处理我的file_obj
+            contentType: false,//不让jQuery设置请求的内容类型
+            data: formdata,
+            success: function (res) {
+                console.log(res)
+                let columns = res['columns']
+                $("#columns").empty()
+                $("#columns").append('<input type="hidden" name="setname" value="'+res["setname"]+'" />')
+                $("#columns").append('<input type="hidden" name="filename" value="'+res["filename"]+'" />')
+                $("#columns").append('<input type="hidden" name="details" value="'+res["details"]+'" />')
+                $("#columns").append('<input type="hidden" name="columns" value="'+columns+'" />')
+                $("#columns").append('<input type="hidden" name="size" value="'+res['size']+'" />')
+                $("#columns").append('<div> Record size: '+res['size']+'</div>')
+                $.each(columns, function (index, item) {
+                    var name = columns[index];
+                    let pattern = '<div class="col-lg-12"> \
+                                    <div class="row mb-3"> \
+                                        <label class="form-label">' + name + ' \
+                                        <select class="form-select" name="'+name+'"> </label>'
+
+                    for(var type of res['types']){
+                        if(res['col_type'][name] === type){
+                            pattern += '<option value="'+type+'" selected="selected">'+type+'</option>'
+                        } else{
+                            pattern += '<option value="'+type+'">'+type+'</option>'
+                        }
+                    }
+                    pattern += '</select> \
+                            </div> \
+                        </div>'
+
+                    $("#columns").append(pattern);
+                });
+            }
+        })
+    })
+</script>
+{% endblock scripts %}

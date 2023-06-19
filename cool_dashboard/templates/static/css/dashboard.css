@@ -1,0 +1,42 @@
+.card {
+  background: #ffffff;
+  margin: 7.5px 0px 7.5px 0px;
+  padding: 20px;
+  border-radius: 0px;
+}
+
+.dib {
+  display: inline-block;
+}
+
+/*    Widget One
+---------------------------*/
+.stat-widget-one .stat-icon {
+  vertical-align: top;
+}
+.stat-widget-one .stat-icon i {
+  font-size: 30px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 100px;
+  padding: 15px;
+  font-weight: 900;
+  display: inline-block;
+}
+.stat-widget-one .stat-content {
+  margin-left: 30px;
+  margin-top: 7px;
+}
+.stat-widget-one .stat-text {
+  font-size: 14px;
+  color: #252525;
+}
+.stat-widget-one .stat-digit {
+  font-size: 24px;
+  color: #252525;
+}
+
+
+.ti-money:before {
+	content: "\e68c";
+}

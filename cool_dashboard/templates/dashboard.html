@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+{% load static %}
+<!doctype html>
+
+{% block  css %}
+    <link href="{% static 'static/css/dashboard.css' %}" rel="stylesheet" type="text/css">
+{% endblock css %}
+
+{% block    right-body %}
+    <!-- ============================================================== -->
+    <!-- Start right Content here -->
+    <!-- ============================================================== -->
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                                    <li class="breadcrumb-item active">Dashboard</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                {% if root_flag %}
+                    <div class="row">
+                        <h2>Admin Dashboard</h2>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-locker-multiple color-success border-success"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Total Datasets</div>
+                                        <div class="stat-digit">{{ all_datasets }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-database-outline color-primary border-primary"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Total Used Storage</div>
+                                        <span class="counter-value stat-digit" data-target={{ all_storage }}>0</span> MB
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-account color-danger border-danger"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Total Users</div>
+                                        <div class="stat-digit">{{ all_users }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-message-question-outline color-pink border-pink"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text">Total Queries</div>
+                                        <div class="stat-digit">{{ all_queries }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                                <div class="card">
+                                    <div class="stat-widget-one">
+                                        <div class="stat-icon dib"><i class="mdi mdi-account-group-outline color-danger border-danger"></i></div>
+                                        <div class="stat-content dib">
+                                            <div class="stat-text">Total Cohorts</div>
+                                            <div class="stat-digit">{{ all_cohorts }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                {% endif %}
+
+                <div class="row">
+                    <h2> User Dashboard</h2>
+                    <div class="col-xl-3 col-md-3">
+                        <!-- card -->
+                        <div class="card">
+                            <!-- card body -->
+                            <div class="stat-widget-one">
+                                <div class="row align-items-center">
+                                    <div class="col-3 stat-icon dib"><i class="mdi mdi-database-outline color-primary border-primary"></i></div>
+                                    <div class="col-4">
+                                        <span class="text-muted mb-3 lh-1 d-block text-truncate">No. Dataset</span>
+                                        <h4>
+                                            <span class="counter-value" data-target={{ user_datasets }}>0</span>
+                                        </h4>
+                                    </div>
+                                    <div class="col-5">
+                                        <span class="badge badge-soft-success text-success">Latest Uploaded</span>
+                                        <div>
+                                            <span class="ms-1 text-muted font-size-18">{{ last_dataset }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-3">
+                        <div class="card">
+                            <div class="stat-widget-one">
+                                <div class="stat-icon dib"><i class="mdi mdi-database-outline color-primary border-primary"></i></div>
+                                <div class="stat-content dib">
+                                    <div class="stat-text">Used Storage</div>
+                                    <span class="counter-value stat-digit" data-target={{ user_storage }}>0</span> MB
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-3">
+                        <!-- card -->
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-message-question-outline color-pink border-pink"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text"> Queries</div>
+                                        <span class="counter-value stat-digit" data-target={{ user_queries }}>0</span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-3">
+                        <!-- card -->
+                            <div class="card">
+                                <div class="stat-widget-one">
+                                    <div class="stat-icon dib"><i class="mdi mdi-account-group-outline color-danger border-danger"></i></div>
+                                    <div class="stat-content dib">
+                                        <div class="stat-text"> Cohorts </div>
+                                        <span class="counter-value stat-digit" data-target={{ user_cohorts }}>0</span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div><!-- end col -->
+                </div>
+
+                <div class="row">
+                    <h2> Dataset </h2>
+                    {% for key,value in databases.items %}
+                        <div class="col-xl-3 col-sm-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <div class="dropdown text-end">
+                                    <a class="text-muted dropdown-toggle font-size-16" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                      <i class="bx bx-dots-horizontal-rounded"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a class="dropdown-item" href="/dataset/{{ value.id }}/">Details</a>
+                                        <a class="dropdown-item" href="/dataset-remove/{{ value.id }}/">Remove</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="mx-auto mb-4">
+                                            <img src="{% static 'static/picture/dataset.png' %}" alt="" class="avatar-xl rounded-circle img-thumbnail">
+                                        </div>
+                                        <h5 class="font-size-16 mb-1"><a href="#" class="text-body">{{ value.name }}</a></h5>
+                                        <p class="text-muted mb-2">({{ value.date }})</p>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>
+                                            <h5 class="font-size-16 mb-1">Num of IDs: </h5>
+                                            <p class="text-muted mb-2">{{ value.num_ids }}</p>
+                                        </div>
+                                        <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>
+                                            <h5 class="font-size-16 mb-1">Num of Records: </h5>
+                                            <p class="text-muted mb-2">{{ value.num_records }}</p>
+                                        </div>
+                                        <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>
+                                            <h5 class="font-size-16 mb-1">Num of Queries: </h5>
+                                            <p class="text-muted mb-2">{{ value.num_queries }}</p>
+                                        </div>
+                                        <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
+                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i>
+                                            <h5 class="font-size-16 mb-1">Involved Datetime: </h5>
+                                            <p class="text-muted mb-2">{{ value.start }} to {{ value.end }}</p>
+{#                                            <p class="text-muted mb-2"> End: {{ value.end }}</p>#}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="btn-group" role="group">
+                                <a type="button" class="btn btn-outline-light text-truncate" href="/dataset/{{ value.id }}/"><i class="uil uil-user me-1"></i> Details </a>
+{#                                <button type="button" class="btn btn-outline-light text-truncate"><i class="uil uil-envelope-alt me-1"></i> Remove </button>#}
+
+                            </div>
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+    </div>
+    <!-- end main content-->
+{% endblock right-body %}
+
+{% block    scripts %}
+    <!-- dashboard init -->
+{#    <script src="{% static 'static/js/dashboard.init.js' %}"></script>#}
+{% endblock scripts %}
