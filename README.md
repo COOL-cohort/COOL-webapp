@@ -14,7 +14,7 @@ For more information, you can refer to the [paper](https://www.comp.nus.edu.sg/~
 In this project, COOL is applied to Covid19 analysis and we also provide a demo video [here](https://www.comp.nus.edu.sg/~dbsystem/cool/#/demo).
 
 # Set up
-* Docker is required to set up the application's dependencies and can be installed [here](https://www.docker.com/get-started).
+* Docker is required to set up the application's dependencies and can be installed [here](https://www.docker.com/get-started). Please download the latest version of Docker.
 
 
 # Quick Start
@@ -36,11 +36,16 @@ sh docker.sh stop
 ```
 sh docker.sh clean
 ```
-* manually load docker (if you are running offline). [download](https://www.dropbox.com/sh/pvkrychaf29nebc/AADdjOFhpPFoCwPS9N01rwOGa?dl=0)
-```
-docker load --input cool-front.zip
-docker load --input cool-backend.zip
-```
+
+[//]: # (* manually load docker &#40;if you are running offline&#41;. [download]&#40;https://www.dropbox.com/sh/pvkrychaf29nebc/AADdjOFhpPFoCwPS9N01rwOGa?dl=0&#41;)
+
+[//]: # (```)
+
+[//]: # (docker load --input cool-front.zip)
+
+[//]: # (docker load --input cool-backend.zip)
+
+[//]: # (```)
 
 * The application is now running at `http://127.0.0.1:8201/`
 
@@ -58,18 +63,16 @@ Password: 123456
 
 3. The columns of events in the dataset should match to elements in the `event` column  
 
-4. `time` column should follow "YYYY-MM-DD" format
+4. `time` column should follow "YYYY-MM-DD HH:mm:SS" format
 
-5. All of the demographic columns (such as age, gender, race) should be corresponding to the `value` attributes.
+5. `Value` Columns accept both integer and float values. 
 
-6. `Value` Columns only accept integer (Int32) values. 
+6. All of the demographic columns (such as age, gender, race) should be corresponding to the ``Value(Invariant)`` attributes which is associated with the `id`.
 
-6. Fill the columns of events with `None`
+7. Fill columns of events with `None` or `0`. Because we do not support `null` value in the current system.
 
-7. Remove all the events with no `value`
-
-* Example dataset: [here](example/example.csv).  
-* Example video: [here](https://www.comp.nus.edu.sg/~dbsystem/cool/#/demo).
+* Example dataset: [here](sample_data/medical-data.csv).  
+* Example video: [here](http://13.212.103.48:3001/).
 
 
 # Directory Descriptions
@@ -78,8 +81,8 @@ Password: 123456
 These two directories contain settings of dockers for the COOL system.
 * __cool_dashboard__:
 The ```cool_dashboard``` directory contains settings for Django server.
-* __dashboard__:
-The ```dashboard``` directory contains the Main Django Application.
+* __sample_data__:
+The ```sample_data``` directory contains sample data for testing the system.
 
 # Dataset Preparation
 ## Table.yaml
