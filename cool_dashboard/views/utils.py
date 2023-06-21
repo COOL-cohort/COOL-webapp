@@ -21,65 +21,73 @@ def get_FileSize(filePath):
 
 def analyze_columns(request):
     if request.method == 'POST':
-        # logger.info(request.POST['dataset_name'])
-        # logger.info(request.POST['dataset_details'])
-        file = request.FILES.get('csv_file')
+        try:
+            # logger.info(request.POST['dataset_name'])
+            # logger.info(request.POST['dataset_details'])
+            file = request.FILES.get('csv_file')
 
-        # get the new file name
-        rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
-        file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
+            # get the new file name
+            rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+            file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
-        # load new file
-        logger.info(os.path.join(upload_path, file_save + ".csv"))
-        f = open(os.path.join(upload_path, file_save + ".csv"), 'wb')
-        for chunk in file.chunks():
-            f.write(chunk)
-        f.close()
+            # load new file
+            logger.info(os.path.join(upload_path, file_save + ".csv"))
+            f = open(os.path.join(upload_path, file_save + ".csv"), 'wb')
+            for chunk in file.chunks():
+                f.write(chunk)
+            f.close()
 
-        user = User.objects.get(id=request.user.id)
-        upload_history.objects.create(user_id=user, file_save=file_save)
+            user = User.objects.get(id=request.user.id)
+            upload_history.objects.create(user_id=user, file_save=file_save)
 
-        with open(os.path.join(upload_path, file_save + ".csv"), 'r') as f:
-            title = f.readline()
+            with open(os.path.join(upload_path, file_save + ".csv"), 'r') as f:
+                title = f.readline()
 
-        # columns = str(title, 'utf-8')[:-1].split(",")
-        columns = title[:-1].split(",")
-        # logger.info(columns)
-        request.session['columns'] = columns
+            # columns = str(title, 'utf-8')[:-1].split(",")
+            columns = title[:-1].split(",")
+            # logger.info(columns)
+            request.session['columns'] = columns
 
-        rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"))
-        columns = list(rawdata.columns)
-        column_types = rawdata.dtypes.to_dict()
+            rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"))
+            columns = list(rawdata.columns)
+            column_types = rawdata.dtypes.to_dict()
+            logger.info(rawdata.dtypes)
 
-        col_types = {}
-        for col in columns:
-            low_col = col.lower().strip()
-            if low_col[-2:] == 'id':
-                col_types[col] = "User ID"
-            elif low_col[-4:] == 'time':
-                col_types[col] = "Time"
-            elif "event" in low_col and str(column_types[low_col]) == 'object':
-                col_types[col] = "Event"
-                event_related = list(rawdata[low_col].unique())
-            elif str(column_types[low_col]) == 'object':
-                col_types[col] = "String"
-            else:
-                col_types[col] = "Value"
-            logger.info(col)
-            logger.info(col_types[col])
+            col_types = {}
+            for col in columns:
+                low_col = col.lower().strip()
+                if low_col[-2:] == 'id':
+                    col_types[col] = "User ID"
+                elif low_col[-4:] == 'time':
+                    col_types[col] = "Time"
+                elif "event" in low_col and str(column_types[col]) == 'object':
+                    col_types[col] = "Event"
+                    event_related = list(rawdata[col].unique())
+                elif str(column_types[col]) == 'object':
+                    col_types[col] = "String"
+                else:
+                    col_types[col] = "Value"
+                # logger.info(col)
+                # logger.info(col_types[col])
 
-        for col in event_related:
-            col_types[col] = "Event Related"
+            for col in event_related:
+                col_types[col] = "Event Related"
 
-        res = {}
-        res['columns'] = columns
-        res['filename'] = file_save
-        res['setname'] = request.POST['dataset_name']
-        res['details'] = request.POST['dataset_details']
-        res['col_type'] = col_types
-        res['size'] = len(rawdata)
-        res['types'] = list(fieldTypes.keys())
-        return JsonResponse(res)
+            res = {}
+            res['columns'] = columns
+            res['filename'] = file_save
+            res['setname'] = request.POST['dataset_name']
+            res['details'] = request.POST['dataset_details']
+            res['col_type'] = col_types
+            res['size'] = len(rawdata)
+            res['types'] = list(fieldTypes.keys())
+            return JsonResponse(res)
+        except Exception as e:
+            res = {
+                'code': 500,
+                'content': e
+            }
+            return JsonResponse(res)
 
 
 def return_measures(request):
