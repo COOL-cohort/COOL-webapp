@@ -30,19 +30,20 @@ def analyze_columns(request):
         try:
             # logger.info(request.POST['dataset_name'])
             # logger.info(request.POST['dataset_details'])
-            file = request.FILES.get('csv_file')
+            # file = request.FILES.get('csv_file')
 
             # get the new file name
             rand_str = ''.join(random.sample(string.ascii_letters + string.digits, 8))
             file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
             # load new file
-            save_path = os.path.join(upload_path, file_save + ".csv")
+            save_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records.csv"
+            # save_path = os.path.join(upload_path, file_save + ".csv")
             logger.info(save_path)
-            f = open(save_path, 'wb')
-            for chunk in file.chunks():
-                f.write(chunk)
-            f.close()
+            # f = open(save_path, 'wb')
+            # for chunk in request.FILES['csv_file'].chunks():
+            #     f.write(chunk)
+            # f.close()
 
             user = User.objects.get(id=request.user.id)
             upload_history.objects.create(user_id=user, file_save=file_save)
@@ -62,6 +63,7 @@ def analyze_columns(request):
             logger.info(rawdata.dtypes)
 
             col_types = {}
+            event_related = []
             for col in columns:
                 low_col = col.lower().strip()
                 if low_col[-2:] == 'id':
@@ -70,7 +72,7 @@ def analyze_columns(request):
                     col_types[col] = "Time"
                 elif "event" in low_col and str(column_types[col]) == 'object':
                     col_types[col] = "Event"
-                    event_related = list(rawdata[col].unique())
+                    event_related.extend(list(rawdata[col].unique()))
                 elif str(column_types[col]) == 'object':
                     col_types[col] = "String"
                 else:
@@ -79,7 +81,8 @@ def analyze_columns(request):
                 # logger.info(col_types[col])
 
             for col in event_related:
-                col_types[col] = "Event Related"
+                if col in columns:
+                    col_types[col] = "Event Related"
 
             res = {}
             res['columns'] = columns

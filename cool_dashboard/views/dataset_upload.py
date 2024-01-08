@@ -29,8 +29,10 @@ class Upload(View):
         if filename == None:
             return render(request, "error-500.html", {'error': "Please upload a csv file."})
 
-        if not os.path.exists(os.path.join(upload_path, "%s.csv" % filename)):
-            return render(request, "error-500.html", {'error': "The csv file is missing. Please reload again. %s"%filename})
+        source_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records.csv"
+        # source_path = os.path.join(upload_path, "%s.csv" % filename)
+        if not os.path.exists(source_path):
+            return render(request, "error-500.html", {'error': f"The csv file({source_path}) is missing. Please reload again!"})
 
         # data = pd.read_csv(upload_path + filename + ".csv", header=0)
         # columns = list(data.columns)
@@ -71,7 +73,8 @@ class Upload(View):
             "cubeName": "%s" % filename,
             # path to the table yaml
             "schemaPath": os.path.join(back_data_path, filename, 'table.yaml'),
-            "dataPath": os.path.join(back_upload_path, "%s.csv" % filename),
+            # "dataPath": os.path.join(back_upload_path, "%s.csv" % filename),
+            "dataPath": "./cool_storage/MIMIC4/all_cool_records.csv",
             "outputPath": "./%s/" % repo_name
         }
         logger.info(query)
