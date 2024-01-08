@@ -13,6 +13,12 @@ from ..config import *
 
 logger = logging.getLogger('django')
 
+def count_lines(filename):
+    count = 0
+    with open(filename, 'r') as file:
+        for line in file:
+            count += 1
+    return count
 
 def get_FileSize(filePath):
     fsize = os.path.getsize(str(filePath))
@@ -31,8 +37,9 @@ def analyze_columns(request):
             file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
             # load new file
-            logger.info(os.path.join(upload_path, file_save + ".csv"))
-            f = open(os.path.join(upload_path, file_save + ".csv"), 'wb')
+            save_path = os.path.join(upload_path, file_save + ".csv")
+            logger.info(save_path)
+            f = open(save_path, 'wb')
             for chunk in file.chunks():
                 f.write(chunk)
             f.close()
@@ -40,7 +47,7 @@ def analyze_columns(request):
             user = User.objects.get(id=request.user.id)
             upload_history.objects.create(user_id=user, file_save=file_save)
 
-            with open(os.path.join(upload_path, file_save + ".csv"), 'r') as f:
+            with open(save_path, 'r') as f:
                 title = f.readline()
 
             # columns = str(title, 'utf-8')[:-1].split(",")
@@ -48,7 +55,8 @@ def analyze_columns(request):
             # logger.info(columns)
             request.session['columns'] = columns
 
-            rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"), nrows=100)
+            rawdata = pd.read_csv(save_path, nrows=20000)
+            length = count_lines(save_path)
             columns = list(rawdata.columns)
             column_types = rawdata.dtypes.to_dict()
             logger.info(rawdata.dtypes)
@@ -79,7 +87,7 @@ def analyze_columns(request):
             res['setname'] = request.POST['dataset_name']
             res['details'] = request.POST['dataset_details']
             res['col_type'] = col_types
-            res['size'] = len(rawdata)
+            res['size'] = length
             res['types'] = list(fieldTypes.keys())
             return JsonResponse(res)
         except Exception as e:
