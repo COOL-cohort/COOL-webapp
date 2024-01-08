@@ -48,7 +48,7 @@ def analyze_columns(request):
             # logger.info(columns)
             request.session['columns'] = columns
 
-            rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"))
+            rawdata = pd.read_csv(os.path.join(upload_path, file_save + ".csv"), nrows=100)
             columns = list(rawdata.columns)
             column_types = rawdata.dtypes.to_dict()
             logger.info(rawdata.dtypes)
