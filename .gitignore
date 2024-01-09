@@ -82,13 +82,11 @@ ENV/
 # mypy
 .mypy_cache/
 
-<<<<<<< HEAD
-upload/*
-cool_storage/*
-=======
+
 cache/*
 cool_storage/*
 */cool_storage/*
+./db.sqlite3
 
 
 dim.db
