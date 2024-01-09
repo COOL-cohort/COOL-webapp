@@ -48,12 +48,13 @@ def analyze_columns(request):
             user = User.objects.get(id=request.user.id)
             upload_history.objects.create(user_id=user, file_save=file_save)
 
-            with open(save_path, 'r') as f:
-                title = f.readline()
+            # with open(save_path, 'r') as f:
+            #     title = f.readline()
+            # columns = title[:-1].split(",")
 
-            # columns = str(title, 'utf-8')[:-1].split(",")
-            columns = title[:-1].split(",")
-            # logger.info(columns)
+            dataset = pd.read_csv(save_path, nrows=1)
+            columns = dataset.columns.tolist()
+            logger.info(columns)
             request.session['columns'] = columns
 
             rawdata = pd.read_csv(save_path, nrows=20000)
