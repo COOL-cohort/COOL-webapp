@@ -37,7 +37,7 @@ def analyze_columns(request):
             file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
             # load new file
-            save_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records.csv"
+            save_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records_v2.csv"
             # save_path = os.path.join(upload_path, file_save + ".csv")
             logger.info(save_path)
             # f = open(save_path, 'wb')

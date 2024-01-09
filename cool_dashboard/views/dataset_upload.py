@@ -29,7 +29,7 @@ class Upload(View):
         if filename == None:
             return render(request, "error-500.html", {'error': "Please upload a csv file."})
 
-        source_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records.csv"
+        source_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records_v2.csv"
         # source_path = os.path.join(upload_path, "%s.csv" % filename)
         if not os.path.exists(source_path):
             return render(request, "error-500.html", {'error': f"The csv file({source_path}) is missing. Please reload again!"})
