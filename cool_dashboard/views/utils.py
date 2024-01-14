@@ -37,13 +37,13 @@ def analyze_columns(request):
             file_save = datetime.now().strftime('%Y%m%d%H%M%S') + rand_str
 
             # load new file
-            save_path = "./cool_backend/cool_storage/MIMIC4/data.csv"
-            # save_path = os.path.join(upload_path, file_save + ".csv")
+            # save_path = "./cool_backend/cool_storage/MIMIC4/all_cool_records_v2.csv"
+            save_path = os.path.join(upload_path, file_save + ".csv")
             logger.info(save_path)
-            # f = open(save_path, 'wb')
-            # for chunk in request.FILES['csv_file'].chunks():
-            #     f.write(chunk)
-            # f.close()
+            f = open(save_path, 'wb')
+            for chunk in request.FILES['csv_file'].chunks():
+                f.write(chunk)
+            f.close()
 
             user = User.objects.get(id=request.user.id)
             upload_history.objects.create(user_id=user, file_save=file_save)
