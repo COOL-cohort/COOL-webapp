@@ -673,7 +673,7 @@ function EventSelect2(jqObj){
                 cache: true,
                 disabled: false
             });
-        }else if(obj.fieldType === 'Metric'){
+        }else if(obj.fieldType === 'Metric' || obj.fieldType === 'Float'){
             var secondStage = $(this).parents(".select-multi-stage").find(".second-stage");
             secondStage.select2('destroy').empty().select2({
                 placeholder: 'Select an option',
@@ -1195,6 +1195,16 @@ function processCohortAnalysisQuery(query) {
                     toolbox: {
                         show: true,
                         feature: {
+                            dataZoom: {
+                                yAxisIndex: 'none'
+                            },
+                            dataView: {
+                                readOnly: false
+                            },
+                            magicType: {
+                                type: ['line', 'bar']
+                            },
+                            restore: {},
                             saveAsImage: {
                                 show: true
                             }
